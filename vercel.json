@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://kotomusubi-preview.onrender.com"
+      "destination": "https://kotomusubi-preview.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",
