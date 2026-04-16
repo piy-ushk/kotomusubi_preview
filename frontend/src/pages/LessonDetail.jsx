@@ -1,9 +1,280 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getLessonContent } from '../services/api';
-import { X, Volume2, Languages, ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
+/* ---- Icons ---- */
+const XIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+);
+const Volume2 = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+  </svg>
+);
+const TranslateIcon = ({ size = 18, active = false }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M5 8l6 6"/><path d="M4 14l6-6 2-3"/>
+    <path d="M2 5h12"/><path d="M7 2h1"/>
+    <path d="M22 22l-5-10-5 10"/><path d="M14 18h6"/>
+  </svg>
+);
+const ChevronLeft = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 18 9 12 15 6"/>
+  </svg>
+);
+
+/* ---- TTS Helper ---- */
+const speak = (text) => {
+  if (!text || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const jpText = text.split('|')[0].split('｜')[0].trim();
+  const utt = new SpeechSynthesisUtterance(jpText);
+  utt.lang = 'ja-JP';
+  utt.rate = 0.8;
+  window.speechSynthesis.speak(utt);
+};
+
+/* ---- Translation helper ---- */
+const splitTranslation = (text) => {
+  if (typeof text !== 'string') return { jp: String(text ?? ''), en: '' };
+  if (text.includes('｜')) { const p = text.split('｜'); return { jp: p[0].trim(), en: p[1]?.trim() || '' }; }
+  if (text.includes('|'))  { const p = text.split('|');  return { jp: p[0].trim(), en: p[1]?.trim() || '' }; }
+  return { jp: text, en: '' };
+};
+
+/* ---- Block Components ---- */
+
+const TranslationControls = ({ id, rawText, isTranslated, onToggle }) => (
+  <div className="block-controls">
+    <button className="block-ctrl-btn speak-btn" onClick={() => speak(rawText)}>
+      <Volume2 size={14} /> Speak
+    </button>
+    <button className={`block-ctrl-btn translate-btn ${isTranslated ? 'active' : ''}`} onClick={() => onToggle(id)}>
+      <TranslateIcon size={14} /> {isTranslated ? 'Hide' : 'Translate'}
+    </button>
+  </div>
+);
+
+const TranslatableBlock = ({ id, rawText, textStyle, isTranslated, onToggle, Tag = 'div', extraClass = '' }) => {
+  const { jp, en } = splitTranslation(rawText);
+  if (!jp) return null;
+  return (
+    <div>
+      <Tag className={extraClass} style={textStyle}>{jp}</Tag>
+      {isTranslated && en && <div className="block-translation">{en}</div>}
+      <TranslationControls id={id} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
+    </div>
+  );
+};
+
+const NumberCard = ({ digit, hiragana, kanji, english, isTranslated, onToggle, wordId }) => {
+  return (
+    <div className="lesson-flashcard">
+      <div className="lesson-flashcard-kanji-box">
+        <div className="lesson-flashcard-kanji">{kanji || hiragana}</div>
+      </div>
+      {digit && <div className="lesson-flashcard-digit">{digit}</div>}
+      {hiragana && <div className="lesson-flashcard-reading">{hiragana}</div>}
+      {english && (
+        isTranslated
+          ? <div className="lesson-flashcard-meaning">{english}</div>
+          : <button className="show-translation-btn" onClick={() => onToggle(wordId)}>Show Translation</button>
+      )}
+      <button className="lesson-speak-btn" onClick={() => speak(hiragana || kanji)}>
+        <Volume2 size={40} />
+      </button>
+    </div>
+  );
+};
+
+const GreetingCard = ({ phrase, reading, meaning, isTranslated, onToggle, wordId }) => {
+  return (
+    <div className="greeting-card">
+      <div className="greeting-phrase">{phrase}</div>
+      {reading && <div className="greeting-reading">{reading}</div>}
+      {meaning && (
+        isTranslated
+          ? <div className="lesson-flashcard-meaning">{meaning}</div>
+          : <button className="show-translation-btn" onClick={() => onToggle(wordId)}>Show Translation</button>
+      )}
+      <button className="lesson-speak-btn" onClick={() => speak(phrase)}>
+        <Volume2 size={40} />
+      </button>
+    </div>
+  );
+};
+
+/* ---- Block Renderer ---- */
+const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, onToggle, slideIndex, blockIndex }) => {
+  const type = block.type;
+  const blockData = block[type];
+  if (!blockData) return null;
+
+  let rawText = '';
+  if (blockData.rich_text) rawText = blockData.rich_text.map(rt => rt.plain_text).join('');
+  else if (blockData.text) rawText = blockData.text;
+
+  const isTranslated = translateAll || !!individualTranslations[blockId];
+
+  switch (type) {
+    case 'heading_1':
+    case 'heading_2':
+    case 'heading_3': {
+      const sizes = { heading_1: '26px', heading_2: '22px', heading_3: '18px' };
+      const { jp, en } = splitTranslation(rawText);
+      return (
+        <div style={{ margin: '24px 0 8px' }}>
+          <div className="block-heading" style={{ fontSize: sizes[type] }}>{jp}</div>
+          {isTranslated && en && <div className="block-translation">{en}</div>}
+          <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
+        </div>
+      );
+    }
+
+    case 'paragraph': {
+      if (!rawText.trim()) return <div style={{ height: '12px' }} />;
+      const { jp, en } = splitTranslation(rawText);
+      return (
+        <div style={{ marginBottom: '4px' }}>
+          <div className="block-paragraph">{jp}</div>
+          {isTranslated && en && <div className="block-translation">{en}</div>}
+          <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
+        </div>
+      );
+    }
+
+    case 'callout': {
+      const emoji = blockData.icon?.emoji || '💡';
+      const { jp, en } = splitTranslation(rawText);
+      return (
+        <div className="block-callout">
+          <div className="callout-header">
+            <span className="callout-emoji">{emoji}</span>
+            <div>
+              <div className="callout-text">{jp}</div>
+              {isTranslated && en && <div className="block-translation">{en}</div>}
+            </div>
+          </div>
+          <div className="callout-children">
+            <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
+          </div>
+        </div>
+      );
+    }
+
+    case 'bulleted_list_item':
+    case 'numbered_list_item': {
+      const { jp, en } = splitTranslation(rawText);
+      return (
+        <div className="block-bullet">
+          <div className="bullet-dot" />
+          <div style={{ flex: 1 }}>
+            <div className="block-paragraph" style={{ fontSize: '17px' }}>{jp}</div>
+            {isTranslated && en && <div className="block-translation">{en}</div>}
+          </div>
+        </div>
+      );
+    }
+
+    case 'image': {
+      const url = blockData.file?.url || blockData.external?.url;
+      if (!url) return null;
+      return (
+        <div style={{ margin: '24px 0' }}>
+          <img
+            src={url}
+            alt="Lesson content"
+            style={{ width: '100%', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+          />
+        </div>
+      );
+    }
+
+    case 'divider':
+      return <div className="divider" style={{ margin: '24px 0' }} />;
+
+    case 'quote': {
+      const { jp } = splitTranslation(rawText);
+      return (
+        <div style={{ borderLeft: '4px solid var(--primary)', paddingLeft: '16px', margin: '12px 0', fontStyle: 'italic', color: '#555', fontSize: '16px' }}>
+          {jp}
+        </div>
+      );
+    }
+
+    case 'table': {
+      // Basic table — rows come as child blocks in Notion format
+      return (
+        <div className="block-table">
+          <table>
+            <tbody>
+              {(blockData.rows || []).map((row, ri) => (
+                <tr key={ri}>
+                  {(row.cells || []).map((cell, ci) => {
+                    const cellText = (cell || []).map(rt => rt.plain_text).join('');
+                    return ri === 0 ? <th key={ci}>{cellText}</th> : <td key={ci}>{cellText}</td>;
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    case 'display_number': {
+      const d = blockData;
+      const wordId = `number_${blockId}`;
+      return (
+        <NumberCard
+          digit={d.digit || d.number?.toString() || ''}
+          hiragana={d.hiragana || d.reading || ''}
+          kanji={d.kanji || ''}
+          english={d.english || d.translation || ''}
+          isTranslated={translateAll || !!individualTranslations[wordId]}
+          onToggle={onToggle}
+          wordId={wordId}
+        />
+      );
+    }
+
+    case 'vocabulary_item':
+    case 'display_greeting': {
+      const d = blockData;
+      const wordId = `greeting_${blockId}`;
+      return (
+        <GreetingCard
+          phrase={d.word || d.phrase || ''}
+          reading={d.reading || d.hiragana || ''}
+          meaning={d.translation || d.meaning || ''}
+          isTranslated={translateAll || !!individualTranslations[wordId]}
+          onToggle={onToggle}
+          wordId={wordId}
+        />
+      );
+    }
+
+    case 'grid': {
+      const chars = Array.isArray(blockData) ? blockData : (blockData.characters || []);
+      return (
+        <div className="char-grid">
+          {chars.map((ch, i) => <div className="char-cell" key={i}>{ch}</div>)}
+        </div>
+      );
+    }
+
+    default:
+      return null;
+  }
+};
+
+/* ---- Main LessonDetail Component ---- */
 const LessonDetail = () => {
   const { lessonId } = useParams();
   const navigate = useNavigate();
@@ -15,237 +286,144 @@ const LessonDetail = () => {
 
   useEffect(() => {
     getLessonContent(lessonId)
-      .then(res => {
-        setData(res.data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
+      .then(res => { setData(res.data); setLoading(false); })
+      .catch(() => setLoading(false));
   }, [lessonId]);
 
-  const speak = (text) => {
-    if (!text) return;
-    window.speechSynthesis.cancel();
-    // For flashcards, sometimes data is in different fields
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'ja-JP';
-    utterance.rate = 0.8;
-    window.speechSynthesis.speak(utterance);
-  };
-
-  const toggleTranslation = (id) => {
+  const toggleTranslation = useCallback((id) => {
     setIndividualTranslations(prev => ({ ...prev, [id]: !prev[id] }));
-  };
+  }, []);
 
-  const splitTranslation = (text) => {
-    if (typeof text !== 'string') return { jp: text?.toString() || '', en: '' };
-    if (text.includes('｜')) {
-      const parts = text.split('｜');
-      return { jp: parts[0].trim(), en: parts[1].trim() };
-    } else if (text.includes('|')) {
-      const parts = text.split('|');
-      return { jp: parts[0].trim(), en: parts[1].trim() };
-    }
-    return { jp: text, en: '' };
-  };
+  if (loading) {
+    return (
+      <div className="lesson-container">
+        <div className="loading-container" style={{ flex: 1 }}>
+          <div className="spinner" />
+          レッスンを読み込み中...
+        </div>
+      </div>
+    );
+  }
 
-  const renderBlock = (block, index, depth = 0) => {
-    const type = block.type;
-    const blockId = `block_${currentSlideIndex}_${index}_${depth}`;
-    const blockData = block[type];
-    
-    if (!blockData) return null;
-
-    let text = "";
-    if (blockData.rich_text) {
-      text = blockData.rich_text.map(rt => rt.plain_text).join("");
-    } else if (blockData.text) {
-       text = blockData.text;
-    }
-
-    const { jp, en } = splitTranslation(text);
-    const isTranslated = translateAll || individualTranslations[blockId];
-
-    switch (type) {
-      case 'heading_1':
-      case 'heading_2':
-      case 'heading_3':
-        return (
-          <div key={blockId} className="block-heading">
-            <div>{jp}</div>
-            {isTranslated && en && <div style={{ fontSize: '0.9rem', opacity: 0.6, fontStyle: 'italic' }}>{en}</div>}
-            <div className="flex gap-4">
-              <button className="action-btn" onClick={() => speak(jp)}><Volume2 size={14} /> Speak</button>
-              <button className="action-btn secondary-action-btn" onClick={() => toggleTranslation(blockId)}>
-                <Languages size={14} /> {isTranslated ? "Hide" : "Translate"}
-              </button>
-            </div>
-          </div>
-        );
-      
-      case 'paragraph':
-        return (
-          <div key={blockId} className="block-paragraph">
-            <div>{jp}</div>
-            {isTranslated && en && <div style={{ fontSize: '0.85rem', opacity: 0.7, fontStyle: 'italic', marginTop: '4px' }}>{en}</div>}
-            <div className="flex gap-4">
-              <button className="action-btn" onClick={() => speak(jp)}><Volume2 size={14} /></button>
-              <button className="action-btn secondary-action-btn" onClick={() => toggleTranslation(blockId)}>
-                {isTranslated ? "Hide" : "Translate"}
-              </button>
-            </div>
-          </div>
-        );
-
-      case 'callout':
-        return (
-          <div key={blockId} className="block-callout">
-             <div className="callout-header">
-                <span className="callout-emoji">{blockData.icon?.emoji || '💡'}</span>
-                <div>
-                   <div className="callout-title">{jp}</div>
-                   {isTranslated && en && <div style={{ fontSize: '0.8rem', opacity: 0.6 }}>{en}</div>}
-                </div>
-             </div>
-             <div className="callout-children">
-                 <button className="action-btn" onClick={() => speak(jp)}><Volume2 size={12} /> Speak</button>
-             </div>
-          </div>
-        );
-
-      case 'bulleted_list_item':
-        return (
-          <div key={blockId} className="block-bullet">
-             <div className="bullet-dot" />
-             <div>
-                <div>{jp}</div>
-                {isTranslated && en && <div style={{ fontSize: '0.8rem', opacity: 0.6 }}>{en}</div>}
-             </div>
-          </div>
-        );
-
-      case 'display_number':
-      case 'vocabulary_item':
-      case 'display_greeting':
-        // These are custom blocks from the atomic data or specialized Notion structure
-        const d = blockData;
-        const mainText = d.kanji || d.word || d.phrase || jp;
-        const sub1 = d.digit || d.number || '';
-        const sub2 = d.hiragana || d.reading || '';
-        const trans = d.english || d.translation || d.meaning || en;
-
-        return (
-          <div key={blockId} className="flashcard">
-             <div className="flashcard-kanji">{mainText}</div>
-             {sub1 && <div style={{ fontSize: '3rem', color: '#C49F7B', fontWeight: '300', marginTop: '1rem' }}>{sub1}</div>}
-             <div className="flashcard-reading">{sub2}</div>
-             {(isTranslated && trans) ? (
-                <div className="flashcard-translation">{trans}</div>
-             ) : (
-                <button className="action-btn" style={{ fontSize: '1.1rem', marginTop: '1rem' }} onClick={() => toggleTranslation(blockId)}>
-                   Show Translation
-                </button>
-             )}
-             <button className="action-btn" style={{ marginTop: '2rem' }} onClick={() => speak(sub2 || mainText)}>
-                <Volume2 size={40} />
-             </button>
-          </div>
-        );
-
-      case 'image':
-        return (
-          <div key={blockId} style={{ margin: '2rem 0' }}>
-            <img 
-               src={blockData.file?.url || blockData.external?.url} 
-               alt="Lesson Content" 
-               style={{ width: '100%', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }} 
-            />
-          </div>
-        );
-
-      default:
-        return null;
-    }
-  };
-
-  if (loading) return <div className="p-10 text-center">Loading Lesson...</div>;
+  if (!data?.slides || data.slides.length === 0) {
+    return (
+      <div className="lesson-container">
+        <div className="loading-container" style={{ flex: 1 }}>
+          コンテンツが見つかりませんでした
+        </div>
+      </div>
+    );
+  }
 
   const slides = data.slides;
-  if (!slides || slides.length === 0) return <div className="p-10 text-center">No content found.</div>;
-
   const currentSlide = slides[currentSlideIndex];
   const progress = ((currentSlideIndex + 1) / slides.length) * 100;
+  const isLastSlide = currentSlideIndex === slides.length - 1;
+
+  const goNext = () => {
+    if (!isLastSlide) {
+      setCurrentSlideIndex(i => i + 1);
+      setIndividualTranslations({});
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const goPrev = () => {
+    if (currentSlideIndex > 0) {
+      setCurrentSlideIndex(i => i - 1);
+      setIndividualTranslations({});
+    }
+  };
+
+  // Global speak — read headings/paragraphs on current slide
+  const speakPage = () => {
+    let textToRead = '';
+    (currentSlide.content || []).forEach(block => {
+      const type = block.type;
+      const bd = block[type];
+      if (!bd) return;
+      if (['heading_1','heading_2','heading_3','paragraph'].includes(type)) {
+        if (bd.rich_text) textToRead += bd.rich_text.map(r => r.plain_text).join('') + ' ';
+      } else if (type === 'display_number') {
+        textToRead += (bd.hiragana || bd.reading || '') + ' ';
+      }
+    });
+    speak(textToRead);
+  };
 
   return (
     <div className="lesson-container">
       {/* Immersive Header */}
       <div className="lesson-header">
-        <button onClick={() => navigate(-1)}><X size={24} /></button>
-        <div className="progress-bar-container">
-          <div className="progress-bar-fill" style={{ width: `${progress}%` }} />
+        <button className="lesson-close-btn" onClick={() => navigate(-1)}>
+          <XIcon />
+        </button>
+        <div className="lesson-progress-container">
+          <div className="lesson-progress-fill" style={{ width: `${progress}%` }} />
         </div>
-        <button 
-          onClick={() => setTranslateAll(!translateAll)}
-          style={{ color: translateAll ? 'var(--primary)' : '#9e9e9e', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}
+        <button className="lesson-close-btn" onClick={speakPage} title="Read Page" style={{ color: 'var(--text-sub)' }}>
+          <Volume2 size={20} />
+        </button>
+        <button
+          className={`lesson-translate-btn ${translateAll ? 'active' : ''}`}
+          onClick={() => setTranslateAll(v => !v)}
         >
-          <Languages size={18} />
-          {translateAll ? "Hide All" : "Translate All"}
+          <TranslateIcon size={14} active={translateAll} />
+          {translateAll ? 'Hide All' : 'Translate All'}
         </button>
       </div>
 
       {/* Slide Content */}
-      <div className="slide-content">
+      <div className="lesson-slide-area">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlideIndex}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-            style={{ width: '100%' }}
+            transition={{ duration: 0.28 }}
           >
-            <span style={{ fontSize: '0.75rem', fontWeight: '800', color: 'blue', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              {currentSlide.title}
-            </span>
-            <div style={{ marginTop: '1rem' }}>
-              {currentSlide.content.map((block, i) => (
-                <div key={i}>
-                  {renderBlock(block, i)}
-                </div>
-              ))}
-            </div>
+            {currentSlide.title && (
+              <div className="slide-section-label">
+                {splitTranslation(currentSlide.title).jp}
+              </div>
+            )}
+            {(currentSlide.content || []).map((block, i) => {
+              const blockId = `slide_${currentSlideIndex}_block_${i}`;
+              return (
+                <motion.div
+                  key={blockId}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04, duration: 0.3 }}
+                >
+                  <BlockRenderer
+                    block={block}
+                    blockId={blockId}
+                    translateAll={translateAll}
+                    individualTranslations={individualTranslations}
+                    onToggle={toggleTranslation}
+                    slideIndex={currentSlideIndex}
+                    blockIndex={i}
+                  />
+                </motion.div>
+              );
+            })}
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Slide Footer Navigation */}
-      <div className="slide-footer">
-        <div className="flex gap-4 w-100" style={{ width: '100%' }}>
-          {currentSlideIndex > 0 && (
-            <button 
-              className="flex items-center justify-center gap-2 p-4"
-              style={{ flex: 1, border: '1px solid var(--primary)', borderRadius: '12px', color: 'var(--primary)', fontWeight: 'bold' }}
-              onClick={() => setCurrentSlideIndex(currentSlideIndex - 1)}
-            >
-              <ChevronLeft size={20} /> Back
-            </button>
-          )}
-          <button 
-            className="primary-button" 
-            style={{ flex: 2, marginTop: 0 }}
-            onClick={() => {
-              if (currentSlideIndex < slides.length - 1) {
-                setCurrentSlideIndex(currentSlideIndex + 1);
-              } else {
-                navigate(-1);
-              }
-            }}
-          >
-            {currentSlideIndex < slides.length - 1 ? "Next" : "Complete Lesson"}
+      {/* Footer Navigation */}
+      <div className="lesson-footer">
+        {currentSlideIndex > 0 && (
+          <button className="lesson-back-btn" onClick={goPrev}>
+            <ChevronLeft /> Back
           </button>
-        </div>
+        )}
+        <button className="lesson-next-btn" onClick={goNext}>
+          {isLastSlide ? 'Complete Lesson' : 'Next'}
+        </button>
       </div>
     </div>
   );

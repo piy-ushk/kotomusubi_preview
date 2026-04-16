@@ -1,63 +1,67 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getTextbooks } from '../services/api';
-import { ArrowLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+
+const ChevronRight = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="9 18 15 12 9 6"/>
+  </svg>
+);
+
+const getIcon = (title) => {
+  if (title?.includes('Grammar')) return '文';
+  if (title?.includes('Topic')) return '話';
+  if (title?.includes('Travel')) return '旅';
+  return '📚';
+};
 
 const TextbooksList = () => {
   const [textbooks, setTextbooks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     getTextbooks()
       .then(res => {
-        setTextbooks(res.data);
+        setTextbooks(Array.isArray(res.data) ? res.data : []);
         setLoading(false);
       })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
+      .catch(() => { setTextbooks([]); setLoading(false); });
   }, []);
 
   return (
-    <div className="p-6 fade-in">
-      <div className="flex items-center gap-4 mb-8">
-        <button onClick={() => navigate(-1)} style={{ color: 'var(--text-primary)' }}>
-          <ArrowLeft size={24} />
-        </button>
-        <h2 style={{ fontSize: '1.25rem' }}>すべての教材</h2>
+    <div className="page-pad slide-in-right">
+      {/* Header — no back button, this is a tab */}
+      <div style={{ marginBottom: '24px' }}>
+        <div className="section-title" style={{ fontSize: '20px' }}>すべての教材</div>
       </div>
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '2rem' }}>読み込み中...</div>
+        <div className="loading-container">
+          <div className="spinner" />
+          読み込み中...
+        </div>
+      ) : textbooks.length === 0 ? (
+        <div className="empty-state">教材が見つかりませんでした</div>
       ) : (
-        <div className="flex flex-col gap-4">
-          {textbooks.map((textbook, index) => {
-             let icon = '📚';
-             if (textbook.title.includes('Grammar')) icon = '文';
-             if (textbook.title.includes('Topic')) icon = '話';
-             if (textbook.title.includes('Travel')) icon = '旅';
-
-             return (
-               <motion.div
-                 key={textbook.id}
-                 initial={{ opacity: 0, y: 10 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 transition={{ delay: index * 0.1 }}
-               >
-                 <Link to={`/textbook/${textbook.id}`} className="materials-card">
-                   <div className="icon-box">{icon}</div>
-                   <div style={{ flex: 1 }}>
-                     <h4 style={{ fontSize: '1.1rem' }}>{textbook.title}</h4>
-                     <div className="badge" style={{ marginTop: '0.5rem' }}>教材</div>
-                   </div>
-                   <ChevronRight size={20} />
-                 </Link>
-               </motion.div>
-             );
-          })}
+        <div className="materials-card-grid">
+          {textbooks.map((textbook, index) => (
+            <motion.div
+              key={textbook.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.08 }}
+            >
+              <Link to={`/textbook/${textbook.id}`} className="materials-card">
+                <div className="icon-box">{getIcon(textbook.title)}</div>
+                <div className="card-info">
+                  <div className="card-title">{textbook.title}</div>
+                  <div className="badge">教材</div>
+                </div>
+                <span className="chevron-icon"><ChevronRight /></span>
+              </Link>
+            </motion.div>
+          ))}
         </div>
       )}
     </div>

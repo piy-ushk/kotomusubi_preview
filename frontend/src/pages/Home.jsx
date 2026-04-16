@@ -1,89 +1,99 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getTextbooks } from '../services/api';
-import { User, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const Home = () => {
+/* Inline Chevron icon */
+const ChevronRight = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="9 18 15 12 9 6"/>
+  </svg>
+);
+
+const UserIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+    <circle cx="12" cy="7" r="4"/>
+  </svg>
+);
+
+const getIcon = (title) => {
+  if (title?.includes('Grammar')) return '文';
+  if (title?.includes('Topic')) return '話';
+  if (title?.includes('Travel')) return '旅';
+  return '📚';
+};
+
+const Home = ({ onGoToMaterials }) => {
   const [textbooks, setTextbooks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     getTextbooks()
       .then(res => {
-        setTextbooks(res.data);
+        setTextbooks(Array.isArray(res.data) ? res.data : []);
         setLoading(false);
       })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
+      .catch(() => { setTextbooks([]); setLoading(false); });
   }, []);
 
   return (
-    <div className="p-6 fade-in">
+    <div className="page-pad fade-in">
       {/* Header */}
-      <div className="flex justify-between items-start mb-8">
-        <div>
-          <img src="/logo.png" alt="Logo" className="logo-main" />
-          <h2 style={{ fontSize: '1.25rem', marginTop: '0.5rem' }}>おはよう!</h2>
-          <p style={{ fontSize: '0.875rem', opacity: 0.8 }}>学習者さん、おはようございます</p>
+      <div className="page-header">
+        <div className="page-header-left">
+          <img src="/logo.png" alt="Kotomusubi" className="logo-main" />
+          <div className="greeting-title">おはよう!</div>
+          <div className="greeting-sub">学習者さん、おはようございます</div>
         </div>
         <div className="profile-circle">
-          <User size={24} />
+          <UserIcon />
         </div>
       </div>
 
-      {/* Learning Materials Section Header */}
-      <div className="flex justify-between items-center mb-4">
-        <h3 style={{ fontSize: '1rem' }}>学習教材</h3>
-        <Link to="/textbooks" className="view-all-btn">すべて表示</Link>
+      {/* Section header */}
+      <div className="section-header">
+        <div className="section-title">学習教材</div>
+        <button className="view-all-btn" onClick={onGoToMaterials}>
+          すべて表示
+        </button>
       </div>
 
       {/* Welcome Banner Card */}
-      <motion.div 
-        className="welcome-banner mb-8"
-        initial={{ opacity: 0, scale: 0.95 }}
+      <motion.div
+        className="welcome-banner"
+        initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
       >
-        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📚</div>
-        <h2 style={{ fontSize: '1.25rem' }}>学習を始めましょう！</h2>
-        <p style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>
-          「教材」タブからコースを選択して、新しいレッスンを開始できます。
-        </p>
-        <button 
-          className="primary-button"
-          onClick={() => navigate('/textbooks')}
-        >
+        <div className="emoji">📚</div>
+        <h2>学習を始めましょう！</h2>
+        <p>「教材」タブからコースを選択して、<br />新しいレッスンを開始できます。</p>
+        <button className="primary-button" onClick={onGoToMaterials}>
           教材を見る
         </button>
       </motion.div>
 
-      {/* Optional: Short list of materials if they exist */}
+      {/* Quick textbook list */}
       {!loading && textbooks.length > 0 && (
-        <div className="flex flex-col gap-4">
-          {textbooks.slice(0, 3).map((textbook) => {
-            let icon = '📚';
-            if (textbook.title.includes('Grammar')) icon = '文';
-            if (textbook.title.includes('Topic')) icon = '話';
-            if (textbook.title.includes('Travel')) icon = '旅';
-
-            return (
-              <Link 
-                key={textbook.id} 
-                to={`/textbook/${textbook.id}`}
-                className="materials-card"
-              >
-                <div className="icon-box">{icon}</div>
-                <div style={{ flex: 1 }}>
-                  <h4 style={{ fontSize: '1.1rem' }}>{textbook.title}</h4>
-                  <div className="badge" style={{ marginTop: '0.5rem' }}>教材</div>
+        <div className="materials-card-grid">
+          {textbooks.slice(0, 3).map((textbook, i) => (
+            <motion.div
+              key={textbook.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
+            >
+              <Link to={`/textbook/${textbook.id}`} className="materials-card">
+                <div className="icon-box">{getIcon(textbook.title)}</div>
+                <div className="card-info">
+                  <div className="card-title">{textbook.title}</div>
+                  <div className="badge">教材</div>
                 </div>
-                <ChevronRight size={20} />
+                <span className="chevron-icon"><ChevronRight /></span>
               </Link>
-            );
-          })}
+            </motion.div>
+          ))}
         </div>
       )}
     </div>

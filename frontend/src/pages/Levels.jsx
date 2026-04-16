@@ -1,8 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getLevels } from '../services/api';
-import { ArrowLeft, ChevronRight, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
+
+const ArrowLeft = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="19" y1="12" x2="5" y2="12"/>
+    <polyline points="12 19 5 12 12 5"/>
+  </svg>
+);
+
+const ChevronRight = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="9 18 15 12 9 6"/>
+  </svg>
+);
+
+const StarIcon = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f18b5b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+  </svg>
+);
 
 const Levels = () => {
   const { textbookId } = useParams();
@@ -13,60 +31,80 @@ const Levels = () => {
   useEffect(() => {
     getLevels(textbookId)
       .then(res => {
-        setLevels(res.data);
+        setLevels(Array.isArray(res.data) ? res.data : []);
         setLoading(false);
       })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
+      .catch(() => { setLevels([]); setLoading(false); });
   }, [textbookId]);
 
   return (
-    <div className="p-6 fade-in">
-      <div className="flex items-center gap-4 mb-12">
-        <button onClick={() => navigate(-1)} style={{ color: 'var(--text-primary)' }}>
-          <ArrowLeft size={24} />
+    <div className="fade-in">
+      {/* App Bar */}
+      <div className="app-bar">
+        <button className="back-btn" onClick={() => navigate(-1)}>
+          <ArrowLeft />
         </button>
-        <h2 style={{ fontSize: '1.25rem' }}>内容を選択してください</h2>
+        <div className="app-bar-title">内容を選択してください</div>
       </div>
 
-      <div style={{ marginBottom: '1.5rem', fontWeight: '700', fontSize: '1.1rem' }}>
-        学習内容
-      </div>
-
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '2rem' }}>読み込み中...</div>
-      ) : (
-        <div className="flex flex-col gap-4">
-          {levels.map((level, index) => (
-            <motion.div
-              key={level.id}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <div 
-                onClick={() => navigate(`/level/${level.id}`)}
-                className="materials-card"
-                style={{ background: 'var(--bg-primary)', cursor: 'pointer' }}
-              >
-                <div 
-                  className="icon-box" 
-                  style={{ background: 'var(--bg-secondary)', width: '56px', height: '56px' }}
-                >
-                  <Star size={32} color="var(--primary)" />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <h4 style={{ fontSize: '1.1rem' }}>{level.title}</h4>
-                  <p style={{ fontSize: '0.875rem', opacity: 0.7 }}>レベル - {level.title}</p>
-                </div>
-                <ChevronRight size={20} />
-              </div>
-            </motion.div>
-          ))}
+      <div className="page-pad" style={{ paddingTop: '8px' }}>
+        <div style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '24px' }}>
+          学習内容
         </div>
-      )}
+
+        {loading ? (
+          <div className="loading-container">
+            <div className="spinner" />
+            読み込み中...
+          </div>
+        ) : levels.length === 0 ? (
+          <div className="empty-state">レベルが見つかりませんでした</div>
+        ) : (
+          <div className="materials-card-grid">
+            {levels.map((level, index) => (
+              <motion.div
+                key={level.id}
+                className="stagger-item"
+                style={{ animationDelay: `${index * 80}ms` }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <button
+                  className="level-card"
+                  onClick={() => navigate(`/level/${level.id}`)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '20px',
+                    width: '100%',
+                    padding: '24px',
+                    background: 'var(--bg-primary)',
+                    border: '1px solid var(--border-light)',
+                    borderRadius: '16px',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    fontFamily: "'Noto Sans JP', sans-serif",
+                  }}
+                >
+                  <div className="icon-box-sm">
+                    <StarIcon />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '4px' }}>
+                      {level.title}
+                    </div>
+                    <div style={{ fontSize: '14px', color: 'var(--text-sub)' }}>
+                      レベル - {level.title}
+                    </div>
+                  </div>
+                  <span style={{ color: 'var(--text-primary)', flexShrink: 0 }}>
+                    <ChevronRight />
+                  </span>
+                </button>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
