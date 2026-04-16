@@ -1,19 +1,13 @@
 {
   "version": 2,
-  "experimentalServices": {
-    "frontend": {
-      "entrypoint": "frontend",
-      "routePrefix": "/"
-    },
-    "backend": {
-      "entrypoint": "backend",
-      "routePrefix": "/api"
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/backend/main.py"
+      "destination": "https://kotomusubi-preview.onrender.com"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
