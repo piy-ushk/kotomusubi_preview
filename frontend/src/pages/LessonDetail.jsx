@@ -48,6 +48,45 @@ const splitTranslation = (text) => {
   return { jp: text, en: '' };
 };
 
+/* ---- Block Processing Helpers ---- */
+const getRawText = (block) => {
+  if (!block) return '';
+  const type = block.type;
+  if (!type) return '';
+  const blockData = block[type];
+  if (!blockData) return '';
+  if (blockData.rich_text) return blockData.rich_text.map(rt => rt.plain_text).join('');
+  if (blockData.text) return blockData.text;
+  return '';
+};
+
+const hasJapanese = (str) => /[\u3040-\u309f\u30a0-\u30ff\u4e00-\u9faf]/.test(str);
+const isEnglishTarget = (str) => {
+  if (!str.trim()) return false;
+  const hasEng = /[a-zA-Z]/.test(str);
+  const noJp = !hasJapanese(str);
+  return hasEng && noJp;
+};
+
+const preprocessBlocks = (blocks) => {
+  const result = [];
+  for (let i = 0; i < blocks.length; i++) {
+    const block = blocks[i];
+    const nextBlock = blocks[i + 1];
+    
+    let jpText = getRawText(block);
+    let nextText = nextBlock ? getRawText(nextBlock) : '';
+    
+    if (jpText && hasJapanese(jpText) && isEnglishTarget(nextText)) {
+      result.push({ block, enTranslation: nextText });
+      i++; // Skip the next block since we merged it
+    } else {
+      result.push({ block, enTranslation: null });
+    }
+  }
+  return result;
+};
+
 /* ---- Block Components ---- */
 
 const TranslationControls = ({ id, rawText, isTranslated, onToggle }) => (
@@ -111,7 +150,7 @@ const GreetingCard = ({ phrase, reading, meaning, isTranslated, onToggle, wordId
 };
 
 /* ---- Block Renderer ---- */
-const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, onToggle, slideIndex, blockIndex }) => {
+const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, onToggle, enTranslation }) => {
   const type = block.type;
   const blockData = block[type];
   if (!blockData) return null;
@@ -121,13 +160,14 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
   else if (blockData.text) rawText = blockData.text;
 
   const isTranslated = translateAll || !!individualTranslations[blockId];
+  let { jp, en } = splitTranslation(rawText);
+  if (!en && enTranslation) en = enTranslation;
 
   switch (type) {
     case 'heading_1':
     case 'heading_2':
     case 'heading_3': {
       const sizes = { heading_1: '26px', heading_2: '22px', heading_3: '18px' };
-      const { jp, en } = splitTranslation(rawText);
       return (
         <div style={{ margin: '24px 0 8px' }}>
           <div className="block-heading" style={{ fontSize: sizes[type] }}>{jp}</div>
@@ -139,7 +179,6 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
 
     case 'paragraph': {
       if (!rawText.trim()) return <div style={{ height: '12px' }} />;
-      const { jp, en } = splitTranslation(rawText);
       return (
         <div style={{ marginBottom: '4px' }}>
           <div className="block-paragraph">{jp}</div>
@@ -151,7 +190,6 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
 
     case 'callout': {
       const emoji = blockData.icon?.emoji || '💡';
-      const { jp, en } = splitTranslation(rawText);
       return (
         <div className="block-callout">
           <div className="callout-header">
@@ -170,15 +208,43 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
 
     case 'bulleted_list_item':
     case 'numbered_list_item': {
-      const { jp, en } = splitTranslation(rawText);
       return (
         <div className="block-bullet">
           <div className="bullet-dot" />
           <div style={{ flex: 1 }}>
             <div className="block-paragraph" style={{ fontSize: '17px' }}>{jp}</div>
             {isTranslated && en && <div className="block-translation">{en}</div>}
+            <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
           </div>
         </div>
+      );
+    }
+    
+    case 'to_do': {
+      const checked = blockData.checked || false;
+      return (
+        <div className="block-todo" style={{ display: 'flex', alignItems: 'flex-start', margin: '8px 0' }}>
+          <input type="checkbox" readOnly checked={checked} style={{ marginTop: '5px', marginRight: '10px' }} />
+          <div style={{ flex: 1 }}>
+            <div className="block-paragraph" style={{ fontSize: '17px', color: 'var(--primary)' }}>{jp}</div>
+            {isTranslated && en && <div className="block-translation">{en}</div>}
+            <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
+          </div>
+        </div>
+      );
+    }
+    
+    case 'toggle': {
+      return (
+        <details className="block-toggle" style={{ margin: '8px 0', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '12px', background: 'var(--bg-secondary)' }}>
+          <summary style={{ cursor: 'pointer', fontWeight: '500', display: 'flex', alignItems: 'center' }}>
+            <div style={{ flex: 1 }}>{jp}</div>
+          </summary>
+          <div style={{ marginTop: '12px', paddingLeft: '20px' }}>
+            {isTranslated && en && <div className="block-translation" style={{ marginBottom: '8px' }}>{en}</div>}
+            <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
+          </div>
+        </details>
       );
     }
 
@@ -200,7 +266,6 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       return <div className="divider" style={{ margin: '24px 0' }} />;
 
     case 'quote': {
-      const { jp } = splitTranslation(rawText);
       return (
         <div style={{ borderLeft: '4px solid var(--primary)', paddingLeft: '16px', margin: '12px 0', fontStyle: 'italic', color: '#555', fontSize: '16px' }}>
           {jp}
@@ -231,12 +296,14 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'display_number': {
       const d = blockData;
       const wordId = `number_${blockId}`;
+      let eng = d.english || d.translation || '';
+      if (!eng && en) eng = en;
       return (
         <NumberCard
           digit={d.digit || d.number?.toString() || ''}
           hiragana={d.hiragana || d.reading || ''}
           kanji={d.kanji || ''}
-          english={d.english || d.translation || ''}
+          english={eng}
           isTranslated={translateAll || !!individualTranslations[wordId]}
           onToggle={onToggle}
           wordId={wordId}
@@ -248,11 +315,13 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'display_greeting': {
       const d = blockData;
       const wordId = `greeting_${blockId}`;
+      let eng = d.translation || d.meaning || '';
+      if (!eng && en) eng = en;
       return (
         <GreetingCard
           phrase={d.word || d.phrase || ''}
           reading={d.reading || d.hiragana || ''}
-          meaning={d.translation || d.meaning || ''}
+          meaning={eng}
           isTranslated={translateAll || !!individualTranslations[wordId]}
           onToggle={onToggle}
           wordId={wordId}
@@ -283,6 +352,7 @@ const LessonDetail = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [translateAll, setTranslateAll] = useState(false);
   const [individualTranslations, setIndividualTranslations] = useState({});
+  const [viewMode, setViewMode] = useState('learning');
 
   useEffect(() => {
     getLessonContent(lessonId)
@@ -293,6 +363,16 @@ const LessonDetail = () => {
   const toggleTranslation = useCallback((id) => {
     setIndividualTranslations(prev => ({ ...prev, [id]: !prev[id] }));
   }, []);
+
+  const slides = data?.learning_slides || [];
+  const testSections = data?.test_sections || [];
+  
+  // Determine if we should show test mode immediately
+  useEffect(() => {
+    if (data && slides.length === 0 && testSections.length > 0 && viewMode === 'learning') {
+      setViewMode('test');
+    }
+  }, [data, slides.length, testSections.length, viewMode]);
 
   if (loading) {
     return (
@@ -305,7 +385,7 @@ const LessonDetail = () => {
     );
   }
 
-  if (!data?.slides || data.slides.length === 0) {
+  if ((!slides || slides.length === 0) && (!testSections || testSections.length === 0)) {
     return (
       <div className="lesson-container">
         <div className="loading-container" style={{ flex: 1 }}>
@@ -315,31 +395,45 @@ const LessonDetail = () => {
     );
   }
 
-  const slides = data.slides;
-  const currentSlide = slides[currentSlideIndex];
-  const progress = ((currentSlideIndex + 1) / slides.length) * 100;
+  const currentSlide = slides[currentSlideIndex] || {};
+  const progress = viewMode === 'learning' && slides.length > 0 ? ((currentSlideIndex + 1) / slides.length) * 100 : 100;
   const isLastSlide = currentSlideIndex === slides.length - 1;
 
   const goNext = () => {
-    if (!isLastSlide) {
-      setCurrentSlideIndex(i => i + 1);
-      setIndividualTranslations({});
-    } else {
-      navigate(-1);
+    if (viewMode === 'learning') {
+      if (!isLastSlide) {
+        setCurrentSlideIndex(i => i + 1);
+        setIndividualTranslations({});
+      } else {
+        if (testSections.length > 0) {
+          setViewMode('test');
+          setIndividualTranslations({});
+        } else {
+          navigate(-1);
+        }
+      }
     }
   };
 
   const goPrev = () => {
-    if (currentSlideIndex > 0) {
+    if (viewMode === 'test') {
+      if (slides.length > 0) {
+        setViewMode('learning');
+        setCurrentSlideIndex(slides.length - 1);
+        setIndividualTranslations({});
+      }
+    } else if (currentSlideIndex > 0) {
       setCurrentSlideIndex(i => i - 1);
       setIndividualTranslations({});
     }
   };
 
-  // Global speak — read headings/paragraphs on current slide
+  // Global speak — read headings/paragraphs on current slide or test section
   const speakPage = () => {
     let textToRead = '';
-    (currentSlide.content || []).forEach(block => {
+    const blocksToRead = viewMode === 'learning' ? (currentSlide.content || []) : testSections.flatMap(s => s.content || []);
+    
+    blocksToRead.forEach(block => {
       const type = block.type;
       const bd = block[type];
       if (!bd) return;
@@ -374,57 +468,120 @@ const LessonDetail = () => {
         </button>
       </div>
 
-      {/* Slide Content */}
-      <div className="lesson-slide-area">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSlideIndex}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.28 }}
-          >
-            {currentSlide.title && (
-              <div className="slide-section-label">
-                {splitTranslation(currentSlide.title).jp}
-              </div>
+      {/* Main Content Area */}
+      {viewMode === 'learning' ? (
+        <>
+          <div className="lesson-slide-area">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSlideIndex}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.28 }}
+              >
+                {currentSlide.title && (
+                  <div className="slide-section-label">
+                    {splitTranslation(currentSlide.title).jp}
+                  </div>
+                )}
+                {preprocessBlocks(currentSlide.content || []).map((item, i) => {
+                  const blockId = `slide_${currentSlideIndex}_block_${i}`;
+                  return (
+                    <motion.div
+                      key={blockId}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.04, duration: 0.3 }}
+                    >
+                      <BlockRenderer
+                        block={item.block}
+                        enTranslation={item.enTranslation}
+                        blockId={blockId}
+                        translateAll={translateAll}
+                        individualTranslations={individualTranslations}
+                        onToggle={toggleTranslation}
+                      />
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          
+          <div className="lesson-footer">
+            {currentSlideIndex > 0 && (
+              <button className="lesson-back-btn" onClick={goPrev}>
+                <ChevronLeft /> Back
+              </button>
             )}
-            {(currentSlide.content || []).map((block, i) => {
-              const blockId = `slide_${currentSlideIndex}_block_${i}`;
-              return (
-                <motion.div
-                  key={blockId}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.04, duration: 0.3 }}
-                >
-                  <BlockRenderer
-                    block={block}
-                    blockId={blockId}
-                    translateAll={translateAll}
-                    individualTranslations={individualTranslations}
-                    onToggle={toggleTranslation}
-                    slideIndex={currentSlideIndex}
-                    blockIndex={i}
-                  />
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Footer Navigation */}
-      <div className="lesson-footer">
-        {currentSlideIndex > 0 && (
-          <button className="lesson-back-btn" onClick={goPrev}>
-            <ChevronLeft /> Back
-          </button>
-        )}
-        <button className="lesson-next-btn" onClick={goNext}>
-          {isLastSlide ? 'Complete Lesson' : 'Next'}
-        </button>
-      </div>
+            <button className="lesson-next-btn" onClick={goNext}>
+              {isLastSlide && testSections.length === 0 ? 'Complete Lesson' : (isLastSlide ? 'Test / Revision' : 'Next')}
+            </button>
+          </div>
+        </>
+      ) : (
+        <div className="test-view-area" style={{ flex: 1, overflowY: 'auto', padding: '20px', paddingBottom: '100px' }}>
+          <div style={{ padding: '0px 10px', maxWidth: '800px', margin: '0 auto' }}>
+            <div className="test-view-header" style={{ marginBottom: '32px', textAlign: 'center' }}>
+              <h2 style={{ fontSize: '28px', color: 'var(--text-color)', marginBottom: '8px' }}>Test & Revision</h2>
+              <p style={{ color: 'var(--text-sub)', fontSize: '16px' }}>Let's review what you've learned.</p>
+            </div>
+            
+            {testSections.map((section, secIdx) => (
+              <div key={secIdx} className="test-section-card" style={{ 
+                background: 'var(--bg-secondary)', 
+                padding: '24px', 
+                borderRadius: '20px', 
+                marginBottom: '24px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+              }}>
+                {section.title && (
+                  <h3 style={{ 
+                    marginBottom: '20px', 
+                    color: 'var(--primary)', 
+                    borderBottom: '2px solid var(--border-color)', 
+                    paddingBottom: '12px',
+                    fontSize: '22px'
+                  }}>
+                    {splitTranslation(section.title).jp}
+                  </h3>
+                )}
+                {preprocessBlocks(section.content || []).map((item, i) => {
+                  const blockId = `test_${secIdx}_block_${i}`;
+                  return (
+                    <div key={blockId} style={{ marginBottom: '16px' }}>
+                      <BlockRenderer
+                        block={item.block}
+                        enTranslation={item.enTranslation}
+                        blockId={blockId}
+                        translateAll={translateAll}
+                        individualTranslations={individualTranslations}
+                        onToggle={toggleTranslation}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
+            
+            <div style={{ textAlign: 'center', marginTop: '40px', display: 'flex', justifyContent: 'center', gap: '16px' }}>
+              {slides.length > 0 && (
+                <button className="lesson-back-btn" onClick={goPrev} style={{ padding: '16px 32px' }}>
+                  <ChevronLeft /> Back to Review
+                </button>
+              )}
+              <button 
+                className="lesson-next-btn" 
+                onClick={() => navigate(-1)} 
+                style={{ padding: '16px 40px', fontSize: '18px', width: 'auto' }}
+              >
+                Complete Lesson
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

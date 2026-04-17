@@ -52,7 +52,29 @@ async def get_levels(textbook_id: str):
     db_ids = await notion.fetch_child_database_ids(textbook_id)
     if not db_ids: return []
     pages = await notion.fetch_database_pages(db_ids[0])
-    levels = [{"id": p["id"], "title": notion.extract_page_title(p)} for p in pages]
+    
+    levels = []
+    for p in pages:
+        cover_url = ""
+        if p.get("cover"):
+            cover_type = p["cover"]["type"]
+            cover_url = p["cover"][cover_type]["url"]
+            
+        # Optional: check if there's a custom image property if cover is none
+        if not cover_url and "properties" in p:
+            for prop in p["properties"].values():
+                if prop.get("type") == "files" and prop.get("files") and len(prop["files"]) > 0:
+                    file_info = prop["files"][0]
+                    if file_info.get("type") in ["file", "external"]:
+                        f_type = file_info["type"]
+                        cover_url = file_info[f_type]["url"]
+                        break
+        
+        levels.append({
+            "id": p["id"],
+            "title": notion.extract_page_title(p),
+            "cover": cover_url
+        })
     
     level_order = ["Super Beginner", "超初級", "Beginner", "初級", "Upper Intermediate", "中上級"]
     def get_sort_key(l):
@@ -60,6 +82,8 @@ async def get_levels(textbook_id: str):
         for i, order in enumerate(level_order):
             if order.lower() in title: return i
         return 999
+        
+    levels.reverse()  # Reverse to fix Notion's default reverse-chronological created_time ordering
     levels.sort(key=get_sort_key)
     return levels
 
@@ -88,30 +112,49 @@ def has_emoji(text):
 async def get_lesson_content(lesson_id: str):
     blocks = await notion.fetch_page_blocks(lesson_id)
     
-    # Chunking blocks into slides based on headings or callouts (anchors)
-    slides = []
-    current_slide = {"title": "Introduction", "content": []}
+    # Chunking blocks into sections based on headings or callouts (anchors)
+    learning_slides = []
+    test_sections = []
+    
+    current_section = {"title": "Introduction", "content": []}
+    current_role = "learning"
     
     for block in blocks:
         text = extract_text(block).strip()
+        text_lower = text.lower()
         b_type = block["type"]
         
         is_anchor = False
         if b_type in ["heading_1", "heading_2", "heading_3", "callout"]:
-            if text and (len(text) < 50): # Heuristic for slide anchors
+            if text and (len(text) < 100): # Heuristic for section anchors
                 is_anchor = True
         
         if is_anchor:
-            if current_slide["content"]:
-                slides.append(current_slide)
-            current_slide = {"title": text, "content": [block]}
-        else:
-            current_slide["content"].append(block)
+            # Save the previous section
+            if current_section["content"]:
+                if current_role == "learning":
+                    learning_slides.append(current_section)
+                else:
+                    test_sections.append(current_section)
             
-    if current_slide["content"]:
-        slides.append(current_slide)
+            # Determine new role
+            if any(keyword in text_lower for keyword in ["question", "discussion", "test", "quiz", "revise", "exercise", "practice", "質問", "ディスカッション", "テスト"]):
+                current_role = "test"
+            elif any(keyword in text_lower for keyword in ["vocabulary", "article", "grammar", "reading", "learning", "単語", "記事", "文法"]):
+                current_role = "learning"
+                
+            current_section = {"title": text, "content": [block]}
+        else:
+            current_section["content"].append(block)
+            
+    if current_section["content"]:
+        if current_role == "learning":
+            learning_slides.append(current_section)
+        else:
+            test_sections.append(current_section)
         
     return {
         "id": lesson_id,
-        "slides": slides
+        "learning_slides": learning_slides,
+        "test_sections": test_sections
     }

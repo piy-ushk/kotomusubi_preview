@@ -60,48 +60,119 @@ const Levels = () => {
         ) : levels.length === 0 ? (
           <div className="empty-state">レベルが見つかりませんでした</div>
         ) : (
-          <div className="materials-card-grid">
-            {levels.map((level, index) => (
-              <motion.div
-                key={level.id}
-                className="stagger-item"
-                style={{ animationDelay: `${index * 80}ms` }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <button
-                  className="level-card"
-                  onClick={() => navigate(`/level/${level.id}`)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '20px',
-                    width: '100%',
-                    padding: '24px',
-                    background: 'var(--bg-primary)',
-                    border: '1px solid var(--border-light)',
-                    borderRadius: '16px',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    fontFamily: "'Noto Sans JP', sans-serif",
-                  }}
-                >
-                  <div className="icon-box-sm">
-                    <StarIcon />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '4px' }}>
-                      {level.title}
+          <div className="materials-card-grid" style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: '24px'
+          }}>
+            {levels.map((level, index) => {
+              const hasCover = !!level.cover;
+              
+              if (hasCover) {
+                const titleParts = level.title.split('|');
+                const mainTitle = titleParts.length > 1 ? titleParts[1].trim() : titleParts[0].trim();
+                const subTitle = titleParts.length > 1 ? titleParts[0].trim() : '';
+
+                return (
+                  <motion.div
+                    key={level.id}
+                    className="stagger-item"
+                    style={{ animationDelay: `${index * 80}ms` }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <div
+                      className="level-image-card"
+                      onClick={() => navigate(`/level/${level.id}`)}
+                      style={{
+                        position: 'relative',
+                        width: '100%',
+                        height: '220px',
+                        borderRadius: '16px',
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'flex-end'
+                      }}
+                    >
+                      <div style={{
+                        position: 'absolute',
+                        top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundImage: `url(${level.cover})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        transition: 'transform 0.3s ease'
+                      }} className="hover-scale-bg" />
+                      
+                      {/* Gradient overlay */}
+                      <div style={{
+                        position: 'absolute',
+                        top: 0, left: 0, right: 0, bottom: 0,
+                        background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 100%)'
+                      }} />
+
+                      <div style={{ position: 'relative', padding: '24px', color: 'white', zIndex: 1, textAlign: 'center' }}>
+                         <h2 style={{ fontSize: '28px', fontWeight: '800', marginBottom: '8px', letterSpacing: '0.5px' }}>
+                           {mainTitle}
+                         </h2>
+                         {titleParts.length > 1 ? (
+                           <div style={{ fontSize: '15px', color: 'rgba(255,255,255,0.9)', fontWeight: '500' }}>
+                             {subTitle} | {mainTitle}
+                           </div>
+                         ) : (
+                           <div style={{ fontSize: '15px', color: 'rgba(255,255,255,0.9)', fontWeight: '500' }}>
+                             {mainTitle}
+                           </div>
+                         )}
+                      </div>
                     </div>
-                    <div style={{ fontSize: '14px', color: 'var(--text-sub)' }}>
-                      レベル - {level.title}
-                    </div>
-                  </div>
-                  <span style={{ color: 'var(--text-primary)', flexShrink: 0 }}>
-                    <ChevronRight />
-                  </span>
-                </button>
-              </motion.div>
-            ))}
+                  </motion.div>
+                );
+              }
+
+              return (
+                 <motion.div
+                   key={level.id}
+                   className="stagger-item"
+                   style={{ animationDelay: `${index * 80}ms` }}
+                   whileTap={{ scale: 0.98 }}
+                 >
+                   <button
+                     className="level-card"
+                     onClick={() => navigate(`/level/${level.id}`)}
+                     style={{
+                       display: 'flex',
+                       alignItems: 'center',
+                       gap: '20px',
+                       width: '100%',
+                       padding: '24px',
+                       background: 'var(--bg-primary)',
+                       border: '1px solid var(--border-light)',
+                       borderRadius: '16px',
+                       cursor: 'pointer',
+                       textAlign: 'left',
+                       fontFamily: "'Noto Sans JP', sans-serif",
+                     }}
+                   >
+                     <div className="icon-box-sm">
+                       <StarIcon />
+                     </div>
+                     <div style={{ flex: 1, minWidth: 0 }}>
+                       <div style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '4px' }}>
+                         {level.title}
+                       </div>
+                       <div style={{ fontSize: '14px', color: 'var(--text-sub)' }}>
+                         レベル - {level.title}
+                       </div>
+                     </div>
+                     <span style={{ color: 'var(--text-primary)', flexShrink: 0 }}>
+                       <ChevronRight />
+                     </span>
+                   </button>
+                 </motion.div>
+              );
+            })}
           </div>
         )}
       </div>
