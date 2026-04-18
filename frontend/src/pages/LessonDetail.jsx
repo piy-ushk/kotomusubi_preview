@@ -40,12 +40,29 @@ const speak = (text) => {
   window.speechSynthesis.speak(utt);
 };
 
+/* ---- Text cleaning helper ---- */
+const cleanText = (text) => {
+  if (typeof text !== 'string') return text;
+  // Filter out decorative emojis that take up extra space
+  return text.replace(/💡|✍️|✅|📝|✨/g, '').trim();
+};
+
 /* ---- Translation helper ---- */
 const splitTranslation = (text) => {
   if (typeof text !== 'string') return { jp: String(text ?? ''), en: '' };
-  if (text.includes('｜')) { const p = text.split('｜'); return { jp: p[0].trim(), en: p[1]?.trim() || '' }; }
-  if (text.includes('|'))  { const p = text.split('|');  return { jp: p[0].trim(), en: p[1]?.trim() || '' }; }
-  return { jp: text, en: '' };
+  let rawJp = '', rawEn = '';
+  if (text.includes('｜')) { 
+    const p = text.split('｜'); 
+    rawJp = p[0]; 
+    rawEn = p[1] || ''; 
+  } else if (text.includes('|')) { 
+    const p = text.split('|'); 
+    rawJp = p[0]; 
+    rawEn = p[1] || ''; 
+  } else {
+    rawJp = text;
+  }
+  return { jp: cleanText(rawJp), en: cleanText(rawEn) };
 };
 
 /* ---- Block Processing Helpers ---- */
@@ -76,6 +93,9 @@ const preprocessBlocks = (blocks) => {
     
     let jpText = getRawText(block);
     let nextText = nextBlock ? getRawText(nextBlock) : '';
+    
+    // Skip blocks that are just decorative emojis (take up extra space)
+    if (jpText && !cleanText(jpText)) continue;
     
     if (jpText && hasJapanese(jpText) && isEnglishTarget(nextText)) {
       result.push({ block, enTranslation: nextText });
@@ -167,6 +187,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'heading_1':
     case 'heading_2':
     case 'heading_3': {
+      if (!jp) return null;
       const sizes = { heading_1: '26px', heading_2: '22px', heading_3: '18px' };
       return (
         <div style={{ margin: '24px 0 8px' }}>
@@ -178,7 +199,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     }
 
     case 'paragraph': {
-      if (!rawText.trim()) return <div style={{ height: '12px' }} />;
+      if (!jp) return null;
       return (
         <div style={{ marginBottom: '4px' }}>
           <div className="block-paragraph">{jp}</div>
@@ -189,11 +210,14 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     }
 
     case 'callout': {
-      const emoji = blockData.icon?.emoji || '💡';
+      const rawEmoji = blockData.icon?.emoji || '💡';
+      const emoji = cleanText(rawEmoji);
+      if (!jp && !emoji) return null;
+      
       return (
         <div className="block-callout">
           <div className="callout-header">
-            <span className="callout-emoji">{emoji}</span>
+            {emoji && <span className="callout-emoji">{emoji}</span>}
             <div>
               <div className="callout-text">{jp}</div>
               {isTranslated && en && <div className="block-translation">{en}</div>}
@@ -300,10 +324,10 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       if (!eng && en) eng = en;
       return (
         <NumberCard
-          digit={d.digit || d.number?.toString() || ''}
-          hiragana={d.hiragana || d.reading || ''}
-          kanji={d.kanji || ''}
-          english={eng}
+          digit={cleanText(d.digit || d.number?.toString() || '')}
+          hiragana={cleanText(d.hiragana || d.reading || '')}
+          kanji={cleanText(d.kanji || '')}
+          english={cleanText(eng)}
           isTranslated={translateAll || !!individualTranslations[wordId]}
           onToggle={onToggle}
           wordId={wordId}
@@ -319,9 +343,9 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       if (!eng && en) eng = en;
       return (
         <GreetingCard
-          phrase={d.word || d.phrase || ''}
-          reading={d.reading || d.hiragana || ''}
-          meaning={eng}
+          phrase={cleanText(d.word || d.phrase || '')}
+          reading={cleanText(d.reading || d.hiragana || '')}
+          meaning={cleanText(eng)}
           isTranslated={translateAll || !!individualTranslations[wordId]}
           onToggle={onToggle}
           wordId={wordId}
