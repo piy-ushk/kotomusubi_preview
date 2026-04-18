@@ -183,6 +183,21 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
   let { jp, en } = splitTranslation(rawText);
   if (!en && enTranslation) en = enTranslation;
 
+  const subBlocks = block.children ? (
+    <div className="block-children" style={{ marginTop: '8px' }}>
+      {block.children.map((child, i) => (
+        <BlockRenderer
+          key={`${blockId}_n${i}`}
+          block={child}
+          blockId={`${blockId}_n${i}`}
+          translateAll={translateAll}
+          individualTranslations={individualTranslations}
+          onToggle={onToggle}
+        />
+      ))}
+    </div>
+  ) : null;
+
   switch (type) {
     case 'heading_1':
     case 'heading_2':
@@ -223,7 +238,8 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
               {isTranslated && en && <div className="block-translation">{en}</div>}
             </div>
           </div>
-          <div className="callout-children">
+          <div className="callout-body">
+            {subBlocks}
             <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
           </div>
         </div>
@@ -264,8 +280,9 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           <summary style={{ cursor: 'pointer', fontWeight: '500', display: 'flex', alignItems: 'center' }}>
             <div style={{ flex: 1 }}>{jp}</div>
           </summary>
-          <div style={{ marginTop: '12px', paddingLeft: '20px' }}>
+          <div style={{ marginTop: '12px', paddingLeft: '10px' }}>
             {isTranslated && en && <div className="block-translation" style={{ marginBottom: '8px' }}>{en}</div>}
+            {subBlocks}
             <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
           </div>
         </details>
@@ -298,21 +315,37 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     }
 
     case 'table': {
-      // Basic table — rows come as child blocks in Notion format
+      const hasHeader = blockData.has_column_header;
       return (
-        <div className="block-table">
+        <div className="block-table" style={{ overflowX: 'auto', margin: '16px 0' }}>
           <table>
             <tbody>
-              {(blockData.rows || []).map((row, ri) => (
+              {block.children && block.children.map((row, ri) => (
                 <tr key={ri}>
-                  {(row.cells || []).map((cell, ci) => {
-                    const cellText = (cell || []).map(rt => rt.plain_text).join('');
-                    return ri === 0 ? <th key={ci}>{cellText}</th> : <td key={ci}>{cellText}</td>;
+                  {row.table_row?.cells?.map((cell, ci) => {
+                    const cellText = cell.map(rt => rt.plain_text).join('');
+                    return (ri === 0 && hasHeader) ? <th key={ci}>{cellText}</th> : <td key={ci}>{cellText}</td>;
                   })}
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      );
+    }
+
+    case 'column_list': {
+      return (
+        <div className="block-column-list" style={{ display: 'flex', gap: '20px', margin: '16px 0', flexWrap: 'wrap' }}>
+          {subBlocks}
+        </div>
+      );
+    }
+
+    case 'column': {
+      return (
+        <div className="block-column" style={{ flex: 1, minWidth: '200px' }}>
+          {subBlocks}
         </div>
       );
     }

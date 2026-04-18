@@ -110,7 +110,7 @@ def has_emoji(text):
 
 @app.get("/api/lessons/{lesson_id}")
 async def get_lesson_content(lesson_id: str):
-    blocks = await notion.fetch_page_blocks(lesson_id)
+    blocks = await notion.fetch_blocks_with_children(lesson_id)
     
     # Chunking blocks into sections based on headings or callouts (anchors)
     learning_slides = []
@@ -140,7 +140,7 @@ async def get_lesson_content(lesson_id: str):
             # Determine new role
             if any(keyword in text_lower for keyword in ["question", "discussion", "test", "quiz", "revise", "exercise", "practice", "質問", "ディスカッション", "テスト"]):
                 current_role = "test"
-            elif any(keyword in text_lower for keyword in ["vocabulary", "article", "grammar", "reading", "learning", "単語", "記事", "文法"]):
+            elif any(keyword in text_lower for keyword in ["vocabulary", "article", "grammar", "reading", "learning", "topic", "talk", "単語", "記事", "文法"]):
                 current_role = "learning"
                 
             current_section = {"title": text, "content": [block]}
