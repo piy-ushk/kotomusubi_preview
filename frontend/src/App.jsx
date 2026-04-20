@@ -58,13 +58,13 @@ function SideNav({ currentTab, onTabChange }) {
       </div>
       <nav className="sidebar-nav">
         <button className={`sidebar-nav-item ${currentTab === 0 ? 'active' : ''}`} onClick={() => onTabChange(0)}>
-          <HomeIcon /> ホーム
+          <HomeIcon /> Home
         </button>
         <button className={`sidebar-nav-item ${currentTab === 1 ? 'active' : ''}`} onClick={() => onTabChange(1)}>
-          <MaterialsIcon /> <Ruby text="教材" ruby="きょうざい" />
+          <MaterialsIcon /> Materials
         </button>
         <button className={`sidebar-nav-item ${currentTab === 2 ? 'active' : ''}`} onClick={() => onTabChange(2)}>
-          <FlashcardIcon /> <Ruby text="単語帳" ruby="たんごちょう" />
+          <FlashcardIcon /> Wordbook
         </button>
       </nav>
     </aside>
