@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getTextbooks } from '../services/api';
 import { motion } from 'framer-motion';
+import Ruby from '../components/Ruby';
 
 /* Inline Chevron icon */
 const ChevronRight = () => (
@@ -18,9 +19,9 @@ const UserIcon = () => (
 );
 
 const getIcon = (title) => {
-  if (title?.includes('Grammar')) return '文';
-  if (title?.includes('Topic')) return '話';
-  if (title?.includes('Travel')) return '旅';
+  if (title?.includes('Grammar')) return <Ruby text="文" ruby="ぶん" />;
+  if (title?.includes('Topic')) return <Ruby text="話" ruby="わ" />;
+  if (title?.includes('Travel')) return <Ruby text="旅" ruby="たび" />;
   return '📚';
 };
 
@@ -44,7 +45,9 @@ const Home = ({ onGoToMaterials }) => {
         <div className="page-header-left">
           <img src="/logo.png" alt="Kotomusubi" className="logo-main" />
           <div className="greeting-title">おはよう!</div>
-          <div className="greeting-sub">学習者さん、おはようございます</div>
+          <div className="greeting-sub">
+            <Ruby text="学習者" ruby="がくしゅうしゃ" />さん、おはようございます
+          </div>
         </div>
         <div className="profile-circle">
           <UserIcon />
@@ -53,9 +56,9 @@ const Home = ({ onGoToMaterials }) => {
 
       {/* Section header */}
       <div className="section-header">
-        <div className="section-title">学習教材</div>
+        <div className="section-title"></div>
         <button className="view-all-btn" onClick={onGoToMaterials}>
-          すべて表示
+          すべて<Ruby text="表示" ruby="ひょうじ" />
         </button>
       </div>
 
@@ -67,10 +70,13 @@ const Home = ({ onGoToMaterials }) => {
         transition={{ duration: 0.4 }}
       >
         <div className="emoji">📚</div>
-        <h2>学習を始めましょう！</h2>
-        <p>「教材」タブからコースを選択して、<br />新しいレッスンを開始できます。</p>
+        <h2><Ruby text="学習" ruby="がくしゅう" />を<Ruby text="始" ruby="はじ" />めましょう！</h2>
+        <p>
+          「<Ruby text="教材" ruby="きょうざい" />」タブからコースを<Ruby text="選択" ruby="せんたく" />して、<br />
+          <Ruby text="新" ruby="あたら" />しいレッスンを<Ruby text="開始" ruby="かいし" />できます。
+        </p>
         <button className="primary-button" onClick={onGoToMaterials}>
-          教材を見る
+          <Ruby text="教材" ruby="きょうざい" />を<Ruby text="見" ruby="み" />る
         </button>
       </motion.div>
 
@@ -88,7 +94,7 @@ const Home = ({ onGoToMaterials }) => {
                 <div className="icon-box">{getIcon(textbook.title)}</div>
                 <div className="card-info">
                   <div className="card-title">{textbook.title}</div>
-                  <div className="badge">教材</div>
+                  <div className="badge"><Ruby text="教材" ruby="きょうざい" /></div>
                 </div>
                 <span className="chevron-icon"><ChevronRight /></span>
               </Link>

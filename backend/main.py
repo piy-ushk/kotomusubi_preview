@@ -115,9 +115,11 @@ async def get_lesson_content(lesson_id: str):
     # Chunking blocks into sections based on headings or callouts (anchors)
     learning_slides = []
     test_sections = []
+    vocabulary = []
     
     current_section = {"title": "Introduction", "content": []}
     current_role = "learning"
+    in_vocab_section = False
     
     for block in blocks:
         text = extract_text(block).strip()
@@ -140,12 +142,45 @@ async def get_lesson_content(lesson_id: str):
             # Determine new role
             if any(keyword in text_lower for keyword in ["question", "discussion", "test", "quiz", "revise", "exercise", "practice", "質問", "ディスカッション", "テスト"]):
                 current_role = "test"
-            elif any(keyword in text_lower for keyword in ["vocabulary", "article", "grammar", "reading", "learning", "topic", "talk", "単語", "記事", "文法"]):
+                in_vocab_section = False
+            elif any(keyword in text_lower for keyword in ["vocabulary", "new word", "単語", "新出単語"]):
                 current_role = "learning"
+                in_vocab_section = True
+            elif any(keyword in text_lower for keyword in ["article", "grammar", "reading", "learning", "topic", "talk", "記事", "文法"]):
+                current_role = "learning"
+                in_vocab_section = False
                 
             current_section = {"title": text, "content": [block]}
         else:
             current_section["content"].append(block)
+            
+        # If we are in a vocabulary section, try to extract words
+        if in_vocab_section and text and b_type not in ["heading_1", "heading_2", "heading_3"]:
+            # Pattern: "JP | Reading | EN" or "JP | EN"
+            parts = re.split(r'[|｜]', text)
+            if len(parts) >= 2:
+                jp_raw = parts[0].strip()
+                # Try to separate Kanji and Reading if in "Kanji(Reading)" format
+                reading = ""
+                jp = jp_raw
+                match = re.match(r'(.+)[(（](.+)[)）]', jp_raw)
+                if match:
+                    jp = match.group(1).strip()
+                    reading = match.group(2).strip()
+                
+                if len(parts) >= 3:
+                    if not reading: reading = parts[1].strip()
+                    en = parts[2].strip()
+                else:
+                    en = parts[1].strip()
+                
+                vocabulary.append({
+                    "id": block["id"],
+                    "jp": jp,
+                    "reading": reading,
+                    "en": en,
+                    "lesson_id": lesson_id
+                })
             
     if current_section["content"]:
         if current_role == "learning":
@@ -156,5 +191,6 @@ async def get_lesson_content(lesson_id: str):
     return {
         "id": lesson_id,
         "learning_slides": learning_slides,
-        "test_sections": test_sections
+        "test_sections": test_sections,
+        "vocabulary": vocabulary
     }

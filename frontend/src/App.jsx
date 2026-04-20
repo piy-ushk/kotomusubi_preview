@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './index.css';
+import Ruby from './components/Ruby';
 
 import Home from './pages/Home';
 import TextbooksList from './pages/TextbooksList';
@@ -36,13 +37,13 @@ function BottomNav({ currentTab, onTabChange }) {
   return (
     <nav className="bottom-nav">
       <button className={`bottom-nav-item ${currentTab === 0 ? 'active' : ''}`} onClick={() => onTabChange(0)}>
-        <HomeIcon /> ホーム
+        <HomeIcon /> Home
       </button>
       <button className={`bottom-nav-item ${currentTab === 1 ? 'active' : ''}`} onClick={() => onTabChange(1)}>
-        <MaterialsIcon /> 教材
+        <MaterialsIcon /> Materials
       </button>
       <button className={`bottom-nav-item ${currentTab === 2 ? 'active' : ''}`} onClick={() => onTabChange(2)}>
-        <FlashcardIcon /> 単語帳
+        <FlashcardIcon /> Wordbook
       </button>
     </nav>
   );
@@ -60,10 +61,10 @@ function SideNav({ currentTab, onTabChange }) {
           <HomeIcon /> ホーム
         </button>
         <button className={`sidebar-nav-item ${currentTab === 1 ? 'active' : ''}`} onClick={() => onTabChange(1)}>
-          <MaterialsIcon /> 教材
+          <MaterialsIcon /> <Ruby text="教材" ruby="きょうざい" />
         </button>
         <button className={`sidebar-nav-item ${currentTab === 2 ? 'active' : ''}`} onClick={() => onTabChange(2)}>
-          <FlashcardIcon /> 単語帳
+          <FlashcardIcon /> <Ruby text="単語帳" ruby="たんごちょう" />
         </button>
       </nav>
     </aside>

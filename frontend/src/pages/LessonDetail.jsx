@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getLessonContent } from '../services/api';
+import { vocabularyService } from '../services/vocabularyService';
 import { AnimatePresence, motion } from 'framer-motion';
 
 /* ---- Icons ---- */
@@ -21,6 +22,17 @@ const TranslateIcon = ({ size = 18, active = false }) => (
     <path d="M5 8l6 6"/><path d="M4 14l6-6 2-3"/>
     <path d="M2 5h12"/><path d="M7 2h1"/>
     <path d="M22 22l-5-10-5 10"/><path d="M14 18h6"/>
+  </svg>
+);
+const BookIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+  </svg>
+);
+const CheckIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
   </svg>
 );
 const ChevronLeft = () => (
@@ -413,7 +425,13 @@ const LessonDetail = () => {
 
   useEffect(() => {
     getLessonContent(lessonId)
-      .then(res => { setData(res.data); setLoading(false); })
+      .then(res => { 
+        setData(res.data); 
+        if (res.data.vocabulary) {
+          vocabularyService.addDiscoveredWords(res.data.vocabulary);
+        }
+        setLoading(false); 
+      })
       .catch(() => setLoading(false));
   }, [lessonId]);
 
@@ -423,6 +441,13 @@ const LessonDetail = () => {
 
   const slides = data?.learning_slides || [];
   const testSections = data?.test_sections || [];
+  const lessonVocab = data?.vocabulary || [];
+  const [learnedIds, setLearnedIds] = useState(vocabularyService.getLearnedWordIds());
+
+  const toggleWordLearned = (wordId) => {
+    const newList = vocabularyService.toggleLearned(wordId);
+    setLearnedIds(newList);
+  };
   
   // Determine if we should show test mode immediately
   useEffect(() => {
@@ -517,6 +542,14 @@ const LessonDetail = () => {
           <Volume2 size={20} />
         </button>
         <button
+          className={`lesson-translate-btn ${viewMode === 'vocabulary' ? 'active' : ''}`}
+          onClick={() => setViewMode(v => v === 'vocabulary' ? 'learning' : 'vocabulary')}
+          style={{ marginRight: '8px' }}
+        >
+          <BookIcon size={14} />
+          Vocabulary
+        </button>
+        <button
           className={`lesson-translate-btn ${translateAll ? 'active' : ''}`}
           onClick={() => setTranslateAll(v => !v)}
         >
@@ -579,64 +612,142 @@ const LessonDetail = () => {
         </>
       ) : (
         <div className="test-view-area" style={{ flex: 1, overflowY: 'auto', padding: '20px', paddingBottom: '100px' }}>
-          <div style={{ padding: '0px 10px', maxWidth: '800px', margin: '0 auto' }}>
-            <div className="test-view-header" style={{ marginBottom: '32px', textAlign: 'center' }}>
-              <h2 style={{ fontSize: '28px', color: 'var(--text-color)', marginBottom: '8px' }}>Test & Revision</h2>
-              <p style={{ color: 'var(--text-sub)', fontSize: '16px' }}>Let's review what you've learned.</p>
-            </div>
-            
-            {testSections.map((section, secIdx) => (
-              <div key={secIdx} className="test-section-card" style={{ 
-                background: 'var(--bg-secondary)', 
-                padding: '24px', 
-                borderRadius: '20px', 
-                marginBottom: '24px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
-              }}>
-                {section.title && (
-                  <h3 style={{ 
-                    marginBottom: '20px', 
-                    color: 'var(--primary)', 
-                    borderBottom: '2px solid var(--border-color)', 
-                    paddingBottom: '12px',
-                    fontSize: '22px'
-                  }}>
-                    {splitTranslation(section.title).jp}
-                  </h3>
-                )}
-                {preprocessBlocks(section.content || []).map((item, i) => {
-                  const blockId = `test_${secIdx}_block_${i}`;
+          {viewMode === 'vocabulary' ? (
+            <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+              <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+                <h2 style={{ fontSize: '28px', color: 'var(--text-color)', marginBottom: '8px' }}>Lesson Vocabulary</h2>
+                <p style={{ color: 'var(--text-sub)', fontSize: '16px' }}>Master these words from this lesson.</p>
+              </div>
+              
+              <div className="vocab-list" style={{ display: 'grid', gap: '16px' }}>
+                {lessonVocab.length > 0 ? lessonVocab.map((word) => {
+                  const isLearned = learnedIds.includes(word.id);
                   return (
-                    <div key={blockId} style={{ marginBottom: '16px' }}>
-                      <BlockRenderer
-                        block={item.block}
-                        enTranslation={item.enTranslation}
-                        blockId={blockId}
-                        translateAll={translateAll}
-                        individualTranslations={individualTranslations}
-                        onToggle={toggleTranslation}
-                      />
+                    <div key={word.id} className={`vocab-card ${isLearned ? 'learned' : ''}`} style={{
+                      background: 'var(--bg-secondary)',
+                      padding: '20px',
+                      borderRadius: '16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                      border: isLearned ? '2px solid var(--primary)' : '2px solid transparent',
+                      transition: 'all 0.2s ease'
+                    }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px' }}>
+                          <div style={{ fontSize: '22px', fontWeight: '700', color: 'var(--text-color)' }}>{word.jp}</div>
+                          {word.reading && <div style={{ fontSize: '16px', color: 'var(--text-sub)' }}>{word.reading}</div>}
+                        </div>
+                        <div style={{ fontSize: '16px', color: 'var(--text-sub)', marginTop: '4px' }}>{word.en}</div>
+                      </div>
+                      
+                      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                        <button 
+                          className="lesson-speak-btn" 
+                          onClick={() => speak(word.jp)}
+                          style={{ padding: '8px', background: 'transparent', border: '1px solid var(--border-color)', borderRadius: '50%', color: 'var(--text-sub)' }}
+                        >
+                          <Volume2 size={20} />
+                        </button>
+                        <button 
+                          onClick={() => toggleWordLearned(word.id)}
+                          style={{
+                            padding: '8px 16px',
+                            borderRadius: '12px',
+                            border: 'none',
+                            background: isLearned ? 'var(--primary)' : 'var(--bg-card)',
+                            color: isLearned ? 'white' : 'var(--text-sub)',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            fontWeight: '600',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                          }}
+                        >
+                          {isLearned ? <><CheckIcon size={16} /> Learned</> : 'Not yet'}
+                        </button>
+                      </div>
                     </div>
                   );
-                })}
+                }) : (
+                  <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-sub)' }}>
+                    No vocabulary items found in this lesson.
+                  </div>
+                )}
               </div>
-            ))}
-            
-            <div style={{ textAlign: 'center', marginTop: '40px', display: 'flex', justifyContent: 'center', gap: '16px' }}>
-              {slides.length > 0 && (
-                <button className="lesson-back-btn" onClick={goPrev} style={{ padding: '16px 32px' }}>
-                  <ChevronLeft /> Back to Review
+              
+              <div style={{ textAlign: 'center', marginTop: '40px' }}>
+                <button 
+                  className="lesson-next-btn" 
+                  onClick={() => setViewMode('learning')} 
+                  style={{ padding: '16px 40px', fontSize: '18px', width: 'auto' }}
+                >
+                  Back to Lesson
                 </button>
-              )}
-              <button 
-                className="lesson-next-btn" 
-                onClick={() => navigate(-1)} 
-                style={{ padding: '16px 40px', fontSize: '18px', width: 'auto' }}
-              >
-                Complete Lesson
-              </button>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div style={{ padding: '0px 10px', maxWidth: '800px', margin: '0 auto' }}>
+              <div className="test-view-header" style={{ marginBottom: '32px', textAlign: 'center' }}>
+                <h2 style={{ fontSize: '28px', color: 'var(--text-color)', marginBottom: '8px' }}>Test & Revision</h2>
+                <p style={{ color: 'var(--text-sub)', fontSize: '16px' }}>Let's review what you've learned.</p>
+              </div>
+              
+              {testSections.map((section, secIdx) => (
+                <div key={secIdx} className="test-section-card" style={{ 
+                  background: 'var(--bg-secondary)', 
+                  padding: '24px', 
+                  borderRadius: '20px', 
+                  marginBottom: '24px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+                }}>
+                  {section.title && (
+                    <h3 style={{ 
+                      marginBottom: '20px', 
+                      color: 'var(--primary)', 
+                      borderBottom: '2px solid var(--border-color)', 
+                      paddingBottom: '12px',
+                      fontSize: '22px'
+                    }}>
+                      {splitTranslation(section.title).jp}
+                    </h3>
+                  )}
+                  {preprocessBlocks(section.content || []).map((item, i) => {
+                    const blockId = `test_${secIdx}_block_${i}`;
+                    return (
+                      <div key={blockId} style={{ marginBottom: '16px' }}>
+                        <BlockRenderer
+                          block={item.block}
+                          enTranslation={item.enTranslation}
+                          blockId={blockId}
+                          translateAll={translateAll}
+                          individualTranslations={individualTranslations}
+                          onToggle={toggleTranslation}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+              
+              <div style={{ textAlign: 'center', marginTop: '40px', display: 'flex', justifyContent: 'center', gap: '16px' }}>
+                {slides.length > 0 && (
+                  <button className="lesson-back-btn" onClick={goPrev} style={{ padding: '16px 32px' }}>
+                    <ChevronLeft /> Back to Review
+                  </button>
+                )}
+                <button 
+                  className="lesson-next-btn" 
+                  onClick={() => navigate(-1)} 
+                  style={{ padding: '16px 40px', fontSize: '18px', width: 'auto' }}
+                >
+                  Complete Lesson
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

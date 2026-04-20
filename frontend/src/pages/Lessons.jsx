@@ -77,7 +77,6 @@ const Lessons = () => {
             style={{ display: 'flex' }}
           >
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div className="lesson-subtitle">Lesson {index + 1}</div>
               <div className="lesson-title">
                 {lesson.title.split('|')[0].split('｜')[0].trim()}
               </div>
