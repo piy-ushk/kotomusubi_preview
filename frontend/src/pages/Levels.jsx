@@ -44,13 +44,11 @@ const Levels = () => {
         <button className="back-btn" onClick={() => navigate(-1)}>
           <ArrowLeft />
         </button>
-        <div className="app-bar-title">内容を選択してください</div>
+        <div className="app-bar-title">Select Content</div>
       </div>
 
       <div className="page-pad" style={{ paddingTop: '8px' }}>
-        <div style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '24px' }}>
-          学習内容
-        </div>
+
 
         {loading ? (
           <div className="loading-container">
@@ -162,9 +160,9 @@ const Levels = () => {
                        <div style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '4px' }}>
                          {level.title}
                        </div>
-                       <div style={{ fontSize: '14px', color: 'var(--text-sub)' }}>
-                         レベル - {level.title}
-                       </div>
+                        <div style={{ fontSize: '14px', color: 'var(--text-sub)' }}>
+                          レベル - {level.title}
+                        </div>
                      </div>
                      <span style={{ color: 'var(--text-primary)', flexShrink: 0 }}>
                        <ChevronRight />

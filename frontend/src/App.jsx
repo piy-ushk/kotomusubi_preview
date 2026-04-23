@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './index.css';
-import Ruby from './components/Ruby';
+
 
 import Home from './pages/Home';
 import TextbooksList from './pages/TextbooksList';

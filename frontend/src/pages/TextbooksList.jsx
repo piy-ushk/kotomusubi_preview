@@ -10,9 +10,9 @@ const ChevronRight = () => (
 );
 
 const getIcon = (title) => {
-  if (title?.includes('Grammar')) return '文';
-  if (title?.includes('Topic')) return '話';
-  if (title?.includes('Travel')) return '旅';
+  if (title?.includes('Grammar')) return 'Gr';
+  if (title?.includes('Topic')) return 'Tk';
+  if (title?.includes('Travel')) return 'Tr';
   return '📚';
 };
 
@@ -33,16 +33,16 @@ const TextbooksList = () => {
     <div className="page-pad slide-in-right">
       {/* Header — no back button, this is a tab */}
       <div style={{ marginBottom: '24px' }}>
-        <div className="section-title" style={{ fontSize: '20px' }}>すべての教材</div>
+        <div className="section-title" style={{ fontSize: '20px' }}>All Materials</div>
       </div>
 
       {loading ? (
         <div className="loading-container">
           <div className="spinner" />
-          読み込み中...
+          Loading...
         </div>
       ) : textbooks.length === 0 ? (
-        <div className="empty-state">教材が見つかりませんでした</div>
+        <div className="empty-state">No materials found</div>
       ) : (
         <div className="materials-card-grid">
           {textbooks.map((textbook, index) => (
@@ -56,7 +56,7 @@ const TextbooksList = () => {
                 <div className="icon-box">{getIcon(textbook.title)}</div>
                 <div className="card-info">
                   <div className="card-title">{textbook.title}</div>
-                  <div className="badge">教材</div>
+                   <div className="badge">Material</div>
                 </div>
                 <span className="chevron-icon"><ChevronRight /></span>
               </Link>

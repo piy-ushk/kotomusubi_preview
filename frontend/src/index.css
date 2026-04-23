@@ -4,9 +4,9 @@
    secondaryColor: #ffec9d (warm yellow)
    backgroundColor:#fff1e3 (creamy warm)
    surfaceColor:   #FFFFFF (white)
-   textColor:      #bdae84 (warm sand)
-   subTextColor:   #bdae84
-   borderColor:    #bdae84
+   textColor:      #222020 (dark charcoal)
+   subTextColor:   #222020
+   borderColor:    #222020
    font: 'Noto Sans JP'
 ============================================ */
 
@@ -23,10 +23,10 @@
   --secondary:      #ffec9d;
   --bg-primary:     #fff1e3;
   --bg-surface:     #FFFFFF;
-  --text-primary:   #bdae84;
-  --text-sub:       #bdae84;
-  --border:         #bdae84;
-  --border-light:   rgba(189, 174, 132, 0.25);
+  --text-primary:   #222020;
+  --text-sub:       #222020;
+  --border:         #222020;
+  --border-light:   rgba(34, 32, 32, 0.15);
   --radius-sm:      8px;
   --radius-md:      12px;
   --radius-lg:      16px;
@@ -235,28 +235,35 @@ body {
 /* ===== HEADER ROW ===== */
 .page-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
 
 .page-header-left {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 }
 
 .logo-main {
-  height: 64px;
+  height: 40px;
   width: auto;
   object-fit: contain;
+  margin-bottom: 16px;
+  display: block;
 }
 
 @media (min-width: 768px) {
+  .page-header {
+    align-items: center;
+    margin-bottom: 40px;
+  }
   .logo-main {
     display: none; /* Hidden on desktop since it's in the sidebar */
   }
   .page-header-left {
-    margin-top: 16px;
+    margin-top: 0;
   }
   .greeting-title {
     font-size: 32px;
