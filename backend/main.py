@@ -124,6 +124,11 @@ async def add_lesson_annotation(lesson_id: str, req: AnnotationRequest):
     ann_id = db.add_annotation(user_id, lesson_id, req.block_id, req.action, req.content)
     return {"success": True, "annotation_id": ann_id}
 
+@app.delete("/api/annotations/{annotation_id}")
+async def remove_annotation(annotation_id: int):
+    db.delete_annotation(annotation_id)
+    return {"success": True}
+
 @app.get("/api/lessons/{lesson_id}")
 async def get_lesson_content(lesson_id: str):
     blocks = await notion.fetch_blocks_with_children(lesson_id)

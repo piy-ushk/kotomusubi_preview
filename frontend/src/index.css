@@ -1405,3 +1405,23 @@ body {
 .callout-body {
   margin-top: 10px;
 }
+/* ===== USER ANNOTATION ===== */
+.user-annotation-line {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.remove-annotation-btn {
+  opacity: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+.user-annotation-line:hover .remove-annotation-btn {
+  opacity: 1;
+}

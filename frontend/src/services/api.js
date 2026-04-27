@@ -10,5 +10,6 @@ export const getLevels = (textbookId) => api.get(`/textbooks/${textbookId}/level
 export const getLessons = (levelId) => api.get(`/levels/${levelId}/lessons`);
 export const getLessonContent = (lessonId) => api.get(`/lessons/${lessonId}`);
 export const addAnnotation = (lessonId, annotationData) => api.post(`/lessons/${lessonId}/annotations`, annotationData);
+export const deleteAnnotation = (annotationId) => api.delete(`/annotations/${annotationId}`);
 
 export default api;

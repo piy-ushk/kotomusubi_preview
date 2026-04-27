@@ -32,6 +32,14 @@ def add_annotation(user_id, lesson_id, block_id, action, content):
     conn.close()
     return inserted_id
 
+def delete_annotation(annotation_id):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute('DELETE FROM annotations WHERE id = ?', (annotation_id,))
+    conn.commit()
+    conn.close()
+    return True
+
 def get_annotations(user_id, lesson_id):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()

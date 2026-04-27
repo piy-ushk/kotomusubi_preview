@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getLessonContent, addAnnotation } from '../services/api';
+import { getLessonContent, addAnnotation, deleteAnnotation } from '../services/api';
 import { vocabularyService } from '../services/vocabularyService';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -182,13 +182,22 @@ const GreetingCard = ({ phrase, reading, meaning, isTranslated, onToggle, wordId
 };
 
 /* ---- Annotation Helper ---- */
-const renderAnnotations = (blockId, annotations) => {
+const renderAnnotations = (blockId, annotations, onRemoveAnnotation) => {
   if (!annotations || !annotations[blockId]) return null;
   return annotations[blockId].map(ann => {
     if (ann.action === 'add_line') {
       return (
         <div key={ann.id} className="user-annotation-line" style={{ borderLeft: '3px solid var(--primary)', paddingLeft: '12px', color: 'var(--primary)', fontStyle: 'italic', margin: '8px 0', fontSize: '15px', fontWeight: '500' }}>
-          {ann.content}
+          <span>{ann.content}</span>
+          {onRemoveAnnotation && (
+            <button 
+              className="remove-annotation-btn"
+              onClick={(e) => { e.stopPropagation(); onRemoveAnnotation(blockId, ann.id); }}
+              title="Remove note"
+            >
+              <XIcon size={14} />
+            </button>
+          )}
         </div>
       );
     }
@@ -197,7 +206,7 @@ const renderAnnotations = (blockId, annotations) => {
 };
 
 /* ---- Block Renderer ---- */
-const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, onToggle, enTranslation, annotations, onContextMenu }) => {
+const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, onToggle, enTranslation, annotations, onContextMenu, onRemoveAnnotation }) => {
   const type = block.type;
   const blockData = block[type];
   if (!blockData) return null;
@@ -222,6 +231,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           onToggle={onToggle}
           annotations={annotations}
           onContextMenu={onContextMenu}
+          onRemoveAnnotation={onRemoveAnnotation}
         />
       ))}
     </div>
@@ -243,7 +253,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           {isTranslated && en && <div className="block-translation">{en}</div>}
           {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
           {subBlocks}
-          {renderAnnotations(blockId, annotations)}
+          {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
         </div>
       );
     }
@@ -256,7 +266,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           {isTranslated && en && <div className="block-translation">{en}</div>}
           {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
           {subBlocks}
-          {renderAnnotations(blockId, annotations)}
+          {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
         </div>
       );
     }
@@ -279,7 +289,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
             {subBlocks}
             <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
           </div>
-          {renderAnnotations(blockId, annotations)}
+          {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
         </div>
       );
     }
@@ -295,7 +305,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
             {isTranslated && en && <div className="block-translation">{en}</div>}
             {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
             {subBlocks}
-            {renderAnnotations(blockId, annotations)}
+            {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
           </div>
         </div>
       );
@@ -312,7 +322,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
             {isTranslated && en && <div className="block-translation">{en}</div>}
             {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
             {subBlocks}
-            {renderAnnotations(blockId, annotations)}
+            {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
           </div>
         </div>
       );
@@ -356,7 +366,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
         <div style={{ borderLeft: '4px solid var(--primary)', paddingLeft: '16px', margin: '12px 0', fontStyle: 'italic', color: '#555', fontSize: '16px' }} onContextMenu={handleContext}>
           {jp && <div>{jp}</div>}
           {subBlocks}
-          {renderAnnotations(blockId, annotations)}
+          {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
         </div>
       );
     }
@@ -514,6 +524,22 @@ const LessonDetail = () => {
     alert("Bookmark added!");
   };
 
+  const handleRemoveAnnotation = async (blockId, annotationId) => {
+    if (!window.confirm("Are you sure you want to remove this personalized note?")) return;
+    try {
+      await deleteAnnotation(annotationId);
+      setAnnotations(prev => {
+        const blockAnns = prev[blockId] || [];
+        return {
+          ...prev,
+          [blockId]: blockAnns.filter(a => a.id !== annotationId)
+        };
+      });
+    } catch (e) {
+      console.error("Failed to remove annotation", e);
+    }
+  };
+
   const slides = data?.learning_slides || [];
   const testSections = data?.test_sections || [];
   const lessonVocab = data?.vocabulary || [];
@@ -668,6 +694,7 @@ const LessonDetail = () => {
                         onToggle={toggleTranslation}
                         annotations={annotations}
                         onContextMenu={handleContextMenu}
+                        onRemoveAnnotation={handleRemoveAnnotation}
                       />
                     </motion.div>
                   );
@@ -804,6 +831,7 @@ const LessonDetail = () => {
                           onToggle={toggleTranslation}
                           annotations={annotations}
                           onContextMenu={handleContextMenu}
+                          onRemoveAnnotation={handleRemoveAnnotation}
                         />
                       </div>
                     );
