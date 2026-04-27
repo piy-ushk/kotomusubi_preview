@@ -214,24 +214,26 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'heading_1':
     case 'heading_2':
     case 'heading_3': {
-      if (!jp) return null;
+      if (!jp && !subBlocks) return null;
       const sizes = { heading_1: '26px', heading_2: '22px', heading_3: '18px' };
       return (
         <div style={{ margin: '24px 0 8px' }}>
-          <div className="block-heading" style={{ fontSize: sizes[type] }}>{jp}</div>
+          {jp && <div className="block-heading" style={{ fontSize: sizes[type] }}>{jp}</div>}
           {isTranslated && en && <div className="block-translation">{en}</div>}
-          <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
+          {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
+          {subBlocks}
         </div>
       );
     }
 
     case 'paragraph': {
-      if (!jp) return null;
+      if (!jp && !subBlocks) return null;
       return (
         <div style={{ marginBottom: '4px' }}>
-          <div className="block-paragraph">{jp}</div>
+          {jp && <div className="block-paragraph">{jp}</div>}
           {isTranslated && en && <div className="block-translation">{en}</div>}
-          <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
+          {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
+          {subBlocks}
         </div>
       );
     }
@@ -239,7 +241,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'callout': {
       const rawEmoji = blockData.icon?.emoji || '💡';
       const emoji = cleanText(rawEmoji);
-      if (!jp && !emoji) return null;
+      if (!jp && !emoji && !subBlocks) return null;
       
       return (
         <div className="block-callout">
@@ -260,27 +262,31 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
 
     case 'bulleted_list_item':
     case 'numbered_list_item': {
+      if (!jp && !subBlocks) return null;
       return (
         <div className="block-bullet">
           <div className="bullet-dot" />
           <div style={{ flex: 1 }}>
-            <div className="block-paragraph" style={{ fontSize: '17px' }}>{jp}</div>
+            {jp && <div className="block-paragraph" style={{ fontSize: '17px' }}>{jp}</div>}
             {isTranslated && en && <div className="block-translation">{en}</div>}
-            <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
+            {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
+            {subBlocks}
           </div>
         </div>
       );
     }
     
     case 'to_do': {
+      if (!jp && !subBlocks) return null;
       const checked = blockData.checked || false;
       return (
         <div className="block-todo" style={{ display: 'flex', alignItems: 'flex-start', margin: '8px 0' }}>
           <input type="checkbox" readOnly checked={checked} style={{ marginTop: '5px', marginRight: '10px' }} />
           <div style={{ flex: 1 }}>
-            <div className="block-paragraph" style={{ fontSize: '17px', color: 'var(--primary)' }}>{jp}</div>
+            {jp && <div className="block-paragraph" style={{ fontSize: '17px', color: 'var(--primary)' }}>{jp}</div>}
             {isTranslated && en && <div className="block-translation">{en}</div>}
-            <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
+            {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
+            {subBlocks}
           </div>
         </div>
       );
@@ -319,9 +325,11 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       return <div className="divider" style={{ margin: '24px 0' }} />;
 
     case 'quote': {
+      if (!jp && !subBlocks) return null;
       return (
         <div style={{ borderLeft: '4px solid var(--primary)', paddingLeft: '16px', margin: '12px 0', fontStyle: 'italic', color: '#555', fontSize: '16px' }}>
-          {jp}
+          {jp && <div>{jp}</div>}
+          {subBlocks}
         </div>
       );
     }

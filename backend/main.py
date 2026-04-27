@@ -122,40 +122,51 @@ async def get_lesson_content(lesson_id: str):
     in_vocab_section = False
     
     for block in blocks:
+        b_type = block["type"]
         text = extract_text(block).strip()
         text_lower = text.lower()
-        b_type = block["type"]
         
+        # Skip empty text blocks that have no children, preventing empty spaces
+        if b_type in ["paragraph", "heading_1", "heading_2", "heading_3", "bulleted_list_item", "numbered_list_item", "quote"]:
+            if not text and not block.get("has_children"):
+                continue
+
         is_anchor = False
-        if b_type in ["heading_1", "heading_2", "heading_3", "callout"]:
-            if text and (len(text) < 100): # Heuristic for section anchors
-                is_anchor = True
+        # Use divider or major headings to split slides instead of callout/heading_3
+        if b_type in ["heading_1", "heading_2", "divider"]:
+            is_anchor = True
         
         if is_anchor:
-            # Save the previous section
-            if current_section["content"]:
+            # Only save the previous section if it has meaningful content
+            meaningful = any(b["type"] != "divider" for b in current_section["content"])
+            if meaningful:
                 if current_role == "learning":
                     learning_slides.append(current_section)
                 else:
                     test_sections.append(current_section)
             
-            # Determine new role
-            if any(keyword in text_lower for keyword in ["question", "discussion", "test", "quiz", "revise", "exercise", "practice", "質問", "ディスカッション", "テスト"]):
-                current_role = "test"
-                in_vocab_section = False
-            elif any(keyword in text_lower for keyword in ["vocabulary", "new word", "単語", "新出単語"]):
-                current_role = "learning"
-                in_vocab_section = True
-            elif any(keyword in text_lower for keyword in ["article", "grammar", "reading", "learning", "topic", "talk", "記事", "文法"]):
-                current_role = "learning"
-                in_vocab_section = False
-                
-            current_section = {"title": text, "content": [block]}
+            # Determine new role from text if present
+            if text:
+                if any(keyword in text_lower for keyword in ["question", "discussion", "test", "quiz", "revise", "exercise", "practice", "質問", "ディスカッション", "テスト"]):
+                    current_role = "test"
+                    in_vocab_section = False
+                elif any(keyword in text_lower for keyword in ["vocabulary", "new word", "単語", "新出単語"]):
+                    current_role = "learning"
+                    in_vocab_section = True
+                elif any(keyword in text_lower for keyword in ["article", "grammar", "reading", "learning", "topic", "talk", "記事", "文法"]):
+                    current_role = "learning"
+                    in_vocab_section = False
+            
+            # Start new section (do not include divider block in content)
+            current_section = {
+                "title": text if b_type != "divider" else "",
+                "content": [block] if b_type != "divider" else []
+            }
         else:
             current_section["content"].append(block)
             
         # If we are in a vocabulary section, try to extract words
-        if in_vocab_section and text and b_type not in ["heading_1", "heading_2", "heading_3"]:
+        if in_vocab_section and text and b_type not in ["heading_1", "heading_2", "heading_3", "divider"]:
             # Pattern: "JP | Reading | EN" or "JP | EN"
             parts = re.split(r'[|｜]', text)
             if len(parts) >= 2:
@@ -182,7 +193,8 @@ async def get_lesson_content(lesson_id: str):
                     "lesson_id": lesson_id
                 })
             
-    if current_section["content"]:
+    meaningful = any(b["type"] != "divider" for b in current_section["content"])
+    if meaningful:
         if current_role == "learning":
             learning_slides.append(current_section)
         else:
