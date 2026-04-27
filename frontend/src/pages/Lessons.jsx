@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import { getLessons } from '../services/api';
 import { motion } from 'framer-motion';
 
@@ -36,6 +36,9 @@ const Lessons = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [levelTitle, setLevelTitle] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+  const textbookTitleState = location.state?.textbookTitle || 'Material';
+  const levelTitleState = location.state?.levelTitle || 'Level';
 
   useEffect(() => {
     getLessons(levelId)
@@ -100,7 +103,11 @@ const Lessons = () => {
         <button className="back-btn" onClick={() => navigate(-1)}>
           <ArrowLeft />
         </button>
-        <div className="app-bar-title">レッスン一覧</div>
+        <div className="app-bar-title" style={{ fontSize: '15px' }}>
+          <span style={{ opacity: 0.6 }}>{textbookTitleState}</span>
+          <span style={{ margin: '0 8px', opacity: 0.4 }}>/</span>
+          <span>{levelTitleState}</span>
+        </div>
       </div>
 
       {/* Progress Card */}

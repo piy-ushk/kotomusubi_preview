@@ -52,7 +52,7 @@ const TextbooksList = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.08 }}
             >
-              <Link to={`/textbook/${textbook.id}`} className="materials-card">
+              <Link to={`/textbook/${textbook.id}`} state={{ textbookTitle: textbook.title }} className="materials-card">
                 <div className="icon-box">{getIcon(textbook.title)}</div>
                 <div className="card-info">
                   <div className="card-title">{textbook.title}</div>

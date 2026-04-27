@@ -65,7 +65,18 @@ class NotionService:
     def extract_page_title(self, page: Dict[str, Any]) -> str:
         try:
             properties = page.get("properties", {})
-            title_prop = properties.get("名前") or properties.get("Name") or properties.get("title") or properties.get("Title")
+            title_prop = None
+            
+            # First try to find the property of type 'title'
+            for prop_name, prop_data in properties.items():
+                if prop_data.get("type") == "title":
+                    title_prop = prop_data
+                    break
+            
+            # Fallback to common names if the above fails for some reason
+            if not title_prop:
+                title_prop = properties.get("名前") or properties.get("Name") or properties.get("title") or properties.get("Title")
+                
             if not title_prop:
                 return ""
             

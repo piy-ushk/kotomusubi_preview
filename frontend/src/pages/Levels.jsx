@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getLevels } from '../services/api';
 import { motion } from 'framer-motion';
 
@@ -27,6 +27,8 @@ const Levels = () => {
   const [levels, setLevels] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+  const textbookTitle = location.state?.textbookTitle || 'Select Content';
 
   useEffect(() => {
     getLevels(textbookId)
@@ -44,7 +46,7 @@ const Levels = () => {
         <button className="back-btn" onClick={() => navigate(-1)}>
           <ArrowLeft />
         </button>
-        <div className="app-bar-title">Select Content</div>
+        <div className="app-bar-title">{textbookTitle}</div>
       </div>
 
       <div className="page-pad" style={{ paddingTop: '8px' }}>
@@ -80,7 +82,7 @@ const Levels = () => {
                   >
                     <div
                       className="level-image-card"
-                      onClick={() => navigate(`/level/${level.id}`)}
+                      onClick={() => navigate(`/level/${level.id}`, { state: { textbookTitle, levelTitle: mainTitle } })}
                       style={{
                         position: 'relative',
                         width: '100%',
@@ -138,7 +140,7 @@ const Levels = () => {
                  >
                    <button
                      className="level-card"
-                     onClick={() => navigate(`/level/${level.id}`)}
+                     onClick={() => navigate(`/level/${level.id}`, { state: { textbookTitle, levelTitle: level.title } })}
                      style={{
                        display: 'flex',
                        alignItems: 'center',
