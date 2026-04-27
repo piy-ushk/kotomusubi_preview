@@ -561,6 +561,8 @@ body {
   justify-content: space-between;
   padding: 20px;
   background: var(--bg-primary);
+  text-decoration: none;
+  color: inherit;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
   cursor: pointer;

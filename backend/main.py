@@ -96,21 +96,31 @@ async def get_levels(textbook_id: str):
 async def get_lessons(level_id: str):
     db_ids = await notion.fetch_child_database_ids(level_id)
     if not db_ids: return []
+    
+    level_page = await notion.fetch_page(level_id)
+    level_title = notion.extract_page_title(level_page)
+    is_upper_intermediate = "Upper" in level_title or "中上級" in level_title
+
     all_lessons = []
     for db_id in db_ids:
         pages = await notion.fetch_database_pages(db_id)
         for p in pages:
-            # Check if this page has child databases (meaning it's a chapter)
-            child_dbs_in_page = await notion.fetch_child_database_ids(p["id"])
-            if child_dbs_in_page:
-                for child_db_id in child_dbs_in_page:
-                    sub_pages = await notion.fetch_database_pages(child_db_id)
-                    all_lessons.extend([{"id": sp["id"], "title": notion.extract_page_title(sp)} for sp in sub_pages])
+            if is_upper_intermediate:
+                # Check if this page has child databases (meaning it's a chapter)
+                child_dbs_in_page = await notion.fetch_child_database_ids(p["id"])
+                if child_dbs_in_page:
+                    for child_db_id in child_dbs_in_page:
+                        sub_pages = await notion.fetch_database_pages(child_db_id)
+                        all_lessons.extend([{"id": sp["id"], "title": notion.extract_page_title(sp)} for sp in sub_pages])
+                else:
+                    all_lessons.append({"id": p["id"], "title": notion.extract_page_title(p)})
             else:
                 all_lessons.append({"id": p["id"], "title": notion.extract_page_title(p)})
     
-    # Sort lessons by title so they appear in correct order (e.g. 【13-1】 before 【13-2】)
-    all_lessons.sort(key=lambda x: x["title"])
+    if is_upper_intermediate:
+        # Sort lessons by title so they appear in correct order (e.g. 【13-1】 before 【13-2】)
+        all_lessons.sort(key=lambda x: x["title"])
+        
     return all_lessons
 
 def extract_text(block):

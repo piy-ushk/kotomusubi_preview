@@ -62,6 +62,15 @@ class NotionService:
         blocks = await self.fetch_page_blocks(page_id)
         return [b["id"] for b in blocks if b["type"] == "child_database"]
 
+    async def fetch_page(self, page_id: str) -> Dict[str, Any]:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                f"{self.base_url}/pages/{page_id}",
+                headers=self.headers
+            )
+            response.raise_for_status()
+            return response.json()
+
     def extract_page_title(self, page: Dict[str, Any]) -> str:
         try:
             properties = page.get("properties", {})
