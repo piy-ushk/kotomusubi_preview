@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getLessonContent } from '../services/api';
+import { getLessonContent, addAnnotation } from '../services/api';
 import { vocabularyService } from '../services/vocabularyService';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -181,8 +181,23 @@ const GreetingCard = ({ phrase, reading, meaning, isTranslated, onToggle, wordId
   );
 };
 
+/* ---- Annotation Helper ---- */
+const renderAnnotations = (blockId, annotations) => {
+  if (!annotations || !annotations[blockId]) return null;
+  return annotations[blockId].map(ann => {
+    if (ann.action === 'add_line') {
+      return (
+        <div key={ann.id} className="user-annotation-line" style={{ borderLeft: '3px solid var(--primary)', paddingLeft: '12px', color: 'var(--primary)', fontStyle: 'italic', margin: '8px 0', fontSize: '15px', fontWeight: '500' }}>
+          {ann.content}
+        </div>
+      );
+    }
+    return null;
+  });
+};
+
 /* ---- Block Renderer ---- */
-const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, onToggle, enTranslation }) => {
+const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, onToggle, enTranslation, annotations, onContextMenu }) => {
   const type = block.type;
   const blockData = block[type];
   if (!blockData) return null;
@@ -205,10 +220,16 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           translateAll={translateAll}
           individualTranslations={individualTranslations}
           onToggle={onToggle}
+          annotations={annotations}
+          onContextMenu={onContextMenu}
         />
       ))}
     </div>
   ) : null;
+
+  const handleContext = (e) => {
+    if (onContextMenu) onContextMenu(e, blockId);
+  };
 
   switch (type) {
     case 'heading_1':
@@ -217,11 +238,12 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       if (!jp && !subBlocks) return null;
       const sizes = { heading_1: '26px', heading_2: '22px', heading_3: '18px' };
       return (
-        <div style={{ margin: '24px 0 8px' }}>
+        <div style={{ margin: '24px 0 8px' }} onContextMenu={handleContext}>
           {jp && <div className="block-heading" style={{ fontSize: sizes[type] }}>{jp}</div>}
           {isTranslated && en && <div className="block-translation">{en}</div>}
           {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
           {subBlocks}
+          {renderAnnotations(blockId, annotations)}
         </div>
       );
     }
@@ -229,11 +251,12 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'paragraph': {
       if (!jp && !subBlocks) return null;
       return (
-        <div style={{ marginBottom: '4px' }}>
+        <div style={{ marginBottom: '4px' }} onContextMenu={handleContext}>
           {jp && <div className="block-paragraph">{jp}</div>}
           {isTranslated && en && <div className="block-translation">{en}</div>}
           {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
           {subBlocks}
+          {renderAnnotations(blockId, annotations)}
         </div>
       );
     }
@@ -244,7 +267,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       if (!jp && !emoji && !subBlocks) return null;
       
       return (
-        <div className="block-callout">
+        <div className="block-callout" onContextMenu={handleContext}>
           <div className="callout-header">
             {emoji && <span className="callout-emoji">{emoji}</span>}
             <div>
@@ -256,6 +279,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
             {subBlocks}
             <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
           </div>
+          {renderAnnotations(blockId, annotations)}
         </div>
       );
     }
@@ -264,13 +288,14 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'numbered_list_item': {
       if (!jp && !subBlocks) return null;
       return (
-        <div className="block-bullet">
+        <div className="block-bullet" onContextMenu={handleContext}>
           <div className="bullet-dot" />
           <div style={{ flex: 1 }}>
             {jp && <div className="block-paragraph" style={{ fontSize: '17px' }}>{jp}</div>}
             {isTranslated && en && <div className="block-translation">{en}</div>}
             {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
             {subBlocks}
+            {renderAnnotations(blockId, annotations)}
           </div>
         </div>
       );
@@ -280,13 +305,14 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       if (!jp && !subBlocks) return null;
       const checked = blockData.checked || false;
       return (
-        <div className="block-todo" style={{ display: 'flex', alignItems: 'flex-start', margin: '8px 0' }}>
+        <div className="block-todo" style={{ display: 'flex', alignItems: 'flex-start', margin: '8px 0' }} onContextMenu={handleContext}>
           <input type="checkbox" readOnly checked={checked} style={{ marginTop: '5px', marginRight: '10px' }} />
           <div style={{ flex: 1 }}>
             {jp && <div className="block-paragraph" style={{ fontSize: '17px', color: 'var(--primary)' }}>{jp}</div>}
             {isTranslated && en && <div className="block-translation">{en}</div>}
             {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
             {subBlocks}
+            {renderAnnotations(blockId, annotations)}
           </div>
         </div>
       );
@@ -327,9 +353,10 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'quote': {
       if (!jp && !subBlocks) return null;
       return (
-        <div style={{ borderLeft: '4px solid var(--primary)', paddingLeft: '16px', margin: '12px 0', fontStyle: 'italic', color: '#555', fontSize: '16px' }}>
+        <div style={{ borderLeft: '4px solid var(--primary)', paddingLeft: '16px', margin: '12px 0', fontStyle: 'italic', color: '#555', fontSize: '16px' }} onContextMenu={handleContext}>
           {jp && <div>{jp}</div>}
           {subBlocks}
+          {renderAnnotations(blockId, annotations)}
         </div>
       );
     }
@@ -430,11 +457,14 @@ const LessonDetail = () => {
   const [translateAll, setTranslateAll] = useState(false);
   const [individualTranslations, setIndividualTranslations] = useState({});
   const [viewMode, setViewMode] = useState('learning');
+  const [annotations, setAnnotations] = useState({});
+  const [contextMenu, setContextMenu] = useState(null);
 
   useEffect(() => {
     getLessonContent(lessonId)
       .then(res => { 
         setData(res.data); 
+        setAnnotations(res.data.annotations || {});
         if (res.data.vocabulary) {
           vocabularyService.addDiscoveredWords(res.data.vocabulary);
         }
@@ -446,6 +476,43 @@ const LessonDetail = () => {
   const toggleTranslation = useCallback((id) => {
     setIndividualTranslations(prev => ({ ...prev, [id]: !prev[id] }));
   }, []);
+
+  const handleContextMenu = useCallback((e, blockId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setContextMenu({ x: e.pageX, y: e.pageY, blockId });
+  }, []);
+
+  const closeContextMenu = useCallback(() => setContextMenu(null), []);
+
+  useEffect(() => {
+    window.addEventListener('click', closeContextMenu);
+    return () => window.removeEventListener('click', closeContextMenu);
+  }, [closeContextMenu]);
+
+  const handleAddLine = async (blockId) => {
+    const text = prompt("Enter your personalized note or line:");
+    if (!text) return;
+    try {
+      const res = await addAnnotation(lessonId, { block_id: blockId, action: "add_line", content: text });
+      if (res.data.success) {
+         setAnnotations(prev => ({
+           ...prev,
+           [blockId]: [...(prev[blockId] || []), { id: res.data.annotation_id, action: "add_line", content: text }]
+         }));
+      }
+    } catch (e) {
+       console.error("Failed to add annotation", e);
+    }
+  };
+
+  const handleSaveWord = async (blockId) => {
+    alert("Saved to personal memory!");
+  };
+
+  const handleBookmark = async (blockId) => {
+    alert("Bookmark added!");
+  };
 
   const slides = data?.learning_slides || [];
   const testSections = data?.test_sections || [];
@@ -599,6 +666,8 @@ const LessonDetail = () => {
                         translateAll={translateAll}
                         individualTranslations={individualTranslations}
                         onToggle={toggleTranslation}
+                        annotations={annotations}
+                        onContextMenu={handleContextMenu}
                       />
                     </motion.div>
                   );
@@ -733,6 +802,8 @@ const LessonDetail = () => {
                           translateAll={translateAll}
                           individualTranslations={individualTranslations}
                           onToggle={toggleTranslation}
+                          annotations={annotations}
+                          onContextMenu={handleContextMenu}
                         />
                       </div>
                     );
@@ -758,6 +829,41 @@ const LessonDetail = () => {
           )}
         </div>
       )}
+
+      {/* Context Menu Modal/Overlay */}
+      {contextMenu && (
+        <div style={{
+          position: 'absolute',
+          top: Math.min(contextMenu.y, window.innerHeight - 150),
+          left: Math.min(contextMenu.x, window.innerWidth - 180),
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border-color)',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          borderRadius: '12px',
+          padding: '8px',
+          zIndex: 1000,
+          display: 'flex',
+          flexDirection: 'column',
+          minWidth: '160px'
+        }} onClick={(e) => e.stopPropagation()}>
+          <button 
+            onClick={() => { handleAddLine(contextMenu.blockId); closeContextMenu(); }}
+            style={{ padding: '12px 16px', textAlign: 'left', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '15px', color: 'var(--text-color)', borderBottom: '1px solid var(--border-light)', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '500' }}>
+            ✏️ Add Line
+          </button>
+          <button 
+            onClick={() => { handleSaveWord(contextMenu.blockId); closeContextMenu(); }}
+            style={{ padding: '12px 16px', textAlign: 'left', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '15px', color: 'var(--text-color)', borderBottom: '1px solid var(--border-light)', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '500' }}>
+            💾 Save Word
+          </button>
+          <button 
+            onClick={() => { handleBookmark(contextMenu.blockId); closeContextMenu(); }}
+            style={{ padding: '12px 16px', textAlign: 'left', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '15px', color: 'var(--text-color)', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '500' }}>
+            🔖 Bookmark
+          </button>
+        </div>
+      )}
+
     </div>
   );
 };

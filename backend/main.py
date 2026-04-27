@@ -3,7 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 import re
 from dotenv import load_dotenv
+from pydantic import BaseModel
 from notion_service import NotionService
+import db
+
+load_dotenv()
+db.init_db()
 
 load_dotenv()
 
@@ -108,6 +113,17 @@ def extract_text(block):
 def has_emoji(text):
     return any(32 <= ord(c) <= 126 for c in text) is False or re.search(r'[^\w\s,.!?]', text) # Simplified emoji check
 
+class AnnotationRequest(BaseModel):
+    block_id: str
+    action: str
+    content: str = ""
+
+@app.post("/api/lessons/{lesson_id}/annotations")
+async def add_lesson_annotation(lesson_id: str, req: AnnotationRequest):
+    user_id = "default_user" # Simplified for MVP
+    ann_id = db.add_annotation(user_id, lesson_id, req.block_id, req.action, req.content)
+    return {"success": True, "annotation_id": ann_id}
+
 @app.get("/api/lessons/{lesson_id}")
 async def get_lesson_content(lesson_id: str):
     blocks = await notion.fetch_blocks_with_children(lesson_id)
@@ -200,9 +216,13 @@ async def get_lesson_content(lesson_id: str):
         else:
             test_sections.append(current_section)
         
+    user_id = "default_user"
+    annotations = db.get_annotations(user_id, lesson_id)
+        
     return {
         "id": lesson_id,
         "learning_slides": learning_slides,
         "test_sections": test_sections,
-        "vocabulary": vocabulary
+        "vocabulary": vocabulary,
+        "annotations": annotations
     }

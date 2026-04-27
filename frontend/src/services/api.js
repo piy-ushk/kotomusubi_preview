@@ -9,5 +9,6 @@ export const getTextbooks = () => api.get('/textbooks');
 export const getLevels = (textbookId) => api.get(`/textbooks/${textbookId}/levels`);
 export const getLessons = (levelId) => api.get(`/levels/${levelId}/lessons`);
 export const getLessonContent = (lessonId) => api.get(`/lessons/${lessonId}`);
+export const addAnnotation = (lessonId, annotationData) => api.post(`/lessons/${lessonId}/annotations`, annotationData);
 
 export default api;
