@@ -117,14 +117,15 @@ async def get_lessons(level_id: str):
             else:
                 all_lessons.append({"id": p["id"], "title": notion.extract_page_title(p)})
     
-    # Always sort lessons by title to ensure correct numeric ordering (Chapter 1 before Chapter 2, etc.)
-    # Use a natural sort key that handles numbers embedded in strings
+    # Sort by numbers only — ignores text prefix so "Capter12" and "Chapter 12" both sort as [12].
+    # Falls back to full title string if no number found.
     import re as _re
     def natural_sort_key(x):
         title = x["title"]
-        # Extract numbers for natural sort: "Chapter 1" -> ["Chapter ", 1], "Chapter 10" -> ["Chapter ", 10]
-        parts = _re.split(r'(\d+)', title)
-        return [int(p) if p.isdigit() else p.lower() for p in parts]
+        nums = _re.findall(r'\d+', title)
+        if nums:
+            return [int(n) for n in nums]
+        return [9999, title.lower()]
     
     all_lessons.sort(key=natural_sort_key)
         
@@ -162,7 +163,14 @@ async def get_lesson_content(lesson_id: str):
     blocks = await notion.fetch_blocks_with_children(lesson_id)
     
     # Also fetch vocabulary from child databases ("New Word" databases in the lesson)
-    child_db_ids = await notion.fetch_child_database_ids(lesson_id)
+    # Gather child DB IDs from the lesson itself AND from any child_page blocks
+    top_blocks = await notion.fetch_page_blocks(lesson_id)
+    child_db_ids = [b["id"] for b in top_blocks if b["type"] == "child_database"]
+    # Also look inside child_page blocks for embedded databases
+    for b in top_blocks:
+        if b["type"] == "child_page":
+            sub_blocks = await notion.fetch_page_blocks(b["id"])
+            child_db_ids.extend([sb["id"] for sb in sub_blocks if sb["type"] == "child_database"])
     vocabulary = []
     for child_db_id in child_db_ids:
         try:
@@ -220,6 +228,20 @@ async def get_lesson_content(lesson_id: str):
     current_section = {"title": "Introduction", "content": []}
     current_role = "learning"
     in_vocab_section = False
+    
+    # Flatten child_page blocks inline so their content appears in the lesson slides
+    def flatten_blocks(raw_blocks):
+        result = []
+        for b in raw_blocks:
+            if b["type"] == "child_page":
+                # Inline the sub-page's children instead of the child_page block itself
+                children = b.get("children", [])
+                result.extend(flatten_blocks(children))
+            else:
+                result.append(b)
+        return result
+    
+    blocks = flatten_blocks(blocks)
     
     for block in blocks:
         b_type = block["type"]
