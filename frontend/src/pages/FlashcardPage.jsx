@@ -302,42 +302,88 @@ const FlashcardPage = () => {
         <div style={{ fontSize: '14px', color: 'var(--text-sub)', fontWeight: '600' }}>{currentIndex + 1} / {words.length}</div>
       </div>
 
-      {/* Outer fade wrapper — opacity only, NO scale/translate so preserve-3d is not broken */}
+      {/* Outer fade wrapper */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.18 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
           style={{ width: '100%', display: 'flex', justifyContent: 'center', flexShrink: 0 }}
         >
-          {/* Perspective container — must be a plain div, not a motion.div */}
-          <div style={{
-            perspective: '1200px',
-            width: '100%',
-            maxWidth: '400px',
-            height: '280px',
-          }}>
-            <div
-              className={`flashcard ${flipped ? 'flipped' : ''}`}
-              onClick={() => setFlipped(f => !f)}
-              style={{ width: '100%', height: '100%' }}
+          {/* Dynamic perspective container */}
+          <div
+            onClick={() => setFlipped(f => !f)}
+            style={{
+              perspective: '1200px',
+              width: '100%',
+              maxWidth: '400px',
+              height: '280px',
+              position: 'relative',
+              cursor: 'pointer',
+            }}
+          >
+            {/* Front Face */}
+            <motion.div
+              className="flashcard-face flashcard-front"
+              initial={false}
+              animate={{
+                rotateY: flipped ? 180 : 0,
+                opacity: flipped ? 0 : 1,
+                scale: flipped ? 0.95 : 1,
+              }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+                pointerEvents: flipped ? 'none' : 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
             >
-              <div className="flashcard-face flashcard-front">
-                <div style={{ fontSize: '44px', fontWeight: '700', color: 'var(--text-primary)' }}>{currentWord.jp}</div>
-                {currentWord.reading && <div style={{ fontSize: '18px', color: 'var(--text-sub)' }}>{currentWord.reading}</div>}
-                <div style={{ fontSize: '13px', color: '#bbb', fontStyle: 'italic' }}>Tap to flip</div>
-              </div>
-              <div className="flashcard-face flashcard-back">
-                <div style={{ fontSize: '28px', fontWeight: '600', color: 'var(--text-primary)', textAlign: 'center' }}>{currentWord.en}</div>
-                <div style={{ fontSize: '20px', color: 'var(--text-sub)' }}>{currentWord.jp}</div>
-                <button onClick={e => { e.stopPropagation(); vocabularyService.toggleLearned(currentWord.id); goNext(); }}
-                  style={{ marginTop: '16px', padding: '10px 22px', borderRadius: '12px', border: 'none', background: 'var(--primary)', color: 'white', fontWeight: '700', cursor: 'pointer' }}>
-                  ✓ Mark Learned
-                </button>
-              </div>
-            </div>
+              <div style={{ fontSize: '44px', fontWeight: '700', color: 'var(--text-primary)' }}>{currentWord.jp}</div>
+              {currentWord.reading && <div style={{ fontSize: '18px', color: 'var(--text-sub)' }}>{currentWord.reading}</div>}
+              <div style={{ fontSize: '13px', color: '#bbb', fontStyle: 'italic', marginTop: '12px' }}>Tap to flip</div>
+            </motion.div>
+
+            {/* Back Face */}
+            <motion.div
+              className="flashcard-face flashcard-back"
+              initial={false}
+              animate={{
+                rotateY: flipped ? 0 : -180,
+                opacity: flipped ? 1 : 0,
+                scale: flipped ? 1 : 0.95,
+              }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+                pointerEvents: flipped ? 'auto' : 'none',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <div style={{ fontSize: '28px', fontWeight: '600', color: 'var(--text-primary)', textAlign: 'center' }}>{currentWord.en}</div>
+              <div style={{ fontSize: '20px', color: 'var(--text-sub)', marginTop: '8px' }}>{currentWord.jp}</div>
+              <button onClick={e => { e.stopPropagation(); vocabularyService.toggleLearned(currentWord.id); goNext(); }}
+                style={{ marginTop: '20px', padding: '10px 22px', borderRadius: '12px', border: 'none', background: 'var(--primary)', color: 'white', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(241,139,91,0.2)' }}>
+                ✓ Mark Learned
+              </button>
+            </motion.div>
           </div>
         </motion.div>
       </AnimatePresence>
