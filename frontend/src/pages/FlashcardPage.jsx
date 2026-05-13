@@ -302,22 +302,41 @@ const FlashcardPage = () => {
         <div style={{ fontSize: '14px', color: 'var(--text-sub)', fontWeight: '600' }}>{currentIndex + 1} / {words.length}</div>
       </div>
 
+      {/* Outer fade wrapper — opacity only, NO scale/translate so preserve-3d is not broken */}
       <AnimatePresence mode="wait">
-        <motion.div key={currentIndex} initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.92 }}
-          transition={{ duration: 0.22 }} className="flashcard-wrapper" style={{ width: '100%', maxWidth: '400px', height: '280px', flexShrink: 0 }}>
-          <div className={`flashcard ${flipped ? 'flipped' : ''}`} onClick={() => setFlipped(f => !f)} style={{ height: '100%', width: '100%' }}>
-            <div className="flashcard-face flashcard-front">
-              <div style={{ fontSize: '44px', fontWeight: '700', color: 'var(--text-primary)' }}>{currentWord.jp}</div>
-              {currentWord.reading && <div style={{ fontSize: '18px', color: 'var(--text-sub)' }}>{currentWord.reading}</div>}
-              <div style={{ fontSize: '13px', color: '#bbb', fontStyle: 'italic' }}>Tap to flip</div>
-            </div>
-            <div className="flashcard-face flashcard-back">
-              <div style={{ fontSize: '28px', fontWeight: '600', color: 'var(--text-primary)', textAlign: 'center' }}>{currentWord.en}</div>
-              <div style={{ fontSize: '20px', color: 'var(--text-sub)' }}>{currentWord.jp}</div>
-              <button onClick={e => { e.stopPropagation(); vocabularyService.toggleLearned(currentWord.id); goNext(); }}
-                style={{ marginTop: '16px', padding: '10px 22px', borderRadius: '12px', border: 'none', background: 'var(--primary)', color: 'white', fontWeight: '700', cursor: 'pointer' }}>
-                ✓ Mark Learned
-              </button>
+        <motion.div
+          key={currentIndex}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
+          style={{ width: '100%', display: 'flex', justifyContent: 'center', flexShrink: 0 }}
+        >
+          {/* Perspective container — must be a plain div, not a motion.div */}
+          <div style={{
+            perspective: '1200px',
+            width: '100%',
+            maxWidth: '400px',
+            height: '280px',
+          }}>
+            <div
+              className={`flashcard ${flipped ? 'flipped' : ''}`}
+              onClick={() => setFlipped(f => !f)}
+              style={{ width: '100%', height: '100%' }}
+            >
+              <div className="flashcard-face flashcard-front">
+                <div style={{ fontSize: '44px', fontWeight: '700', color: 'var(--text-primary)' }}>{currentWord.jp}</div>
+                {currentWord.reading && <div style={{ fontSize: '18px', color: 'var(--text-sub)' }}>{currentWord.reading}</div>}
+                <div style={{ fontSize: '13px', color: '#bbb', fontStyle: 'italic' }}>Tap to flip</div>
+              </div>
+              <div className="flashcard-face flashcard-back">
+                <div style={{ fontSize: '28px', fontWeight: '600', color: 'var(--text-primary)', textAlign: 'center' }}>{currentWord.en}</div>
+                <div style={{ fontSize: '20px', color: 'var(--text-sub)' }}>{currentWord.jp}</div>
+                <button onClick={e => { e.stopPropagation(); vocabularyService.toggleLearned(currentWord.id); goNext(); }}
+                  style={{ marginTop: '16px', padding: '10px 22px', borderRadius: '12px', border: 'none', background: 'var(--primary)', color: 'white', fontWeight: '700', cursor: 'pointer' }}>
+                  ✓ Mark Learned
+                </button>
+              </div>
             </div>
           </div>
         </motion.div>
