@@ -218,13 +218,15 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
   const isTranslated = translateAll || !!individualTranslations[blockId];
   let { jp, en } = splitTranslation(rawText);
   if (!en && enTranslation) en = enTranslation;
+  const hasJpChars = hasJapanese(rawText);
 
   const subBlocks = block.children ? (
     <div className="block-children" style={{ marginTop: '8px' }}>
-      {block.children.map((child, i) => (
+      {preprocessBlocks(block.children).map((item, i) => (
         <BlockRenderer
           key={`${blockId}_n${i}`}
-          block={child}
+          block={item.block}
+          enTranslation={item.enTranslation}
           blockId={`${blockId}_n${i}`}
           translateAll={translateAll}
           individualTranslations={individualTranslations}
@@ -251,7 +253,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
         <div style={{ margin: '24px 0 8px' }} onContextMenu={handleContext}>
           {jp && <div className="block-heading" style={{ fontSize: sizes[type] }}>{jp}</div>}
           {isTranslated && en && <div className="block-translation">{en}</div>}
-          {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
+          {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
           {subBlocks}
           {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
         </div>
@@ -264,7 +266,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
         <div style={{ marginBottom: '4px' }} onContextMenu={handleContext}>
           {jp && <div className="block-paragraph">{jp}</div>}
           {isTranslated && en && <div className="block-translation">{en}</div>}
-          {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
+          {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
           {subBlocks}
           {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
         </div>
@@ -287,7 +289,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           </div>
           <div className="callout-body">
             {subBlocks}
-            <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
+            {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
           </div>
           {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
         </div>
@@ -303,7 +305,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           <div style={{ flex: 1 }}>
             {jp && <div className="block-paragraph" style={{ fontSize: '17px' }}>{jp}</div>}
             {isTranslated && en && <div className="block-translation">{en}</div>}
-            {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
+            {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
             {subBlocks}
             {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
           </div>
@@ -320,7 +322,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           <div style={{ flex: 1 }}>
             {jp && <div className="block-paragraph" style={{ fontSize: '17px', color: 'var(--primary)' }}>{jp}</div>}
             {isTranslated && en && <div className="block-translation">{en}</div>}
-            {jp && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
+            {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
             {subBlocks}
             {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
           </div>
@@ -337,7 +339,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           <div style={{ marginTop: '12px', paddingLeft: '10px' }}>
             {isTranslated && en && <div className="block-translation" style={{ marginBottom: '8px' }}>{en}</div>}
             {subBlocks}
-            <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
+            {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
           </div>
         </details>
       );
