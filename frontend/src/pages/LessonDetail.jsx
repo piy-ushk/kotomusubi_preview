@@ -592,6 +592,7 @@ const LessonDetail = () => {
   const currentSlide = slides[currentSlideIndex] || {};
   const progress = viewMode === 'learning' && slides.length > 0 ? ((currentSlideIndex + 1) / slides.length) * 100 : 100;
   const isLastSlide = currentSlideIndex === slides.length - 1;
+  const isBeginnerImageLesson = slides.length === 1 && currentSlide.content?.some(b => b.type === 'image');
 
   const goNext = () => {
     if (viewMode === 'learning') {
@@ -599,7 +600,7 @@ const LessonDetail = () => {
         setCurrentSlideIndex(i => i + 1);
         setIndividualTranslations({});
       } else {
-        if (lessonVocab.length > 0) {
+        if (isBeginnerImageLesson && lessonVocab.length > 0) {
           setViewMode('vocabulary');
           setIndividualTranslations({});
         } else if (testSections.length > 0) {
@@ -656,6 +657,16 @@ const LessonDetail = () => {
         <button className="lesson-close-btn" onClick={speakPage} title="Read Page" style={{ color: 'var(--text-sub)' }}>
           <Volume2 size={20} />
         </button>
+        {lessonVocab.length > 0 && (
+          <button
+            className={`lesson-translate-btn ${viewMode === 'vocabulary' ? 'active' : ''}`}
+            onClick={() => setViewMode(v => v === 'vocabulary' ? 'learning' : 'vocabulary')}
+            style={{ marginRight: '8px' }}
+          >
+            <BookIcon size={14} />
+            Vocabulary
+          </button>
+        )}
         <button
           className={`lesson-translate-btn ${translateAll ? 'active' : ''}`}
           onClick={() => setTranslateAll(v => !v)}
@@ -716,7 +727,7 @@ const LessonDetail = () => {
               </button>
             )}
             <button className="lesson-next-btn" onClick={goNext}>
-              {isLastSlide && lessonVocab.length > 0 ? 'Start Learning' : (isLastSlide && testSections.length > 0 ? 'Test / Revision' : (isLastSlide ? 'Complete Lesson' : 'Next'))}
+              {isLastSlide && isBeginnerImageLesson && lessonVocab.length > 0 ? 'Start Learning' : (isLastSlide && testSections.length > 0 ? 'Test / Revision' : (isLastSlide ? 'Complete Lesson' : 'Next'))}
             </button>
           </div>
         </>
