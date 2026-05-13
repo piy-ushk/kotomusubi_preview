@@ -725,40 +725,39 @@ body {
 }
 
 .flashcard-wrapper {
-  width: 100%;
-  flex: 1;
+  perspective: 1200px;
   display: flex;
   align-items: center;
   justify-content: center;
-  perspective: 1000px;
 }
 
 .flashcard {
   width: 100%;
   max-width: 360px;
-  aspect-ratio: 3/2;
+  min-height: 240px;
   cursor: pointer;
   transform-style: preserve-3d;
-  transition: transform 0.5s ease;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
 
 @media (min-width: 768px) {
   .flashcard {
-    max-width: 560px;
+    max-width: 520px;
+    min-height: 280px;
   }
   .flashcard-kanji {
-    font-size: 80px;
+    font-size: 64px !important;
   }
   .flashcard-reading {
-    font-size: 32px;
+    font-size: 28px !important;
   }
   .flashcard-meaning {
     font-size: 28px;
   }
 }
 
-.flashcard.flipped { transform: rotateX(180deg); }
+.flashcard.flipped { transform: rotateY(180deg); }
 
 .flashcard-face {
   position: absolute;
@@ -775,10 +774,11 @@ body {
   border: 2px solid var(--border-light);
   box-shadow: 0 6px 24px rgba(0,0,0,0.08);
   gap: 16px;
+  min-height: 240px;
 }
 
 .flashcard-back {
-  transform: rotateX(180deg);
+  transform: rotateY(180deg);
 }
 
 .flashcard-kanji {

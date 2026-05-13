@@ -117,9 +117,16 @@ async def get_lessons(level_id: str):
             else:
                 all_lessons.append({"id": p["id"], "title": notion.extract_page_title(p)})
     
-    if is_upper_intermediate:
-        # Sort lessons by title so they appear in correct order (e.g. 【13-1】 before 【13-2】)
-        all_lessons.sort(key=lambda x: x["title"])
+    # Always sort lessons by title to ensure correct numeric ordering (Chapter 1 before Chapter 2, etc.)
+    # Use a natural sort key that handles numbers embedded in strings
+    import re as _re
+    def natural_sort_key(x):
+        title = x["title"]
+        # Extract numbers for natural sort: "Chapter 1" -> ["Chapter ", 1], "Chapter 10" -> ["Chapter ", 10]
+        parts = _re.split(r'(\d+)', title)
+        return [int(p) if p.isdigit() else p.lower() for p in parts]
+    
+    all_lessons.sort(key=natural_sort_key)
         
     return all_lessons
 
@@ -154,10 +161,61 @@ async def remove_annotation(annotation_id: int):
 async def get_lesson_content(lesson_id: str):
     blocks = await notion.fetch_blocks_with_children(lesson_id)
     
+    # Also fetch vocabulary from child databases ("New Word" databases in the lesson)
+    child_db_ids = await notion.fetch_child_database_ids(lesson_id)
+    vocabulary = []
+    for child_db_id in child_db_ids:
+        try:
+            vocab_pages = await notion.fetch_database_pages(child_db_id)
+            for vp in vocab_pages:
+                props = vp.get("properties", {})
+                # Extract fields from the vocab database properties
+                jp = ""
+                reading = ""
+                en = ""
+                
+                # Try common property names for Japanese word databases
+                for prop_name, prop_data in props.items():
+                    ptype = prop_data.get("type", "")
+                    prop_lower = prop_name.lower()
+                    
+                    if ptype == "title":
+                        jp = "".join([rt.get("plain_text", "") for rt in prop_data.get("title", [])]).strip()
+                    elif ptype == "rich_text":
+                        val = "".join([rt.get("plain_text", "") for rt in prop_data.get("rich_text", [])]).strip()
+                        if any(k in prop_lower for k in ["reading", "hiragana", "ひらがな", "読み"]):
+                            reading = val
+                        elif any(k in prop_lower for k in ["english", "meaning", "translation", "en", "訳", "意味"]):
+                            en = val
+                        elif not reading and val:
+                            reading = val  # Fallback: first rich_text is often reading
+                    elif ptype == "select" or ptype == "multi_select":
+                        pass  # Skip category fields
+                
+                if jp:
+                    # If the title looks like "JP | EN" parse it
+                    if "｜" in jp or "|" in jp:
+                        parts = re.split(r'[|｜]', jp)
+                        if len(parts) >= 2:
+                            jp = parts[0].strip()
+                            if not en:
+                                en = parts[-1].strip()
+                            if not reading and len(parts) >= 3:
+                                reading = parts[1].strip()
+                    
+                    vocabulary.append({
+                        "id": vp["id"],
+                        "jp": jp,
+                        "reading": reading,
+                        "en": en,
+                        "lesson_id": lesson_id
+                    })
+        except Exception:
+            pass  # Skip databases that fail
+    
     # Chunking blocks into sections based on headings or callouts (anchors)
     learning_slides = []
     test_sections = []
-    vocabulary = []
     
     current_section = {"title": "Introduction", "content": []}
     current_role = "learning"
@@ -179,8 +237,16 @@ async def get_lesson_content(lesson_id: str):
             is_anchor = True
         
         if is_anchor:
-            # Only save the previous section if it has meaningful content
-            meaningful = any(b["type"] != "divider" for b in current_section["content"])
+            # Save the previous section if it has meaningful content
+            # Images, callouts, paragraphs etc are all meaningful
+            meaningful = any(
+                b["type"] not in ["divider"] and (
+                    b["type"] == "image" or 
+                    extract_text(b).strip() or 
+                    b.get("has_children")
+                )
+                for b in current_section["content"]
+            )
             if meaningful:
                 if current_role == "learning":
                     learning_slides.append(current_section)
@@ -192,10 +258,10 @@ async def get_lesson_content(lesson_id: str):
                 if any(keyword in text_lower for keyword in ["question", "discussion", "test", "quiz", "revise", "exercise", "practice", "質問", "ディスカッション", "テスト"]):
                     current_role = "test"
                     in_vocab_section = False
-                elif any(keyword in text_lower for keyword in ["vocabulary", "new word", "単語", "新出単語"]):
+                elif any(keyword in text_lower for keyword in ["vocabulary", "new word", "単語", "新出単語", "新出"]):
                     current_role = "learning"
                     in_vocab_section = True
-                elif any(keyword in text_lower for keyword in ["article", "grammar", "reading", "learning", "topic", "talk", "記事", "文法"]):
+                elif any(keyword in text_lower for keyword in ["article", "grammar", "reading", "learning", "topic", "talk", "記事", "文法", "introduction", "はじめに"]):
                     current_role = "learning"
                     in_vocab_section = False
             
@@ -207,8 +273,8 @@ async def get_lesson_content(lesson_id: str):
         else:
             current_section["content"].append(block)
             
-        # If we are in a vocabulary section, try to extract words
-        if in_vocab_section and text and b_type not in ["heading_1", "heading_2", "heading_3", "divider"]:
+        # If we are in a vocabulary section, try to extract words inline (fallback if no child DB)
+        if in_vocab_section and not vocabulary and text and b_type not in ["heading_1", "heading_2", "heading_3", "divider"]:
             # Pattern: "JP | Reading | EN" or "JP | EN"
             parts = re.split(r'[|｜]', text)
             if len(parts) >= 2:
@@ -235,7 +301,15 @@ async def get_lesson_content(lesson_id: str):
                     "lesson_id": lesson_id
                 })
             
-    meaningful = any(b["type"] != "divider" for b in current_section["content"])
+    # Save the last section if meaningful
+    meaningful = any(
+        b["type"] not in ["divider"] and (
+            b["type"] == "image" or 
+            extract_text(b).strip() or 
+            b.get("has_children")
+        )
+        for b in current_section["content"]
+    )
     if meaningful:
         if current_role == "learning":
             learning_slides.append(current_section)

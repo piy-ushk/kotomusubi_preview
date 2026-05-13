@@ -347,11 +347,20 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       const url = blockData.file?.url || blockData.external?.url;
       if (!url) return null;
       return (
-        <div style={{ margin: '24px 0' }}>
+        <div style={{ margin: '16px 0', textAlign: 'center' }}>
           <img
             src={url}
             alt="Lesson content"
-            style={{ width: '100%', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+            style={{
+              maxWidth: '100%',
+              width: 'auto',
+              maxHeight: 'min(320px, 45vh)',
+              borderRadius: '16px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+              display: 'block',
+              margin: '0 auto',
+              objectFit: 'contain'
+            }}
           />
         </div>
       );
