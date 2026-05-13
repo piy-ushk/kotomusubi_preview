@@ -597,7 +597,10 @@ const LessonDetail = () => {
         setCurrentSlideIndex(i => i + 1);
         setIndividualTranslations({});
       } else {
-        if (testSections.length > 0) {
+        if (lessonVocab.length > 0) {
+          setViewMode('vocabulary');
+          setIndividualTranslations({});
+        } else if (testSections.length > 0) {
           setViewMode('test');
           setIndividualTranslations({});
         } else {
@@ -650,14 +653,6 @@ const LessonDetail = () => {
         </div>
         <button className="lesson-close-btn" onClick={speakPage} title="Read Page" style={{ color: 'var(--text-sub)' }}>
           <Volume2 size={20} />
-        </button>
-        <button
-          className={`lesson-translate-btn ${viewMode === 'vocabulary' ? 'active' : ''}`}
-          onClick={() => setViewMode(v => v === 'vocabulary' ? 'learning' : 'vocabulary')}
-          style={{ marginRight: '8px' }}
-        >
-          <BookIcon size={14} />
-          Vocabulary
         </button>
         <button
           className={`lesson-translate-btn ${translateAll ? 'active' : ''}`}
@@ -719,7 +714,7 @@ const LessonDetail = () => {
               </button>
             )}
             <button className="lesson-next-btn" onClick={goNext}>
-              {isLastSlide && testSections.length === 0 ? 'Complete Lesson' : (isLastSlide ? 'Test / Revision' : 'Next')}
+              {isLastSlide && lessonVocab.length > 0 ? 'Start Learning' : (isLastSlide && testSections.length > 0 ? 'Test / Revision' : (isLastSlide ? 'Complete Lesson' : 'Next'))}
             </button>
           </div>
         </>
@@ -794,10 +789,16 @@ const LessonDetail = () => {
               <div style={{ textAlign: 'center', marginTop: '40px' }}>
                 <button 
                   className="lesson-next-btn" 
-                  onClick={() => setViewMode('learning')} 
+                  onClick={() => {
+                    if (testSections.length > 0) {
+                      setViewMode('test');
+                    } else {
+                      navigate(-1);
+                    }
+                  }} 
                   style={{ padding: '16px 40px', fontSize: '18px', width: 'auto' }}
                 >
-                  Back to Lesson
+                  {testSections.length > 0 ? 'Proceed to Test' : 'Complete Lesson'}
                 </button>
               </div>
             </div>
