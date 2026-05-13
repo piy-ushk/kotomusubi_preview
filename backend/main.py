@@ -254,8 +254,8 @@ async def get_lesson_content(lesson_id: str):
                 continue
 
         is_anchor = False
-        # Use divider or major headings to split slides instead of callout/heading_3
-        if b_type in ["heading_1", "heading_2", "divider"]:
+        # Use divider or major headings to split slides cleanly
+        if b_type in ["heading_1", "heading_2", "heading_3", "divider"]:
             is_anchor = True
         
         if is_anchor:
