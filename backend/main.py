@@ -162,15 +162,38 @@ async def remove_annotation(annotation_id: int):
 async def get_lesson_content(lesson_id: str):
     blocks = await notion.fetch_blocks_with_children(lesson_id)
     
-    # Also fetch vocabulary from child databases ("New Word" databases in the lesson)
     # Gather child DB IDs from the lesson itself AND from any child_page blocks
     top_blocks = await notion.fetch_page_blocks(lesson_id)
-    child_db_ids = [b["id"] for b in top_blocks if b["type"] == "child_database"]
+    
+    def is_vocab_db(block):
+        if block["type"] != "child_database": return False
+        title = block.get("child_database", {}).get("title", "").lower()
+        # Prioritize databases named "New Word", "Vocabulary", "Vocab", or "単語"
+        return any(k in title for k in ["new word", "vocabulary", "vocab", "単語", "word"])
+
+    child_db_ids = [b["id"] for b in top_blocks if is_vocab_db(b)]
+    
     # Also look inside child_page blocks for embedded databases
     for b in top_blocks:
         if b["type"] == "child_page":
-            sub_blocks = await notion.fetch_page_blocks(b["id"])
-            child_db_ids.extend([sb["id"] for sb in sub_blocks if sb["type"] == "child_database"])
+            try:
+                sub_blocks = await notion.fetch_page_blocks(b["id"])
+                child_db_ids.extend([sb["id"] for sb in sub_blocks if is_vocab_db(sb)])
+            except Exception:
+                continue
+
+    # Fallback: if NO specific vocabulary databases are found, we might be in a legacy structure
+    # where all databases are treated as potential sources, but this is less likely now.
+    if not child_db_ids:
+        child_db_ids = [b["id"] for b in top_blocks if b["type"] == "child_database"]
+        for b in top_blocks:
+            if b["type"] == "child_page":
+                try:
+                    sub_blocks = await notion.fetch_page_blocks(b["id"])
+                    child_db_ids.extend([sb["id"] for sb in sub_blocks if sb["type"] == "child_database"])
+                except Exception:
+                    continue
+    
     vocabulary = []
     for child_db_id in child_db_ids:
         try:
