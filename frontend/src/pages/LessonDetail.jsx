@@ -744,51 +744,91 @@ const LessonDetail = () => {
                 {lessonVocab.length > 0 ? lessonVocab.map((word) => {
                   const isLearned = learnedIds.includes(word.id);
                   return (
-                    <div key={word.id} className={`vocab-card ${isLearned ? 'learned' : ''}`} style={{
-                      background: 'var(--bg-secondary)',
-                      padding: '20px',
-                      borderRadius: '16px',
+                    <div key={word.id} className="vocab-card" style={{ 
+                      background: 'var(--bg-secondary)', 
+                      padding: '20px', 
+                      borderRadius: '16px', 
                       display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
+                      flexDirection: 'column',
+                      gap: '12px',
                       boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
                       border: isLearned ? '2px solid var(--primary)' : '2px solid transparent',
-                      transition: 'all 0.2s ease'
+                      transition: 'all 0.2s ease',
+                      position: 'relative'
                     }}>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px' }}>
-                          <div style={{ fontSize: '22px', fontWeight: '700', color: 'var(--text-color)' }}>{word.jp}</div>
-                          {word.reading && <div style={{ fontSize: '16px', color: 'var(--text-sub)' }}>{word.reading}</div>}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', flexWrap: 'wrap' }}>
+                            <div style={{ fontSize: '24px', fontWeight: '700', color: 'var(--text-color)' }}>{word.word}</div>
+                            {word.reading && <div style={{ fontSize: '16px', color: 'var(--text-sub)' }}>[{word.reading}]</div>}
+                            {word.pos && <div style={{ fontSize: '12px', color: 'var(--primary)', background: 'var(--bg-card)', padding: '2px 8px', borderRadius: '4px', fontWeight: '600' }}>{word.pos}</div>}
+                          </div>
+                          
+                          {word.kanji && word.kanji !== word.word && (
+                            <div style={{ fontSize: '14px', color: 'var(--text-sub)', marginTop: '2px' }}>
+                              Kanji: {word.kanji}
+                            </div>
+                          )}
+                          
+                          <div style={{ fontSize: '18px', color: 'var(--text-color)', marginTop: '8px', fontWeight: '500' }}>
+                            {word.meaning}
+                          </div>
+
+                          {word.example && (
+                            <div style={{ 
+                              marginTop: '12px', 
+                              padding: '10px', 
+                              background: 'var(--bg-card)', 
+                              borderRadius: '8px',
+                              fontSize: '14px',
+                              borderLeft: '3px solid var(--primary)',
+                              color: 'var(--text-sub)',
+                              fontStyle: 'italic'
+                            }}>
+                              {word.example}
+                            </div>
+                          )}
                         </div>
-                        <div style={{ fontSize: '16px', color: 'var(--text-sub)', marginTop: '4px' }}>{word.en}</div>
-                      </div>
-                      
-                      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                        <button 
-                          className="lesson-speak-btn" 
-                          onClick={() => speak(word.jp)}
-                          style={{ padding: '8px', background: 'transparent', border: '1px solid var(--border-color)', borderRadius: '50%', color: 'var(--text-sub)' }}
-                        >
-                          <Volume2 size={20} />
-                        </button>
-                        <button 
-                          onClick={() => toggleWordLearned(word.id)}
-                          style={{
-                            padding: '8px 16px',
-                            borderRadius: '12px',
-                            border: 'none',
-                            background: isLearned ? 'var(--primary)' : 'var(--bg-card)',
-                            color: isLearned ? 'white' : 'var(--text-sub)',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                            fontWeight: '600',
-                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                          }}
-                        >
-                          {isLearned ? <><CheckIcon size={16} /> Learned</> : 'Not yet'}
-                        </button>
+                        
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                          <button 
+                            className="lesson-speak-btn" 
+                            onClick={() => speak(word.word)}
+                            style={{ 
+                              padding: '10px', 
+                              background: 'var(--bg-card)', 
+                              border: '1px solid var(--border-color)', 
+                              borderRadius: '50%', 
+                              color: 'var(--text-sub)',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}
+                            title="Speak"
+                          >
+                            <Volume2 size={18} />
+                          </button>
+                          <button 
+                            onClick={() => toggleWordLearned(word.id)}
+                            style={{
+                              padding: '8px 12px',
+                              borderRadius: '10px',
+                              border: 'none',
+                              background: isLearned ? 'var(--primary)' : 'var(--bg-card)',
+                              color: isLearned ? 'white' : 'var(--text-sub)',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              fontWeight: '600',
+                              fontSize: '14px',
+                              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                            }}
+                          >
+                            {isLearned ? <><CheckIcon size={16} /> Learned</> : 'Not yet'}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   );

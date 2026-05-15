@@ -168,8 +168,95 @@ async def get_lesson_content(lesson_id: str):
     def is_vocab_db(block):
         if block["type"] != "child_database": return False
         title = block.get("child_database", {}).get("title", "").lower()
-        # Prioritize databases named "New Word", "Vocabulary", "Vocab", or "単語"
         return any(k in title for k in ["new word", "vocabulary", "vocab", "単語", "word"])
+
+    def is_vocab_item(page_props):
+        """
+        Checks if a database item is marked as a 'NEW WORD'.
+        The marker can be in the Title or any other property.
+        """
+        marker = "NEW WORD"
+        for pn, pd in page_props.items():
+            content = ""
+            ptype = pd.get("type")
+            if ptype == "title":
+                content = "".join([rt.get("plain_text", "") for rt in pd.get("title", [])])
+            elif ptype == "rich_text":
+                content = "".join([rt.get("plain_text", "") for rt in pd.get("rich_text", [])])
+            elif ptype == "select":
+                content = pd.get("select", {}).get("name", "") if pd.get("select") else ""
+            elif ptype == "multi_select":
+                content = ",".join([ms.get("name", "") for ms in pd.get("multi_select", [])])
+            
+            if marker in content.upper():
+                return True
+        return False
+
+    def map_vocab_properties(props):
+        """
+        Maps Notion properties to a standard vocabulary object.
+        Supports both English and Japanese property names.
+        """
+        vocab = {
+            "jp": "",
+            "reading": "",
+            "en": "",
+            "kanji": "",
+            "pos": "",
+            "example": ""
+        }
+
+        # 1. Map Japanese / Title
+        for pn in ["Name", "Word", "名前", "単語"]:
+            if pn in props and props[pn].get("type") == "title":
+                vocab["jp"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("title", [])])
+                break
+
+        # 2. Map Reading
+        for pn in ["Reading", "Hiragana", "Pronunciation", "よみかた", "読み方", "ひらがな"]:
+            if pn in props:
+                ptype = props[pn].get("type")
+                if ptype == "rich_text":
+                    vocab["reading"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("rich_text", [])])
+                elif ptype == "title":
+                    vocab["reading"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("title", [])])
+                if vocab["reading"]: break
+
+        # 3. Map English / Meaning
+        for pn in ["English", "Meaning", "Translation", "いみ", "意味"]:
+            if pn in props:
+                ptype = props[pn].get("type")
+                if ptype == "rich_text":
+                    vocab["en"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("rich_text", [])])
+                if vocab["en"]: break
+
+        # 4. Map Kanji
+        for pn in ["Kanji", "かんじ", "漢字"]:
+            if pn in props:
+                ptype = props[pn].get("type")
+                if ptype == "rich_text":
+                    vocab["kanji"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("rich_text", [])])
+                if vocab["kanji"]: break
+
+        # 5. Map Part of Speech
+        for pn in ["POS", "Type", "ひんし", "品詞"]:
+            if pn in props:
+                ptype = props[pn].get("type")
+                if ptype == "rich_text":
+                    vocab["pos"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("rich_text", [])])
+                elif ptype == "select":
+                    vocab["pos"] = props[pn].get("select", {}).get("name", "")
+                if vocab["pos"]: break
+
+        # 6. Map Example
+        for pn in ["Example", "Reibun", "れいぶん", "例文"]:
+            if pn in props:
+                ptype = props[pn].get("type")
+                if ptype == "rich_text":
+                    vocab["example"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("rich_text", [])])
+                if vocab["example"]: break
+
+        return vocab
 
     child_db_ids = [b["id"] for b in top_blocks if is_vocab_db(b)]
     
@@ -183,7 +270,6 @@ async def get_lesson_content(lesson_id: str):
                 continue
 
     # Fallback: if NO specific vocabulary databases are found, we might be in a legacy structure
-    # where all databases are treated as potential sources, but this is less likely now.
     if not child_db_ids:
         child_db_ids = [b["id"] for b in top_blocks if b["type"] == "child_database"]
         for b in top_blocks:
@@ -195,54 +281,33 @@ async def get_lesson_content(lesson_id: str):
                     continue
     
     vocabulary = []
-    for child_db_id in child_db_ids:
+    # Process child databases
+    for db_id in child_db_ids:
         try:
-            vocab_pages = await notion.fetch_database_pages(child_db_id)
-            for vp in vocab_pages:
-                props = vp.get("properties", {})
-                # Extract fields from the vocab database properties
-                jp = ""
-                reading = ""
-                en = ""
+            db_pages = await notion.fetch_database_pages(db_id)
+            for p in db_pages:
+                props = p.get("properties", {})
                 
-                # Try common property names for Japanese word databases
-                for prop_name, prop_data in props.items():
-                    ptype = prop_data.get("type", "")
-                    prop_lower = prop_name.lower()
-                    
-                    if ptype == "title":
-                        jp = "".join([rt.get("plain_text", "") for rt in prop_data.get("title", [])]).strip()
-                    elif ptype == "rich_text":
-                        val = "".join([rt.get("plain_text", "") for rt in prop_data.get("rich_text", [])]).strip()
-                        if any(k in prop_lower for k in ["reading", "hiragana", "ひらがな", "読み"]):
-                            reading = val
-                        elif any(k in prop_lower for k in ["english", "meaning", "translation", "en", "訳", "意味"]):
-                            en = val
-                        elif not reading and val:
-                            reading = val  # Fallback: first rich_text is often reading
-                    elif ptype == "select" or ptype == "multi_select":
-                        pass  # Skip category fields
+                # Check if it's a vocabulary item (marked or in a vocab DB)
+                # If we're in a fallback mode (no vocab-named DBs), we only take items with markers
+                # or those that clearly look like vocabulary items (have yomikata/imi)
+                item_vocab = map_vocab_properties(props)
                 
-                if jp:
-                    # If the title looks like "JP | EN" parse it
-                    if "｜" in jp or "|" in jp:
-                        parts = re.split(r'[|｜]', jp)
-                        if len(parts) >= 2:
-                            jp = parts[0].strip()
-                            if not en:
-                                en = parts[-1].strip()
-                            if not reading and len(parts) >= 3:
-                                reading = parts[1].strip()
-                    
-                    vocabulary.append({
-                        "id": vp["id"],
-                        "jp": jp,
-                        "reading": reading,
-                        "en": en,
-                        "lesson_id": lesson_id
-                    })
-        except Exception:
-            pass  # Skip databases that fail
+                if is_vocab_item(props) or (item_vocab["jp"] and (item_vocab["reading"] or item_vocab["en"])):
+                    if item_vocab["jp"]:
+                        vocabulary.append({
+                            "id": p["id"],
+                            "word": item_vocab["jp"],
+                            "reading": item_vocab["reading"],
+                            "meaning": item_vocab["en"],
+                            "kanji": item_vocab["kanji"],
+                            "pos": item_vocab["pos"],
+                            "example": item_vocab["example"],
+                            "status": "not yet"
+                        })
+        except Exception as e:
+            print(f"Error fetching vocab database {db_id}: {e}")
+            continue
     
     # Chunking blocks into sections based on headings or callouts (anchors)
     learning_slides = []
