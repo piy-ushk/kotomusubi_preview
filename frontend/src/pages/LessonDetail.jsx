@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getLessonContent, addAnnotation, deleteAnnotation } from '../services/api';
 import { vocabularyService } from '../services/vocabularyService';
@@ -60,21 +60,100 @@ const cleanText = (text) => {
 };
 
 /* ---- Translation helper ---- */
-const splitTranslation = (text) => {
-  if (typeof text !== 'string') return { jp: String(text ?? ''), en: '' };
-  let rawJp = '', rawEn = '';
+const LANGUAGE_LABELS = {
+  en: 'English',
+  ja: '日本語',
+  zh: '中文',
+  ko: '한국어',
+  vi: 'Tiếng Việt',
+  es: 'Español',
+  fr: 'Français',
+  de: 'Deutsch',
+  pt: 'Português'
+};
+
+const normalizeLanguageCode = (label) => {
+  if (!label) return '';
+  const normalized = label.trim().toLowerCase();
+  if (['en', 'eng', 'english', '英語'].includes(normalized)) return 'en';
+  if (['ja', 'jp', 'jpn', 'japanese', '日本語'].includes(normalized)) return 'ja';
+  if (['zh', 'cn', 'chi', 'chinese', '中文', '中国語'].includes(normalized)) return 'zh';
+  if (['ko', 'kr', 'kor', 'korean', '한국어', '韓国語', '韓語'].includes(normalized)) return 'ko';
+  if (['vi', 'viet', 'vietnamese', 'ベトナム語', 'tiếng việt'].includes(normalized)) return 'vi';
+  if (['es', 'spa', 'spanish', 'español'].includes(normalized)) return 'es';
+  if (['fr', 'fre', 'french', 'français'].includes(normalized)) return 'fr';
+  if (['de', 'ger', 'german', 'deutsch'].includes(normalized)) return 'de';
+  if (['pt', 'por', 'portuguese', 'português'].includes(normalized)) return 'pt';
+  return '';
+};
+
+const getLanguageLabel = (code) => {
+  if (LANGUAGE_LABELS[code]) return LANGUAGE_LABELS[code];
+  if (code.startsWith('lang')) return `Language ${code.replace('lang', '')}`;
+  return code.toUpperCase();
+};
+
+const parseLanguageSegments = (segments, assumeEnglishFirst = true) => {
+  const translations = {};
+  const unlabeled = [];
+  segments.forEach(segment => {
+    const trimmed = cleanText(segment);
+    if (!trimmed) return;
+    const match = trimmed.match(/^([A-Za-z]{2,10}|日本語|英語|中国語|中文|韓国語|韓語|한국어|ベトナム語|Vietnamese|English|Japanese|Chinese|Korean|Spanish|Español|French|Français|German|Deutsch|Portuguese|Português)\s*[:：]\s*(.+)$/i);
+    if (match) {
+      const code = normalizeLanguageCode(match[1]);
+      const value = cleanText(match[2]);
+      if (code && value) translations[code] = value;
+      else if (value) unlabeled.push(value);
+    } else {
+      unlabeled.push(trimmed);
+    }
+  });
+  if (assumeEnglishFirst && unlabeled.length > 0 && !translations.en) {
+    translations.en = unlabeled.shift();
+  }
+  unlabeled.forEach((value, index) => {
+    translations[`lang${index + 2}`] = value;
+  });
+  return translations;
+};
+
+const selectTranslation = (translations, language) => {
+  if (!translations || Object.keys(translations).length === 0) return '';
+  if (language && translations[language]) return translations[language];
+  if (language !== 'en' && translations.en) return translations.en;
+  const firstKey = Object.keys(translations)[0];
+  return translations[firstKey] || '';
+};
+
+const splitTranslation = (text, language = 'en') => {
+  if (typeof text !== 'string') return { jp: String(text ?? ''), en: '', translations: {} };
+  let rawJp = text;
+  let translationParts = [];
   if (text.includes('｜')) { 
     const p = text.split('｜'); 
-    rawJp = p[0]; 
-    rawEn = p[1] || ''; 
+    rawJp = p[0] || ''; 
+    translationParts = p.slice(1); 
   } else if (text.includes('|')) { 
     const p = text.split('|'); 
-    rawJp = p[0]; 
-    rawEn = p[1] || ''; 
-  } else {
-    rawJp = text;
+    rawJp = p[0] || ''; 
+    translationParts = p.slice(1); 
   }
-  return { jp: cleanText(rawJp), en: cleanText(rawEn) };
+  const translations = parseLanguageSegments(translationParts, true);
+  return { jp: cleanText(rawJp), en: selectTranslation(translations, language), translations };
+};
+
+const getTranslationOnly = (text, language = 'en') => {
+  if (typeof text !== 'string') return '';
+  const parts = text.includes('｜') ? text.split('｜') : (text.includes('|') ? text.split('|') : [text]);
+  const translations = parseLanguageSegments(parts, true);
+  return selectTranslation(translations, language);
+};
+
+const getTranslationsFromText = (text) => {
+  if (typeof text !== 'string') return {};
+  const parts = text.includes('｜') ? text.split('｜') : (text.includes('|') ? text.split('|') : [text]);
+  return parseLanguageSegments(parts, true);
 };
 
 /* ---- Block Processing Helpers ---- */
@@ -95,6 +174,103 @@ const isEnglishTarget = (str) => {
   const hasEng = /[a-zA-Z]/.test(str);
   const noJp = !hasJapanese(str);
   return hasEng && noJp;
+};
+
+const FURIGANA_REGEX = /([\u4e00-\u9faf々〆ヵヶ]+)(?:\(([^)]+)\)|（([^）]+)）|\[([^\]]+)\])/g;
+
+const renderFuriganaText = (text, showFurigana) => {
+  if (typeof text !== 'string') return text;
+  if (!showFurigana) return text.replace(FURIGANA_REGEX, '$1');
+  const parts = [];
+  let lastIndex = 0;
+  text.replace(FURIGANA_REGEX, (match, base, r1, r2, r3, offset) => {
+    if (offset > lastIndex) parts.push(text.slice(lastIndex, offset));
+    const reading = r1 || r2 || r3 || '';
+    parts.push(
+      <ruby key={`${offset}-${base}`}>
+        {base}
+        <rp>(</rp>
+        <rt>{reading}</rt>
+        <rp>)</rp>
+      </ruby>
+    );
+    lastIndex = offset + match.length;
+    return match;
+  });
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex));
+  return parts.length > 0 ? parts : text;
+};
+
+const NOTION_COLORS = {
+  gray: '#6f6f6f',
+  brown: '#8d6e63',
+  orange: '#f18b5b',
+  yellow: '#f5c542',
+  green: '#4caf50',
+  blue: '#3b6fd4',
+  purple: '#9c27b0',
+  pink: '#e91e63',
+  red: '#e53935'
+};
+
+const NOTION_BG_COLORS = {
+  gray: 'rgba(111, 111, 111, 0.18)',
+  brown: 'rgba(141, 110, 99, 0.2)',
+  orange: 'rgba(241, 139, 91, 0.22)',
+  yellow: 'rgba(245, 197, 66, 0.25)',
+  green: 'rgba(76, 175, 80, 0.2)',
+  blue: 'rgba(59, 111, 212, 0.2)',
+  purple: 'rgba(156, 39, 176, 0.2)',
+  pink: 'rgba(233, 30, 99, 0.2)',
+  red: 'rgba(229, 57, 53, 0.2)'
+};
+
+const getNotionColorStyle = (color) => {
+  if (!color || color === 'default') return {};
+  if (color.endsWith('_background')) {
+    const base = color.replace('_background', '');
+    return {
+      backgroundColor: NOTION_BG_COLORS[base] || 'rgba(0,0,0,0.08)',
+      color: NOTION_COLORS[base] || 'inherit',
+      padding: '0 4px',
+      borderRadius: '4px'
+    };
+  }
+  return { color: NOTION_COLORS[color] || 'inherit' };
+};
+
+const renderRichText = (richText, showFurigana) => {
+  if (!Array.isArray(richText) || richText.length === 0) return '';
+  return richText.map((rt, idx) => {
+    const { bold, italic, underline, strikethrough, code, color } = rt.annotations || {};
+    const style = {
+      ...getNotionColorStyle(color),
+      fontWeight: bold ? 700 : undefined,
+      fontStyle: italic ? 'italic' : undefined
+    };
+    if (underline || strikethrough) {
+      style.textDecoration = `${underline ? 'underline' : ''}${underline && strikethrough ? ' ' : ''}${strikethrough ? 'line-through' : ''}`.trim();
+    }
+    if (code) {
+      style.fontFamily = 'monospace';
+      style.backgroundColor = 'rgba(0,0,0,0.06)';
+      style.padding = '0 4px';
+      style.borderRadius = '4px';
+    }
+    const content = renderFuriganaText(cleanText(rt.plain_text || ''), showFurigana);
+    if (rt.href) {
+      return (
+        <a key={idx} href={rt.href} target="_blank" rel="noreferrer" style={style}>
+          {content}
+        </a>
+      );
+    }
+    return (
+      <span key={idx} style={style}>
+        {content}
+      </span>
+    );
+  });
 };
 
 const preprocessBlocks = (blocks) => {
@@ -119,6 +295,21 @@ const preprocessBlocks = (blocks) => {
   return result;
 };
 
+const isPracticeSection = (title = '') => /let's practice|話してみよう/i.test(title);
+const isReviewSection = (title = '') => /復習問題|review|revise/i.test(title);
+
+const shouldShowAnswerField = (block, sectionTitle) => {
+  if (!sectionTitle) return false;
+  if (!isPracticeSection(sectionTitle) && !isReviewSection(sectionTitle)) return false;
+  if (!block || !block.type) return false;
+  const type = block.type;
+  if (!['paragraph', 'bulleted_list_item', 'numbered_list_item', 'quote', 'callout', 'to_do'].includes(type)) return false;
+  const text = getRawText(block).trim();
+  if (!text) return false;
+  if (/回答例|こたえ|答え|サンプル|sample/i.test(text)) return false;
+  return true;
+};
+
 /* ---- Block Components ---- */
 
 const TranslationControls = ({ id, rawText, isTranslated, onToggle }) => (
@@ -132,26 +323,26 @@ const TranslationControls = ({ id, rawText, isTranslated, onToggle }) => (
   </div>
 );
 
-const TranslatableBlock = ({ id, rawText, textStyle, isTranslated, onToggle, Tag = 'div', extraClass = '' }) => {
-  const { jp, en } = splitTranslation(rawText);
+const TranslatableBlock = ({ id, rawText, textStyle, isTranslated, onToggle, translationLanguage, showFurigana, Tag = 'div', extraClass = '' }) => {
+  const { jp, en } = splitTranslation(rawText, translationLanguage);
   if (!jp) return null;
   return (
     <div>
-      <Tag className={extraClass} style={textStyle}>{jp}</Tag>
+      <Tag className={extraClass} style={textStyle}>{renderFuriganaText(jp, showFurigana)}</Tag>
       {isTranslated && en && <div className="block-translation">{en}</div>}
       <TranslationControls id={id} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />
     </div>
   );
 };
 
-const NumberCard = ({ digit, hiragana, kanji, english, isTranslated, onToggle, wordId }) => {
+const NumberCard = ({ digit, hiragana, kanji, english, isTranslated, onToggle, wordId, showFurigana }) => {
   return (
     <div className="lesson-flashcard">
       <div className="lesson-flashcard-kanji-box">
         <div className="lesson-flashcard-kanji">{kanji || hiragana}</div>
       </div>
       {digit && <div className="lesson-flashcard-digit">{digit}</div>}
-      {hiragana && <div className="lesson-flashcard-reading">{hiragana}</div>}
+      {showFurigana && hiragana && <div className="lesson-flashcard-reading">{hiragana}</div>}
       {english && (
         isTranslated
           ? <div className="lesson-flashcard-meaning">{english}</div>
@@ -164,11 +355,11 @@ const NumberCard = ({ digit, hiragana, kanji, english, isTranslated, onToggle, w
   );
 };
 
-const GreetingCard = ({ phrase, reading, meaning, isTranslated, onToggle, wordId }) => {
+const GreetingCard = ({ phrase, reading, meaning, isTranslated, onToggle, wordId, showFurigana }) => {
   return (
     <div className="greeting-card">
       <div className="greeting-phrase">{phrase}</div>
-      {reading && <div className="greeting-reading">{reading}</div>}
+      {showFurigana && reading && <div className="greeting-reading">{reading}</div>}
       {meaning && (
         isTranslated
           ? <div className="lesson-flashcard-meaning">{meaning}</div>
@@ -206,7 +397,7 @@ const renderAnnotations = (blockId, annotations, onRemoveAnnotation) => {
 };
 
 /* ---- Block Renderer ---- */
-const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, onToggle, enTranslation, annotations, onContextMenu, onRemoveAnnotation }) => {
+const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, onToggle, enTranslation, annotations, onContextMenu, onRemoveAnnotation, translationLanguage, showFurigana }) => {
   const type = block.type;
   const blockData = block[type];
   if (!blockData) return null;
@@ -216,9 +407,10 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
   else if (blockData.text) rawText = blockData.text;
 
   const isTranslated = translateAll || !!individualTranslations[blockId];
-  let { jp, en } = splitTranslation(rawText);
-  if (!en && enTranslation) en = enTranslation;
+  let { jp, en } = splitTranslation(rawText, translationLanguage);
+  if (!en && enTranslation) en = getTranslationOnly(enTranslation, translationLanguage);
   const hasJpChars = hasJapanese(rawText);
+  const jpContent = blockData.rich_text ? renderRichText(blockData.rich_text, showFurigana) : renderFuriganaText(jp, showFurigana);
 
   const subBlocks = block.children ? (
     <div className="block-children" style={{ marginTop: '8px' }}>
@@ -234,6 +426,8 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           annotations={annotations}
           onContextMenu={onContextMenu}
           onRemoveAnnotation={onRemoveAnnotation}
+          translationLanguage={translationLanguage}
+          showFurigana={showFurigana}
         />
       ))}
     </div>
@@ -251,7 +445,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       const sizes = { heading_1: '26px', heading_2: '22px', heading_3: '18px' };
       return (
         <div style={{ margin: '24px 0 8px' }} onContextMenu={handleContext}>
-          {jp && <div className="block-heading" style={{ fontSize: sizes[type] }}>{jp}</div>}
+          {jp && <div className="block-heading" style={{ fontSize: sizes[type] }}>{jpContent}</div>}
           {isTranslated && en && <div className="block-translation">{en}</div>}
           {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
           {subBlocks}
@@ -264,7 +458,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       if (!jp && !subBlocks) return null;
       return (
         <div style={{ marginBottom: '4px' }} onContextMenu={handleContext}>
-          {jp && <div className="block-paragraph">{jp}</div>}
+          {jp && <div className="block-paragraph">{jpContent}</div>}
           {isTranslated && en && <div className="block-translation">{en}</div>}
           {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
           {subBlocks}
@@ -283,7 +477,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           <div className="callout-header">
             {emoji && <span className="callout-emoji">{emoji}</span>}
             <div>
-              <div className="callout-text">{jp}</div>
+              <div className="callout-text">{jpContent}</div>
               {isTranslated && en && <div className="block-translation">{en}</div>}
             </div>
           </div>
@@ -303,7 +497,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
         <div className="block-bullet" onContextMenu={handleContext}>
           <div className="bullet-dot" />
           <div style={{ flex: 1 }}>
-            {jp && <div className="block-paragraph" style={{ fontSize: '17px' }}>{jp}</div>}
+            {jp && <div className="block-paragraph" style={{ fontSize: '17px' }}>{jpContent}</div>}
             {isTranslated && en && <div className="block-translation">{en}</div>}
             {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
             {subBlocks}
@@ -320,7 +514,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
         <div className="block-todo" style={{ display: 'flex', alignItems: 'flex-start', margin: '8px 0' }} onContextMenu={handleContext}>
           <input type="checkbox" readOnly checked={checked} style={{ marginTop: '5px', marginRight: '10px' }} />
           <div style={{ flex: 1 }}>
-            {jp && <div className="block-paragraph" style={{ fontSize: '17px', color: 'var(--primary)' }}>{jp}</div>}
+            {jp && <div className="block-paragraph" style={{ fontSize: '17px', color: 'var(--primary)' }}>{jpContent}</div>}
             {isTranslated && en && <div className="block-translation">{en}</div>}
             {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
             {subBlocks}
@@ -334,7 +528,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       return (
         <details className="block-toggle" style={{ margin: '8px 0', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '12px', background: 'var(--bg-secondary)' }}>
           <summary style={{ cursor: 'pointer', fontWeight: '500', display: 'flex', alignItems: 'center' }}>
-            <div style={{ flex: 1 }}>{jp}</div>
+            <div style={{ flex: 1 }}>{jpContent}</div>
           </summary>
           <div style={{ marginTop: '12px', paddingLeft: '10px' }}>
             {isTranslated && en && <div className="block-translation" style={{ marginBottom: '8px' }}>{en}</div>}
@@ -375,7 +569,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       if (!jp && !subBlocks) return null;
       return (
         <div style={{ borderLeft: '4px solid var(--primary)', paddingLeft: '16px', margin: '12px 0', fontStyle: 'italic', color: '#555', fontSize: '16px' }} onContextMenu={handleContext}>
-          {jp && <div>{jp}</div>}
+          {jp && <div>{jpContent}</div>}
           {subBlocks}
           {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
         </div>
@@ -421,7 +615,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'display_number': {
       const d = blockData;
       const wordId = `number_${blockId}`;
-      let eng = d.english || d.translation || '';
+      let eng = getTranslationOnly(d.english || d.translation || '', translationLanguage);
       if (!eng && en) eng = en;
       return (
         <NumberCard
@@ -432,6 +626,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           isTranslated={translateAll || !!individualTranslations[wordId]}
           onToggle={onToggle}
           wordId={wordId}
+          showFurigana={showFurigana}
         />
       );
     }
@@ -440,7 +635,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'display_greeting': {
       const d = blockData;
       const wordId = `greeting_${blockId}`;
-      let eng = d.translation || d.meaning || '';
+      let eng = getTranslationOnly(d.translation || d.meaning || '', translationLanguage);
       if (!eng && en) eng = en;
       return (
         <GreetingCard
@@ -450,6 +645,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           isTranslated={translateAll || !!individualTranslations[wordId]}
           onToggle={onToggle}
           wordId={wordId}
+          showFurigana={showFurigana}
         />
       );
     }
@@ -480,6 +676,9 @@ const LessonDetail = () => {
   const [viewMode, setViewMode] = useState('learning');
   const [annotations, setAnnotations] = useState({});
   const [contextMenu, setContextMenu] = useState(null);
+  const [showFurigana, setShowFurigana] = useState(false);
+  const [translationLanguage, setTranslationLanguage] = useState('en');
+  const [answerInputs, setAnswerInputs] = useState({});
 
   useEffect(() => {
     getLessonContent(lessonId)
@@ -498,6 +697,10 @@ const LessonDetail = () => {
     setIndividualTranslations(prev => ({ ...prev, [id]: !prev[id] }));
   }, []);
 
+  const handleAnswerChange = useCallback((id, value) => {
+    setAnswerInputs(prev => ({ ...prev, [id]: value }));
+  }, []);
+
   const handleContextMenu = useCallback((e, blockId) => {
     e.preventDefault();
     e.stopPropagation();
@@ -510,6 +713,43 @@ const LessonDetail = () => {
     window.addEventListener('click', closeContextMenu);
     return () => window.removeEventListener('click', closeContextMenu);
   }, [closeContextMenu]);
+
+  const availableLanguages = useMemo(() => {
+    const langs = new Map([['en', getLanguageLabel('en')]]);
+    const addTranslations = (translations) => {
+      Object.keys(translations || {}).forEach(code => {
+        if (!langs.has(code)) langs.set(code, getLanguageLabel(code));
+      });
+    };
+    const scanBlocks = (blocks) => {
+      (blocks || []).forEach(block => {
+        const { translations } = splitTranslation(getRawText(block), 'en');
+        addTranslations(translations);
+        if (block.children) scanBlocks(block.children);
+      });
+    };
+    if (data) {
+      (data.learning_slides || []).forEach(section => scanBlocks(section.content));
+      (data.test_sections || []).forEach(section => scanBlocks(section.content));
+      (data.vocabulary || []).forEach(item => {
+        const translations = getTranslationsFromText(item.en || item.translation || item.meaning || item.english || '');
+        addTranslations(translations);
+      });
+    }
+    return Array.from(langs.entries())
+      .map(([code, label]) => ({ code, label }))
+      .sort((a, b) => {
+        if (a.code === 'en') return -1;
+        if (b.code === 'en') return 1;
+        return a.label.localeCompare(b.label);
+      });
+  }, [data]);
+
+  useEffect(() => {
+    if (!availableLanguages.find(lang => lang.code === translationLanguage)) {
+      setTranslationLanguage('en');
+    }
+  }, [availableLanguages, translationLanguage]);
 
   const handleAddLine = async (blockId) => {
     const text = prompt("Enter your personalized note or line:");
@@ -668,6 +908,22 @@ const LessonDetail = () => {
           </button>
         )}
         <button
+          className={`lesson-translate-btn ${showFurigana ? 'active' : ''}`}
+          onClick={() => setShowFurigana(v => !v)}
+        >
+          ふりがな
+        </button>
+        <select
+          className="lesson-language-select"
+          value={translationLanguage}
+          onChange={(e) => setTranslationLanguage(e.target.value)}
+          aria-label="Translation language"
+        >
+          {availableLanguages.map(lang => (
+            <option key={lang.code} value={lang.code}>{lang.label}</option>
+          ))}
+        </select>
+        <button
           className={`lesson-translate-btn ${translateAll ? 'active' : ''}`}
           onClick={() => setTranslateAll(v => !v)}
         >
@@ -695,6 +951,7 @@ const LessonDetail = () => {
                 )}
                 {preprocessBlocks(currentSlide.content || []).map((item, i) => {
                   const blockId = `slide_${currentSlideIndex}_block_${i}`;
+                  const showAnswerField = shouldShowAnswerField(item.block, currentSlide.title);
                   return (
                     <motion.div
                       key={blockId}
@@ -712,7 +969,17 @@ const LessonDetail = () => {
                         annotations={annotations}
                         onContextMenu={handleContextMenu}
                         onRemoveAnnotation={handleRemoveAnnotation}
+                        translationLanguage={translationLanguage}
+                        showFurigana={showFurigana}
                       />
+                      {showAnswerField && (
+                        <textarea
+                          className="lesson-answer-input"
+                          placeholder="回答を書き込む"
+                          value={answerInputs[blockId] || ''}
+                          onChange={(e) => handleAnswerChange(blockId, e.target.value)}
+                        />
+                      )}
                     </motion.div>
                   );
                 })}
@@ -883,6 +1150,7 @@ const LessonDetail = () => {
                   )}
                   {preprocessBlocks(section.content || []).map((item, i) => {
                     const blockId = `test_${secIdx}_block_${i}`;
+                    const showAnswerField = shouldShowAnswerField(item.block, section.title);
                     return (
                       <div key={blockId} style={{ marginBottom: '16px' }}>
                         <BlockRenderer
@@ -895,7 +1163,17 @@ const LessonDetail = () => {
                           annotations={annotations}
                           onContextMenu={handleContextMenu}
                           onRemoveAnnotation={handleRemoveAnnotation}
+                          translationLanguage={translationLanguage}
+                          showFurigana={showFurigana}
                         />
+                        {showAnswerField && (
+                          <textarea
+                            className="lesson-answer-input"
+                            placeholder="回答を書き込む"
+                            value={answerInputs[blockId] || ''}
+                            onChange={(e) => handleAnswerChange(blockId, e.target.value)}
+                          />
+                        )}
                       </div>
                     );
                   })}

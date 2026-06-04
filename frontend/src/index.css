@@ -909,6 +909,25 @@ body {
 
 .lesson-translate-btn.active { color: var(--primary); }
 
+.lesson-language-select {
+  height: 28px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.lesson-language-select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
 .lesson-slide-area {
   flex: 1;
   overflow-y: auto;
@@ -989,6 +1008,15 @@ body {
   margin-bottom: 4px;
 }
 
+ruby {
+  ruby-position: over;
+}
+
+ruby rt {
+  font-size: 0.55em;
+  color: #9e9e9e;
+}
+
 .block-translation {
   font-size: 14px;
   color: var(--text-sub);
@@ -1003,6 +1031,28 @@ body {
   gap: 16px;
   margin-top: 8px;
 }
+
+.lesson-answer-input {
+  width: 100%;
+  min-height: 72px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg-surface);
+  color: #333;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+.lesson-answer-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.lesson-answer-input::placeholder { color: var(--text-sub); }
 
 .block-ctrl-btn {
   display: flex;
