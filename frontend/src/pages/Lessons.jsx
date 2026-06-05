@@ -37,10 +37,17 @@ const Lessons = () => {
   const [levelTitle, setLevelTitle] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-  const textbookTitleState = location.state?.textbookTitle || 'Material';
-  const levelTitleState = location.state?.levelTitle || 'Level';
+  const textbookTitleState = location.state?.textbookTitle || sessionStorage.getItem('currentTextbook') || 'Material';
+  const levelTitleState = location.state?.levelTitle || sessionStorage.getItem('currentLevel') || 'Level';
 
   useEffect(() => {
+    if (location.state?.textbookTitle) {
+      sessionStorage.setItem('currentTextbook', location.state.textbookTitle);
+    }
+    if (location.state?.levelTitle) {
+      sessionStorage.setItem('currentLevel', location.state.levelTitle);
+    }
+    
     getLessons(levelId)
       .then(res => {
         const data = Array.isArray(res.data) ? res.data : [];

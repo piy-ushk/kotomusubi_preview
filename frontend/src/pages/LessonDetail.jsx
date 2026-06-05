@@ -8,8 +8,8 @@ import TravelLessonLayout from './TravelLessonLayout';
 const LessonDetail = () => {
   const { lessonId } = useParams();
   const location = useLocation();
-  const textbookTitle = location.state?.textbookTitle || 'Material';
-  const levelTitle = location.state?.levelTitle || 'Level';
+  const textbookTitle = location.state?.textbookTitle || sessionStorage.getItem('currentTextbook') || 'Material';
+  const levelTitle = location.state?.levelTitle || sessionStorage.getItem('currentLevel') || 'Level';
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,7 @@ const LessonDetail = () => {
     );
   }
 
-  if (!data || (!data.learning_slides?.length && !data.test_sections?.length)) {
+  if (!data || (!data.learning_slides?.length && !data.test_sections?.length && !data.vocabulary?.length)) {
     return (
       <div className="lesson-container">
         <div className="loading-container" style={{ flex: 1 }}>

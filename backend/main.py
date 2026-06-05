@@ -160,6 +160,8 @@ async def remove_annotation(annotation_id: int):
 
 @app.get("/api/lessons/{lesson_id}")
 async def get_lesson_content(lesson_id: str):
+    lesson_page = await notion.fetch_page(lesson_id)
+    lesson_title = notion.extract_page_title(lesson_page)
     blocks = await notion.fetch_blocks_with_children(lesson_id)
     
     # Gather child DB IDs from the lesson itself AND from any child_page blocks
@@ -431,6 +433,7 @@ async def get_lesson_content(lesson_id: str):
         
     return {
         "id": lesson_id,
+        "title": lesson_title,
         "learning_slides": learning_slides,
         "test_sections": test_sections,
         "vocabulary": vocabulary,
