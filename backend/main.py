@@ -384,7 +384,7 @@ async def get_lesson_content(lesson_id: str):
             # Images, callouts, paragraphs etc are all meaningful
             meaningful = any(
                 b["type"] not in ["divider"] and (
-                    b["type"] == "image" or 
+                    b["type"] in ["image", "child_database"] or 
                     extract_text(b).strip() or 
                     b.get("has_children")
                 )
@@ -447,7 +447,7 @@ async def get_lesson_content(lesson_id: str):
     # Save the last section if meaningful
     meaningful = any(
         b["type"] not in ["divider"] and (
-            b["type"] == "image" or 
+            b["type"] in ["image", "child_database"] or 
             extract_text(b).strip() or 
             b.get("has_children")
         )

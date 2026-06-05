@@ -251,6 +251,33 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       );
     }
 
+    case 'child_database': {
+      const items = block.database_items;
+      if (!items || items.length === 0) return null;
+      return (
+        <div className="vocab-grid" style={{ marginTop: '16px' }}>
+          {items.map(item => {
+            const wordId = `inline_vocab_${item.id}`;
+            const v = item.vocab || {};
+            let eng = getTranslationOnly(v.en || '', translationLanguage);
+            return (
+              <VocabCard
+                key={item.id}
+                phrase={cleanText(v.jp || '')}
+                reading={cleanText(v.reading || '')}
+                pos={v.pos}
+                meaning={cleanText(eng)}
+                isTranslated={translateAll || !!individualTranslations[wordId]}
+                onToggle={onToggle}
+                wordId={wordId}
+                showFurigana={showFurigana}
+              />
+            );
+          })}
+        </div>
+      );
+    }
+
     case 'divider':
       return <hr style={{ border: 'none', borderTop: '1px dashed var(--line)', margin: '24px 0' }} />;
 
