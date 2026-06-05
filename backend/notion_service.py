@@ -56,7 +56,8 @@ class NotionService:
             if block.get("has_children") or block["type"] == "child_page":
                 # Recursive fetch for nested content blocks
                 if block["type"] in ["toggle", "table", "column_list", "column", "callout",
-                                     "bulleted_list_item", "numbered_list_item", "child_page"]:
+                                     "bulleted_list_item", "numbered_list_item", "child_page",
+                                     "heading_1", "heading_2", "heading_3"]:
                     block["children"] = await self.fetch_blocks_with_children(block["id"])
         return blocks
 

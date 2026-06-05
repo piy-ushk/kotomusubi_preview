@@ -94,6 +94,23 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'heading_2':
     case 'heading_3': {
       if (!jp && !subBlocks) return null;
+      if (blockData.is_toggleable || subBlocks) {
+        return (
+          <details className="drill" style={{ margin: '8px 0' }} onContextMenu={handleContext}>
+            <summary>{jpContent}</summary>
+            <div className="drill-body">
+              {en && (
+                <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
+                  <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+                  <p className="en">{en}</p>
+                </div>
+              )}
+              {subBlocks}
+              {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
+            </div>
+          </details>
+        );
+      }
       return (
         <div onContextMenu={handleContext}>
           {jp && <h3 className="subhead">{jpContent}</h3>}
@@ -247,6 +264,41 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
 
     case 'column_list':
       return <div className="ta-chart-grid" style={{ margin: '16px 0' }}>{subBlocks}</div>;
+
+    case 'child_database': {
+      const items = block.database_items || [];
+      if (items.length === 0) return null;
+      return (
+        <div className="vocab-grid inline-vocab-grid" style={{ marginTop: '16px', gap: '16px' }}>
+          {items.map((item, idx) => {
+            const vocab = item.vocab;
+            // Fallbacks for generic database mapping
+            const title = vocab.jp || item.raw_props["名前"] || item.raw_props["Name"] || item.raw_props["Word"] || item.raw_props["単語"] || "";
+            const meaning = vocab.en || item.raw_props["Meaning"] || item.raw_props["English"] || item.raw_props["意味"] || "";
+            const reading = vocab.reading || item.raw_props["Reading"] || item.raw_props["Pronunciation"] || item.raw_props["読み方"] || item.raw_props["ひらがな"] || "";
+            
+            return (
+              <div key={item.id} className="vocab-card inline-card">
+                <h3 className="vocab-word" style={{fontSize: '1.2rem', marginBottom: '4px'}}>{title}</h3>
+                {reading && <p className="vocab-reading" style={{fontSize: '0.85rem', color: 'var(--text-muted)', margin: '0 0 8px'}}>{reading}</p>}
+                
+                {meaning && (
+                  <>
+                    <button className="vocab-toggle" style={{marginTop: 'auto'}} onClick={(e) => {
+                      const tgt = e.currentTarget.nextElementSibling;
+                      tgt.style.display = tgt.style.display === 'block' ? 'none' : 'block';
+                    }}>
+                      意味を見る
+                    </button>
+                    <p className="vocab-meaning-en" style={{display: 'none', marginTop: '8px', borderTop: '1px solid var(--line)', paddingTop: '8px'}}>{meaning}</p>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
 
     case 'column':
       return <div className="ta-group">{subBlocks}</div>;

@@ -260,45 +260,77 @@ async def get_lesson_content(lesson_id: str):
 
         return vocab
 
-    child_db_ids = [b["id"] for b in top_blocks if is_vocab_db(b)]
-    
-    # Also look inside child_page blocks for embedded databases
-    for b in top_blocks:
-        if b["type"] == "child_page":
-            try:
-                sub_blocks = await notion.fetch_page_blocks(b["id"])
-                child_db_ids.extend([sb["id"] for sb in sub_blocks if is_vocab_db(sb)])
-            except Exception:
-                continue
-
-    # Fallback: if NO specific vocabulary databases are found, we might be in a legacy structure
-    if not child_db_ids:
-        child_db_ids = [b["id"] for b in top_blocks if b["type"] == "child_database"]
-        for b in top_blocks:
-            if b["type"] == "child_page":
+    # Recursively find all child_database blocks and fetch their items inline
+    async def fetch_inline_databases(blocks_list):
+        for b in blocks_list:
+            if b["type"] == "child_database":
                 try:
-                    sub_blocks = await notion.fetch_page_blocks(b["id"])
-                    child_db_ids.extend([sb["id"] for sb in sub_blocks if sb["type"] == "child_database"])
-                except Exception:
-                    continue
+                    db_pages = await notion.fetch_database_pages(b["id"])
+                    items = []
+                    for p in db_pages:
+                        props = p.get("properties", {})
+                        item_vocab = map_vocab_properties(props)
+                        
+                        extra_props = {}
+                        for pn, pd in props.items():
+                            content = ""
+                            ptype = pd.get("type")
+                            if ptype == "title":
+                                content = "".join([rt.get("plain_text", "") for rt in pd.get("title", [])])
+                            elif ptype == "rich_text":
+                                content = "".join([rt.get("plain_text", "") for rt in pd.get("rich_text", [])])
+                            elif ptype == "select":
+                                content = pd.get("select", {}).get("name", "") if pd.get("select") else ""
+                            elif ptype == "multi_select":
+                                content = ",".join([ms.get("name", "") for ms in pd.get("multi_select", [])])
+                            if content:
+                                extra_props[pn] = content
+                                
+                        items.append({
+                            "id": p["id"],
+                            "vocab": item_vocab,
+                            "raw_props": extra_props
+                        })
+                    b["database_items"] = items
+                except Exception as e:
+                    print(f"Error fetching inline DB {b['id']}: {e}")
+            if "children" in b:
+                await fetch_inline_databases(b["children"])
+                
+    await fetch_inline_databases(blocks)
+
+    def find_all_databases(blocks_list):
+        dbs = []
+        for b in blocks_list:
+            if b["type"] == "child_database":
+                dbs.append(b)
+            if "children" in b:
+                dbs.extend(find_all_databases(b["children"]))
+        return dbs
+
+    all_dbs = find_all_databases(blocks)
     
     vocabulary = []
-    # Process child databases
-    for db_id in child_db_ids:
+    # Process child databases for the global vocabulary tab
+    for db_block in all_dbs:
         try:
-            db_pages = await notion.fetch_database_pages(db_id)
-            for p in db_pages:
-                props = p.get("properties", {})
+            # Check if it's a vocabulary item by checking if it matches vocab naming,
+            # or if it has valid words mapped.
+            is_vocab = False
+            title = db_block.get("child_database", {}).get("title", "").lower()
+            if any(k in title for k in ["new word", "vocabulary", "vocab", "単語", "word"]):
+                is_vocab = True
                 
-                # Check if it's a vocabulary item (marked or in a vocab DB)
-                # If we're in a fallback mode (no vocab-named DBs), we only take items with markers
-                # or those that clearly look like vocabulary items (have yomikata/imi)
-                item_vocab = map_vocab_properties(props)
+            items = db_block.get("database_items", [])
+            for item in items:
+                item_vocab = item["vocab"]
+                props = item.get("raw_props", {})
                 
-                if is_vocab_item(props) or (item_vocab["jp"] and (item_vocab["reading"] or item_vocab["en"])):
+                # If the DB wasn't explicitly named vocabulary, check if the items look like vocab
+                if is_vocab or is_vocab_item(props) or (item_vocab["jp"] and (item_vocab["reading"] or item_vocab["en"])):
                     if item_vocab["jp"]:
                         vocabulary.append({
-                            "id": p["id"],
+                            "id": item["id"],
                             "word": item_vocab["jp"],
                             "reading": item_vocab["reading"],
                             "meaning": item_vocab["en"],
@@ -308,7 +340,6 @@ async def get_lesson_content(lesson_id: str):
                             "status": "not yet"
                         })
         except Exception as e:
-            print(f"Error fetching vocab database {db_id}: {e}")
             continue
     
     # Chunking blocks into sections based on headings or callouts (anchors)
