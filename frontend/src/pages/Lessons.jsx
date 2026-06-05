@@ -76,6 +76,7 @@ const Lessons = () => {
         >
           <Link
             to={`/lesson/${lesson.id}`}
+            state={{ textbookTitle: textbookTitleState }}
             className={`lesson-card ${lesson.completed ? 'completed' : ''}`}
             style={{ display: 'flex' }}
           >

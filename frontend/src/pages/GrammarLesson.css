@@ -1,0 +1,186 @@
+
+.grammar-lesson-page {
+  --bg:           #FAF6EE;
+  --card:         #FFFFFF;
+  --accent:       #C9A876;
+  --accent-dark:  #8B6F47;
+  --accent-soft:  #EFE4D0;
+  --line:         #D9C9AC;
+  --text:         #2E2418;
+  --text-muted:   #7A6A55;
+  --highlight:    #FFF4E0;
+  --ok:           #6B9B7F;
+  --orange:       #D98E3A;
+  --orange-soft:  #FFF1DC;
+  --ken-bg:       #E8F0F7;
+  --ken-color:    #3D7BAF;
+  --ana-bg:       #FBE7EE;
+  --ana-color:    #C44A75;
+  --fs-eyebrow:   0.85rem;
+  --fs-title:     2.6rem;
+  --fs-subtitle:  1.1rem;
+  --fs-section:   1.25rem;
+  --fs-example:   1.5rem;
+  --fs-body:      1rem;
+  --fs-en:        0.95rem;
+  --fs-small:     0.85rem;
+  --radius-lg:    20px;
+  --radius:       12px;
+  --pad-section:  1.75rem;
+  --gap:          1.25rem;
+  --max-width:    860px;
+  --font-jp:      'Zen Maru Gothic', 'Noto Sans JP', sans-serif;
+  --font-body:    'Noto Sans JP', sans-serif;
+  --shadow:       0 4px 24px rgba(139, 111, 71, 0.08);
+}
+.grammar-lesson-page * { box-sizing: border-box; }
+.grammar-lesson-page { margin: 0; padding: 0; }
+.grammar-lesson-page { padding: 2rem 1rem; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: var(--fs-body); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+.grammar-lesson-page .page { max-width: var(--max-width); margin: 0 auto; }
+.grammar-lesson-page .toolbar { position: sticky; top: 0.6rem; z-index: 10; display: flex; gap: 0.5rem; justify-content: flex-end; margin-bottom: 1rem; flex-wrap: wrap; }
+.grammar-lesson-page .toolbar button { background: var(--card); border: 1px solid var(--line); color: var(--accent-dark); padding: 0.45rem 1rem; border-radius: 999px; font-size: var(--fs-small); font-family: inherit; font-weight: 500; cursor: pointer; box-shadow: var(--shadow); transition: all .15s ease; }
+.grammar-lesson-page .toolbar button:hover { background: var(--accent-soft); }
+.grammar-lesson-page .toolbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.grammar-lesson-page .hero { position: relative; background: var(--card); border-radius: var(--radius-lg); padding: 2.5rem var(--pad-section); box-shadow: var(--shadow); margin-bottom: var(--gap); overflow: hidden; }
+.grammar-lesson-page .hero::before { content: ''; position: absolute; top: -40px; right: -40px; width: 180px; height: 180px; background: var(--accent-soft); border-radius: 50%; opacity: 0.6; }
+.grammar-lesson-page .hero::after { content: ''; position: absolute; bottom: -50px; left: -30px; width: 130px; height: 130px; background: var(--accent-soft); border-radius: 50%; opacity: 0.4; }
+.grammar-lesson-page .hero-inner { position: relative; z-index: 1; }
+.grammar-lesson-page .eyebrow { display: inline-block; font-size: var(--fs-eyebrow); letter-spacing: 0.15em; color: var(--accent-dark); background: var(--accent-soft); padding: 0.3rem 0.9rem; border-radius: 999px; font-weight: 700; margin-bottom: 1rem; }
+.grammar-lesson-page .title { font-family: var(--font-jp); font-size: var(--fs-title); font-weight: 900; color: var(--accent-dark); margin: 0 0 0.5rem; line-height: 1.2; }
+.grammar-lesson-page .subtitle { font-size: var(--fs-subtitle); color: var(--text-muted); margin: 0; font-weight: 500; }
+.grammar-lesson-page .section { background: var(--card); border-radius: var(--radius-lg); padding: var(--pad-section); box-shadow: var(--shadow); margin-bottom: var(--gap); }
+.grammar-lesson-page .section-title { display: flex; align-items: center; gap: 0.7rem; font-family: var(--font-jp); font-size: var(--fs-section); font-weight: 700; color: var(--accent-dark); margin: 0 0 1.2rem; padding-bottom: 0.7rem; border-bottom: 2px dashed var(--line); }
+.grammar-lesson-page .section-title .num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; font-size: 1rem; font-weight: 700; font-family: var(--font-body); }
+.grammar-lesson-page .subhead { font-family: var(--font-jp); color: var(--accent-dark); margin: 1.5rem 0 0.8rem; font-size: 1.05rem; font-weight: 700; }
+.grammar-lesson-page .subhead:first-child { margin-top: 0; }
+.grammar-lesson-page .meaning { line-height: 1.9; margin: 0; }
+.grammar-lesson-page .meaning p { margin: 0 0 0.5rem; }
+.grammar-lesson-page .form-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: var(--radius); font-size: var(--fs-body); }
+.grammar-lesson-page .form-table th, .form-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.grammar-lesson-page .form-table tbody th { background: var(--accent-soft); color: var(--accent-dark); font-weight: 700; width: 28%; vertical-align: top; }
+.grammar-lesson-page .form-table tbody td { background: #fff; }
+.grammar-lesson-page .form-table .form-line { display: flex; align-items: flex-start; gap: 0.55rem; padding: 0.1rem 0; }
+.grammar-lesson-page .form-table .form-line .mark { font-weight: 700; font-size: 0.78rem; padding: 0.12rem 0.6rem; border-radius: 999px; min-width: 3rem; text-align: center; background: var(--accent-soft); color: var(--accent-dark); font-family: var(--font-body); flex-shrink: 0; }
+.grammar-lesson-page .form-table .form-line .text { flex: 1; }
+.grammar-lesson-page .form-table tbody tr:last-child th, .form-table tbody tr:last-child td { border-bottom: none; }
+.grammar-lesson-page .form-table code { background: var(--highlight); padding: 0.15rem 0.55rem; border-radius: 6px; font-family: var(--font-jp); font-size: 1em; font-weight: 700; color: var(--accent-dark); }
+.grammar-lesson-page .form-table .label-en { display: block; font-size: 0.78rem; font-weight: 400; color: var(--text-muted); margin-top: 0.15rem; letter-spacing: 0.02em; }
+.grammar-lesson-page .ta-chart { margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px dashed var(--line); }
+.grammar-lesson-page .ta-chart-head { display: flex; align-items: baseline; gap: 0.8rem; flex-wrap: wrap; margin: 0 0 0.4rem; }
+.grammar-lesson-page .ta-chart-head .subhead { margin: 0; }
+.grammar-lesson-page .ta-chart-head .ta-rule { font-family: var(--font-jp); color: var(--text-muted); font-size: 0.88rem; font-weight: 500; }
+.grammar-lesson-page .ta-chart-grid { display: grid; grid-template-columns: 1.6fr 1fr 1.4fr; gap: 0.8rem; margin-top: 0.8rem; }
+.grammar-lesson-page .ta-group { display: flex; flex-direction: column; gap: 0.55rem; }
+.grammar-lesson-page .ta-group-title { font-family: var(--font-jp); color: var(--accent-dark); font-weight: 700; font-size: 1rem; margin: 0 0 0.3rem; text-align: center; padding: 0.5rem 0.4rem; background: var(--accent-soft); border-radius: 8px; line-height: 1.4; }
+.grammar-lesson-page .ta-group-title .ta-group-num { display: block; font-size: 1rem; }
+.grammar-lesson-page .ta-group-title .ta-group-jp { display: block; font-size: 0.92rem; margin-top: 0.1rem; }
+.grammar-lesson-page .ta-group-title .ta-group-en { display: block; font-size: 0.72rem; color: var(--text-muted); font-weight: 500; font-family: var(--font-body); margin-top: 0.18rem; }
+.grammar-lesson-page .ta-group-1 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; align-content: start; }
+.grammar-lesson-page .ta-group-1 > .ta-group-title { grid-column: 1 / -1; }
+.grammar-lesson-page .conj-box { border-radius: 10px; padding: 0.7rem 0.9rem; }
+.grammar-lesson-page .conj-box.tone-a { background: #FBEEDF; }
+.grammar-lesson-page .conj-box.tone-b { background: #EFE4D0; }
+.grammar-lesson-page .conj-box.tone-c { background: #FFF1D2; }
+.grammar-lesson-page .conj-box.tone-plain { background: #FBF7EE; border: 1px solid var(--line); }
+.grammar-lesson-page .conj-box.tone-note { background: #EFE7D7; }
+.grammar-lesson-page .conj-box.tone-exception { background: #F4E8D2; border: 1px dashed var(--accent); }
+.grammar-lesson-page .conj-header { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.grammar-lesson-page .conj-pattern { display: inline-block; background: #FFFFFF; color: var(--accent-dark); padding: 0.18rem 0.7rem; border-radius: 999px; font-family: var(--font-jp); font-weight: 700; font-size: 0.92rem; border: 1px solid var(--line); }
+.grammar-lesson-page .conj-pairs { font-family: var(--font-jp); }
+.grammar-lesson-page .conj-pair { padding: 0.15rem 0; font-size: 0.95rem; line-height: 1.7; display: flex; align-items: center; gap: 0.35rem; flex-wrap: nowrap; white-space: nowrap; }
+.grammar-lesson-page .conj-pair .arrow { color: var(--accent); font-weight: 700; }
+.grammar-lesson-page .conj-answer { display: inline-flex; align-items: center; justify-content: center; min-width: 3.6em; min-height: 1.6em; background: #FFFFFF; color: transparent; padding: 0.05rem 0.55rem; border-radius: 6px; font-weight: 700; transition: all .15s ease; user-select: none; cursor: pointer; border: 1px solid var(--line); position: relative; }
+.grammar-lesson-page .conj-answer::before { content: '?'; position: absolute; color: var(--accent-dark); font-family: var(--font-body); font-weight: 700; font-size: 0.95rem; opacity: 0.7; pointer-events: none; }
+.grammar-lesson-page .conj-answer:hover { background: var(--accent); border-color: var(--accent-dark); }
+.grammar-lesson-page .conj-answer:hover::before { color: #FFFFFF; opacity: 1; }
+.grammar-lesson-page .conj-answer.revealed { background: transparent; color: var(--accent-dark); user-select: text; cursor: default; border-color: transparent; }
+.grammar-lesson-page .conj-answer.revealed::before { display: none; }
+.grammar-lesson-page .conj-answer.revealed:hover { background: transparent; border-color: transparent; }
+.grammar-lesson-page .conj-note-text { margin: 0.3rem 0 0; font-family: var(--font-jp); color: var(--text-muted); font-size: 0.78rem; line-height: 1.5; }
+.grammar-lesson-page .conj-note-text .en-text { display: block; font-size: 0.72rem; margin-top: 0.15rem; font-family: var(--font-body); color: var(--text-muted); font-style: italic; }
+.grammar-lesson-page .conj-note-text.compact { white-space: normal; }
+.grammar-lesson-page .ta-exception-row { margin-top: 0.8rem; }
+@media (max-width: 720px) {
+  .ta-chart-grid { grid-template-columns: 1fr; }
+  .ta-group-1 { grid-template-columns: 1fr; }
+}
+.grammar-lesson-page .en-wrap { margin-top: 0.5rem; }
+.grammar-lesson-page .en-wrap .en { display: none; font-size: var(--fs-en); color: var(--text-muted); margin: 0.4rem 0 0; line-height: 1.6; }
+.grammar-lesson-page .en-wrap.show-en .en, .grammar-lesson-page.show-en .en-wrap .en { display: block; }
+.grammar-lesson-page .examples { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.grammar-lesson-page .example { padding: 1.2rem 1.3rem; background: #FBF7EE; border-left: 4px solid var(--accent); border-radius: 8px; display: flex; flex-direction: column; gap: 0.9rem; align-items: stretch; }
+.grammar-lesson-page .example-img { width: 100%; height: 220px; object-fit: contain; background: transparent; }
+.grammar-lesson-page .example-content { flex: 1; min-width: 0; }
+@media (max-width: 640px) { .examples { grid-template-columns: 1fr; } .example-img { height: 200px; } }
+.grammar-lesson-page .example .jp { font-family: var(--font-jp); font-size: var(--fs-example); font-weight: 500; line-height: 2.1; margin: 0; }
+.grammar-lesson-page .example .en, .bubble > .en { display: none; font-size: var(--fs-en); color: var(--text-muted); margin: 0.4rem 0 0; line-height: 1.6; }
+.grammar-lesson-page.show-en .example .en, .grammar-lesson-page.show-en .bubble > .en, .example.show-en .en, .bubble.show-en > .en { display: block; }
+.grammar-lesson-page .local-en-toggle { margin-top: 0.6rem; background: transparent; border: 1px solid var(--line); color: var(--accent-dark); padding: 0.2rem 0.75rem; border-radius: 999px; font-size: 0.78rem; font-family: inherit; cursor: pointer; font-weight: 600; }
+.grammar-lesson-page .local-en-toggle:hover { background: var(--accent-soft); border-color: var(--accent); }
+.grammar-lesson-page .point-list { padding: 0; margin: 0; list-style: none; }
+.grammar-lesson-page .point-list li { padding: 0.9rem 0 0.9rem 2rem; position: relative; border-bottom: 1px dashed var(--line); line-height: 1.8; }
+.grammar-lesson-page .point-list li:last-child { border-bottom: none; }
+.grammar-lesson-page .point-list li::before { content: '★'; position: absolute; left: 0.2rem; top: 0.85rem; color: var(--accent); font-size: 1rem; }
+.grammar-lesson-page .point-list strong { color: var(--accent-dark); }
+.grammar-lesson-page .note { display: inline-block; margin-top: 0.3rem; color: var(--text-muted); font-size: var(--fs-small); }
+.grammar-lesson-page .dialogue { display: flex; flex-direction: column; gap: 0.7rem; }
+.grammar-lesson-page .bubble { padding: 0.9rem 1.1rem; border-radius: 14px; max-width: 86%; font-family: var(--font-jp); line-height: 2; }
+.grammar-lesson-page .bubble.ken { background: var(--ken-bg); align-self: flex-start; border-bottom-left-radius: 4px; }
+.grammar-lesson-page .bubble.ana { background: var(--ana-bg); align-self: flex-end; border-bottom-right-radius: 4px; }
+.grammar-lesson-page .speaker { display: inline-block; font-size: var(--fs-small); font-weight: 700; margin-right: 0.55rem; color: var(--text-muted); vertical-align: 0.05em; }
+.grammar-lesson-page .bubble.ken .speaker { color: var(--ken-color); }
+.grammar-lesson-page .bubble.ana .speaker { color: var(--ana-color); }
+.grammar-lesson-page .drills { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.grammar-lesson-page .drill { background: #FBF7EE; border-radius: 8px; padding: 0.7rem 1rem; }
+.grammar-lesson-page .drill summary { cursor: pointer; font-family: var(--font-jp); font-weight: 600; color: var(--accent-dark); list-style: none; display: flex; align-items: center; gap: 0.4rem; font-size: 1.05rem; }
+.grammar-lesson-page .drill summary::before { content: '▶'; font-size: 0.7rem; color: var(--accent); transition: transform .2s ease; }
+.grammar-lesson-page .drill[open] summary::before { transform: rotate(90deg); }
+.grammar-lesson-page .drill summary::-webkit-details-marker { display: none; }
+.grammar-lesson-page .drill-body { margin-top: 0.6rem; padding-top: 0.5rem; border-top: 1px dashed var(--line); font-family: var(--font-jp); line-height: 1.9; }
+.grammar-lesson-page .drill-body p { margin: 0.2rem 0; }
+.grammar-lesson-page .drill-body .mark { font-weight: 700; margin-right: 0.4rem; font-size: 0.82rem; padding: 0.1rem 0.55rem; border-radius: 999px; display: inline-block; min-width: 3rem; text-align: center; background: var(--accent-soft); color: var(--accent-dark); font-family: var(--font-body); }
+.grammar-lesson-page .group-label { display: inline-block; font-size: 0.75rem; font-weight: 400; color: var(--text-muted); background: var(--accent-soft); padding: 0.1rem 0.6rem; border-radius: 999px; margin-left: 0.4rem; vertical-align: 0.05em; font-family: var(--font-body); }
+.grammar-lesson-page .quiz { background: #FBF7EE; padding: 1.1rem 1.2rem; border-radius: var(--radius); margin-bottom: 0.8rem; }
+.grammar-lesson-page .quiz:last-child { margin-bottom: 0; }
+.grammar-lesson-page .quiz-q { font-family: var(--font-jp); font-weight: 500; margin: 0 0 0.4rem; line-height: 2; }
+.grammar-lesson-page .quiz-q-en { font-family: var(--font-body); font-weight: 500; margin: 0 0 0.5rem; line-height: 1.8; color: var(--text); font-size: 1rem; }
+.grammar-lesson-page .quiz .en { display: none; color: var(--text-muted); font-size: var(--fs-en); margin: 0 0 0.5rem; }
+.grammar-lesson-page.show-en .quiz .en { display: block; }
+.grammar-lesson-page .quiz-a { display: none; margin: 0.6rem 0 0; padding: 0.7rem 0.9rem; background: var(--accent-soft); border-radius: 8px; border-left: 3px solid var(--accent-dark); color: var(--text); font-weight: 500; line-height: 1.9; font-family: var(--font-jp); }
+.grammar-lesson-page .quiz-a strong { color: var(--accent-dark); }
+.grammar-lesson-page .quiz.show .quiz-a { display: block; }
+.grammar-lesson-page .quiz-toggle { background: transparent; border: 1px solid var(--accent); color: var(--accent-dark); padding: 0.3rem 0.9rem; border-radius: 999px; font-size: var(--fs-small); font-family: inherit; cursor: pointer; }
+.grammar-lesson-page .quiz-toggle:hover { background: var(--accent-soft); }
+.grammar-lesson-page .verb-hint { display: inline-block; font-size: 0.85rem; color: var(--text-muted); margin: 0 0.3rem; font-family: var(--font-body); font-weight: 500; }
+.grammar-lesson-page .word-builder { font-family: var(--font-jp); margin: 0 0 0.6rem; line-height: 2; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.grammar-lesson-page .word-chip { display: inline-block; background: var(--highlight); color: var(--accent-dark); padding: 0.25rem 0.85rem; border-radius: 8px; font-weight: 700; font-family: var(--font-jp); font-size: 1.05rem; border: 1px solid var(--line); }
+.grammar-lesson-page .hint { display: inline-block; padding: 0.12rem 0.7rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; margin-left: 0.2rem; vertical-align: 0.05em; background: var(--accent-soft); color: var(--accent-dark); font-family: var(--font-body); }
+.grammar-lesson-page .practice { background: #FBF7EE; padding: 1.1rem 1.2rem; border-radius: var(--radius); margin-bottom: 0.7rem; }
+.grammar-lesson-page .practice-q { font-family: var(--font-jp); font-weight: 500; line-height: 1.9; color: var(--text); margin: 0; }
+.grammar-lesson-page .sample-wrap { margin-top: 0.6rem; }
+.grammar-lesson-page .sample-toggle { background: transparent; border: 1px solid var(--line); color: var(--accent-dark); padding: 0.2rem 0.75rem; border-radius: 999px; font-size: 0.78rem; font-family: inherit; cursor: pointer; font-weight: 600; }
+.grammar-lesson-page .sample-toggle:hover { background: var(--accent-soft); border-color: var(--accent); }
+.grammar-lesson-page .sample-body { display: none; margin-top: 0.7rem; padding: 0.85rem 1rem; background: #fff; border-radius: 8px; border-left: 3px solid var(--accent); }
+.grammar-lesson-page .sample-wrap.show .sample-body { display: block; }
+.grammar-lesson-page .sample-jp { margin: 0; font-family: var(--font-jp); line-height: 1.95; color: var(--text); }
+@media (max-width: 640px) {
+  .grammar-lesson-page { --fs-title: 1.8rem; --fs-example: 1.2rem; --fs-section: 1.1rem; --pad-section: 1.25rem; }
+  body { padding: 1rem 0.6rem; }
+  .hero { padding: 2rem 1.25rem; }
+  .form-table th { width: 40%; padding: 0.7rem 0.6rem; }
+  .form-table td { padding: 0.7rem 0.6rem; }
+  .drills { grid-template-columns: 1fr; }
+  .bubble { max-width: 96%; }
+}
+@media print {
+  .grammar-lesson-page { background: #fff; padding: 0; }
+  .toolbar, .local-en-toggle, .quiz-toggle, .sample-toggle { display: none; }
+  .section, .hero { box-shadow: none; border: 1px solid var(--line); break-inside: avoid; page-break-inside: avoid; }
+  .example .en, .bubble > .en, .quiz .en, .en-wrap .en { display: block !important; }
+  .sample-wrap .sample-body { display: block !important; }
+  .quiz-a { display: block !important; }
+  .drill[open] .drill-body { display: block; }
+  .hero::before, .hero::after { display: none; }
+  .conj-answer { color: var(--accent-dark) !important; background: transparent !important; border-color: transparent !important; }
+  .conj-answer::before { display: none !important; }
+}
