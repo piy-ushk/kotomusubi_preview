@@ -135,7 +135,7 @@ const Levels = () => {
                  <motion.div
                    key={level.id}
                    className="stagger-item"
-                   style={{ animationDelay: `${index * 80}ms` }}
+                   style={{ animationDelay: `${index * 80}ms`, height: '100%' }}
                    whileTap={{ scale: 0.98 }}
                  >
                    <button
@@ -146,6 +146,7 @@ const Levels = () => {
                        alignItems: 'center',
                        gap: '20px',
                        width: '100%',
+                       height: '100%',
                        padding: '24px',
                        background: 'var(--bg-primary)',
                        border: '1px solid var(--border-light)',
