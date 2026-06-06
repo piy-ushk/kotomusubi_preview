@@ -177,6 +177,42 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     }
     
     case 'toggle': {
+      if (!jp && !subBlocks) return null;
+      
+      const aMatch = rawText.match(/^(?:👦🏻|🧒🏻|👩🏻|👨🏻|🧑🏻)?\s*(A|B|ケン|アナ|Ken|Ana|佐藤|Sato)[：:]\s*(.*)/);
+      if (aMatch) {
+        const speaker = aMatch[1];
+        const isKen = speaker === 'ケン' || speaker === 'Ken' || speaker === 'A';
+        
+        // Render the remaining text without the speaker prefix
+        let bubbleContent;
+        if (blockData.rich_text) {
+          // Clone the rich text array to safely mutate it
+          let modifiedRichText = JSON.parse(JSON.stringify(blockData.rich_text));
+          if (modifiedRichText.length > 0) {
+            // Check if the first item contains the speaker text, and strip it
+            modifiedRichText[0].text.content = modifiedRichText[0].text.content.replace(/^(?:👦🏻|🧒🏻|👩🏻|👨🏻|🧑🏻)?\s*(A|B|ケン|アナ|Ken|Ana|佐藤|Sato)[：:]\s*/, '');
+            modifiedRichText[0].plain_text = modifiedRichText[0].text.content;
+          }
+          bubbleContent = renderRichText(modifiedRichText, showFurigana);
+        } else {
+          bubbleContent = renderFuriganaText(aMatch[2], showFurigana);
+        }
+
+        return (
+          <div className="dialogue" style={{ marginTop: '8px' }}>
+            <div className={`bubble ${isKen ? 'ken' : 'ana'}`} onContextMenu={handleContext}>
+              <span className="speaker">{speaker}</span>
+              {bubbleContent}
+              {en && <p className="en" style={{display: isTranslated ? 'block' : 'none'}}>{en}</p>}
+              {subBlocks}
+              {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
+              {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
+            </div>
+          </div>
+        );
+      }
+
       return (
         <div className="sample-wrap show" style={{ margin: '8px 0' }}>
           <button className="sample-toggle" onClick={(e) => {
