@@ -53,6 +53,9 @@
 .grammar-lesson-page .section-title .num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; font-size: 1rem; font-weight: 700; font-family: var(--font-body); }
 .grammar-lesson-page .subhead { font-family: var(--font-jp); color: var(--accent-dark); margin: 1.5rem 0 0.8rem; font-size: 1.05rem; font-weight: 700; }
 .grammar-lesson-page .subhead:first-child { margin-top: 0; }
+.grammar-lesson-page .inline-page-db { display: flex; flex-direction: column; gap: 1.25rem; }
+.grammar-lesson-page .inline-page-section { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem; background: #fffdf8; }
+.grammar-lesson-page .inline-page-title { margin-top: 0; padding-bottom: 0.55rem; border-bottom: 1px dashed var(--line); font-size: 1.15rem; }
 .grammar-lesson-page .meaning { line-height: 1.9; margin: 0; }
 .grammar-lesson-page .meaning p { margin: 0 0 0.5rem; }
 .grammar-lesson-page .form-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: var(--radius); font-size: var(--fs-body); }

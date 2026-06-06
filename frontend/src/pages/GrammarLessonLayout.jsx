@@ -228,6 +228,16 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       );
     }
 
+    case 'audio': {
+      const url = blockData.file?.url || blockData.external?.url;
+      if (!url) return null;
+      return (
+        <div className="media-block" style={{ margin: '16px 0' }}>
+          <audio controls src={url} style={{ width: '100%' }} />
+        </div>
+      );
+    }
+
     case 'divider':
       return <hr style={{ border: 'none', borderTop: '1px dashed var(--line)', margin: '24px 0' }} />;
 
@@ -268,6 +278,34 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'child_database': {
       const items = block.database_items || [];
       if (items.length === 0) return null;
+      const pageItems = items.filter(item => Array.isArray(item.page_blocks) && item.page_blocks.length > 0);
+      if (pageItems.length > 0) {
+        return (
+          <div className="inline-page-db" style={{ marginTop: '16px' }} onContextMenu={handleContext}>
+            {pageItems.map((item, itemIdx) => (
+              <section key={item.id} className="inline-page-section">
+                {item.title && <h3 className="subhead inline-page-title">{splitTranslation(item.title).jp}</h3>}
+                {preprocessBlocks(item.page_blocks).map((pageItem, pageBlockIdx) => (
+                  <BlockRenderer
+                    key={`${blockId}_db${itemIdx}_b${pageBlockIdx}`}
+                    block={pageItem.block}
+                    enTranslation={pageItem.enTranslation}
+                    blockId={`${blockId}_db${itemIdx}_b${pageBlockIdx}`}
+                    translateAll={translateAll}
+                    individualTranslations={individualTranslations}
+                    onToggle={onToggle}
+                    annotations={annotations}
+                    onContextMenu={onContextMenu}
+                    onRemoveAnnotation={onRemoveAnnotation}
+                    translationLanguage={translationLanguage}
+                    showFurigana={showFurigana}
+                  />
+                ))}
+              </section>
+            ))}
+          </div>
+        );
+      }
       return (
         <div className="vocab-grid inline-vocab-grid" style={{ marginTop: '16px', gap: '16px' }}>
           {items.map((item, idx) => {

@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+import asyncio
 import os
 import re
 from dotenv import load_dotenv
@@ -144,6 +145,24 @@ def extract_text(block):
         return "".join([rt["plain_text"] for rt in data["rich_text"]])
     return ""
 
+def should_expand_database_page(db_title: str, page_title: str, props: dict) -> bool:
+    """
+    Chapter pages use generic inline database names, while vocab databases are
+    often titled by lesson number. Expand only page-like database rows.
+    """
+    title = (db_title or "").lower()
+    page = page_title or ""
+    if any(k in title for k in ["vocabulary", "vocab", "new word", "word", "単語", "新出"]):
+        return False
+    if any(k in title for k in ["new database", "chapter", "lesson", "test", "チェック", "レベル"]):
+        return True
+    if re.search(r'【\s*\d+[-ー]\d+\s*】', page):
+        return True
+    if re.search(r'(chapter|lesson|test)', page, re.IGNORECASE):
+        return True
+    marker_text = " ".join(str(v) for v in props.values()).upper()
+    return "NEW WORD" not in marker_text and len(props) <= 3
+
 def has_emoji(text):
     return any(32 <= ord(c) <= 126 for c in text) is False or re.search(r'[^\w\s,.!?]', text) # Simplified emoji check
 
@@ -270,9 +289,9 @@ async def get_lesson_content(lesson_id: str):
         for b in blocks_list:
             if b["type"] == "child_database":
                 try:
+                    db_title = b.get("child_database", {}).get("title", "")
                     db_pages = await notion.fetch_database_pages(b["id"])
-                    items = []
-                    for p in db_pages:
+                    async def map_database_page(p):
                         props = p.get("properties", {})
                         item_vocab = map_vocab_properties(props)
                         
@@ -290,15 +309,25 @@ async def get_lesson_content(lesson_id: str):
                                 content = ",".join([ms.get("name", "") for ms in pd.get("multi_select", [])])
                             if content:
                                 extra_props[pn] = content
-                                
-                        items.append({
+
+                        page_title = notion.extract_page_title(p)
+                        page_blocks = []
+                        if should_expand_database_page(db_title, page_title, extra_props):
+                            page_blocks = await notion.fetch_blocks_with_children(p["id"])
+                            await fetch_inline_databases(page_blocks)
+
+                        return {
                             "id": p["id"],
+                            "title": page_title,
                             "vocab": item_vocab,
-                            "raw_props": extra_props
-                        })
+                            "raw_props": extra_props,
+                            "page_blocks": page_blocks
+                        }
+
+                    items = await asyncio.gather(*(map_database_page(p) for p in db_pages))
                     b["database_items"] = items
                 except Exception as e:
-                    print(f"Error fetching inline DB {b['id']}: {e}")
+                    print(f"Error fetching inline DB {b['id']}: {type(e).__name__}: {repr(e)}")
             if "children" in b:
                 await fetch_inline_databases(b["children"])
                 

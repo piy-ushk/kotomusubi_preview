@@ -1,3 +1,4 @@
+import asyncio
 import httpx
 import os
 from typing import List, Dict, Any
@@ -6,6 +7,8 @@ class NotionService:
     def __init__(self, api_key: str):
         self.api_key = api_key
         self.base_url = "https://api.notion.com/v1"
+        self.timeout = httpx.Timeout(120.0, connect=10.0)
+        self._block_fetch_semaphore = asyncio.Semaphore(8)
         self.headers = {
             "Authorization": f"Bearer {api_key}",
             "Notion-Version": "2022-06-28",
@@ -15,7 +18,7 @@ class NotionService:
     async def fetch_database_pages(self, database_id: str) -> List[Dict[str, Any]]:
         results = []
         next_cursor = None
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
             while True:
                 payload = {"start_cursor": next_cursor} if next_cursor else {}
                 response = await client.post(
@@ -31,10 +34,10 @@ class NotionService:
                     break
         return results
 
-    async def fetch_page_blocks(self, page_id: str) -> List[Dict[str, Any]]:
+    async def _fetch_page_blocks_with_client(self, page_id: str, client: httpx.AsyncClient) -> List[Dict[str, Any]]:
         results = []
         next_cursor = None
-        async with httpx.AsyncClient() as client:
+        async with self._block_fetch_semaphore:
             while True:
                 url = f"{self.base_url}/blocks/{page_id}/children"
                 if next_cursor:
@@ -48,25 +51,34 @@ class NotionService:
                     break
         return results
 
-    async def fetch_blocks_with_children(self, page_id: str) -> List[Dict[str, Any]]:
+    async def fetch_page_blocks(self, page_id: str) -> List[Dict[str, Any]]:
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
+            return await self._fetch_page_blocks_with_client(page_id, client)
+
+    async def _fetch_blocks_with_children_with_client(self, page_id: str, client: httpx.AsyncClient) -> List[Dict[str, Any]]:
         """Fetches blocks and recursively fetches children for blocks that support them."""
-        blocks = await self.fetch_page_blocks(page_id)
-        for block in blocks:
+        blocks = await self._fetch_page_blocks_with_client(page_id, client)
+        async def hydrate_block(block: Dict[str, Any]) -> None:
             # child_page blocks are sub-pages, so they contain blocks even if has_children is False/omitted in the parent block object
             if block.get("has_children") or block["type"] == "child_page":
                 # Recursive fetch for nested content blocks
                 if block["type"] in ["toggle", "table", "column_list", "column", "callout",
                                      "bulleted_list_item", "numbered_list_item", "child_page",
                                      "heading_1", "heading_2", "heading_3"]:
-                    block["children"] = await self.fetch_blocks_with_children(block["id"])
+                    block["children"] = await self._fetch_blocks_with_children_with_client(block["id"], client)
+        await asyncio.gather(*(hydrate_block(block) for block in blocks))
         return blocks
+
+    async def fetch_blocks_with_children(self, page_id: str) -> List[Dict[str, Any]]:
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
+            return await self._fetch_blocks_with_children_with_client(page_id, client)
 
     async def fetch_child_database_ids(self, page_id: str) -> List[str]:
         blocks = await self.fetch_page_blocks(page_id)
         return [b["id"] for b in blocks if b["type"] == "child_database"]
 
     async def fetch_page(self, page_id: str) -> Dict[str, Any]:
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
             response = await client.get(
                 f"{self.base_url}/pages/{page_id}",
                 headers=self.headers
