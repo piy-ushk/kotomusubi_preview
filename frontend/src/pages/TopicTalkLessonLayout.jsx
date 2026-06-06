@@ -278,6 +278,24 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       );
     }
 
+    case 'callout': {
+      if (!jp && !subBlocks) return null;
+      return (
+        <div className="callout" style={{ padding: '12px', background: 'var(--bg-subtle)', borderRadius: '8px', margin: '16px 0', borderLeft: '4px solid var(--primary)' }} onContextMenu={handleContext}>
+          {blockData.icon && blockData.icon.emoji && <span style={{ marginRight: '8px' }}>{blockData.icon.emoji}</span>}
+          <strong style={{ fontSize: '1.1em' }}>{jpContent}</strong>
+          {en && (
+            <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
+              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+              <p className="en">{en}</p>
+            </div>
+          )}
+          {subBlocks}
+          {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
+        </div>
+      );
+    }
+
     case 'divider':
       return <hr style={{ border: 'none', borderTop: '1px dashed var(--line)', margin: '24px 0' }} />;
 

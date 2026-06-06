@@ -94,11 +94,16 @@ async def get_levels(textbook_id: str):
 
 @app.get("/api/levels/{level_id}/lessons")
 async def get_lessons(level_id: str):
-    db_ids = await notion.fetch_child_database_ids(level_id)
-    if not db_ids: return []
-    
     level_page = await notion.fetch_page(level_id)
     level_title = notion.extract_page_title(level_page)
+
+    # For Topic Talk, the theme itself is the lesson
+    if "テーマ：" in level_title or "Topic:" in level_title:
+        return [{"id": level_id, "title": level_title}]
+
+    db_ids = await notion.fetch_child_database_ids(level_id)
+    if not db_ids: return []
+
     is_upper_intermediate = "Upper" in level_title or "中上級" in level_title
 
     all_lessons = []
@@ -209,7 +214,7 @@ async def get_lesson_content(lesson_id: str):
         }
 
         # 1. Map Japanese / Title
-        for pn in ["Name", "Word", "名前", "単語"]:
+        for pn in ["Name", "Word", "名前", "単語", "Vocabulary"]:
             if pn in props and props[pn].get("type") == "title":
                 vocab["jp"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("title", [])])
                 break

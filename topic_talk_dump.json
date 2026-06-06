@@ -1,0 +1,3980 @@
+{
+  "page": {
+    "object": "page",
+    "id": "392edc46-8f20-8233-a678-01da38434f82",
+    "created_time": "2026-03-30T09:03:00.000Z",
+    "last_edited_time": "2026-04-27T03:56:00.000Z",
+    "created_by": {
+      "object": "user",
+      "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+    },
+    "last_edited_by": {
+      "object": "user",
+      "id": "f1d2f8cc-11fb-4a82-b870-c5b631b15594"
+    },
+    "cover": {
+      "type": "file",
+      "file": {
+        "url": "https://prod-files-secure.s3.us-west-2.amazonaws.com/5405134f-131f-40bd-927e-e6d3d98df120/e27c95c6-2c91-40e1-a632-0a28e23d6509/42.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB4665VDNWIZ4%2F20260606%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260606T082906Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjELf%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJIMEYCIQCYBw7CVLFP6F3tkNxnxQBBylsvM6kl8FMDulNeOMyMLgIhAL8caJtOGgqZ7MCOo6YCjHrlCaeEDPbRbPCglS%2BybpwZKogECID%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMNjM3NDIzMTgzODA1Igyu2A629CnVIegaRhAq3AONR97Fsb%2BVJGa1LGgXuO2YAYgEwumE9YFmm8fe8hnbzXkM2GiGFDVu1pw2TaFudJIIxqiOY%2Fg4Wdys0p7KMt0X2ay9umUQz054CDfkXif5XTKUIiBwH3DAfjmz5PwmrugRfjbMJ8uZrOkdZ8zp1xdgfDAaLxOHDqyNSHG6gvwYjqb6fl6MXn38rIlwiGSdBdaZ6KSNcEYdG4sPLCG5FQn8OGeZ41fVP9OicppAQmAU2m2M%2BhCfGLmTIcPgcwn2IGDOWhYM%2B8vv71rWRRDP1LWiX%2BMJPvtocD%2BWN86Gz%2Fo5WGaQ3W2dQV%2Bz77VkwKLAc4PigUXQklPcxClit0upxxNCllr6YIIwa49TwXXDJcmUma5uP9LLwMgV2D%2FcmjnQovY9YKRY7s%2B%2BXiL8A4Aj2F8cQVqcjUb%2BOwSiUet940JOmr%2FMguiDkck0sb6aBrbrUtizmYJjAQT99BzgjOny4shU%2BSxl0r7z8bwI4cksteJflGaftXMUzdmrPej5TW3yPnwh0nlQakS02Oot%2BCDEvZj5XEM15lomXja6bw9REu4iyr2lA7hyej%2FkeFhH3sri8j2pIEactZT8y47sci75WMcuAu%2F4haxB8Zue8hjMLqV2y9nt77m4eOprlKTkpTCTiY%2FRBjqkAVXIQ52kOsUlN%2BGRYIB0gZKaLE2qZ0CoXImGbgf%2BGSCuJ2DD%2BL4PxSy%2BQtihdOC7hBxJd9XTtZFGKF2IEApeJlNssoRqdsg8Oh5EPG8sBh6HsL3O2vy9PVv1LHkDr%2FNc7SHvZeyT8KGpldo%2FRwWe7bL%2Fj%2BUqL0lydJteFZjEys0Isue9Gu%2F930UJlKasjg9DK%2Fd2kNGmGDO7EHvYbDn6aR50EhL3&X-Amz-Signature=df3f965aba546d0fc7ef34e5f4a31bb71515c46b2eecceed813a25d1df566df9&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+        "expiry_time": "2026-06-06T09:29:06.939Z"
+      }
+    },
+    "icon": null,
+    "parent": {
+      "type": "database_id",
+      "database_id": "c5eedc46-8f20-835d-aef5-01b47f51f20f"
+    },
+    "in_trash": false,
+    "is_archived": false,
+    "is_locked": false,
+    "properties": {
+      "ステータス": {
+        "id": "b%3Dwx",
+        "type": "status",
+        "status": {
+          "id": "7e1c9fcf-1881-454f-b2af-72d7c8345cda",
+          "name": "完了",
+          "color": "green"
+        }
+      },
+      "日付": {
+        "id": "jUvo",
+        "type": "date",
+        "date": null
+      },
+      "担当": {
+        "id": "mZ%3EO",
+        "type": "rich_text",
+        "rich_text": []
+      },
+      "名前": {
+        "id": "title",
+        "type": "title",
+        "title": [
+          {
+            "type": "text",
+            "text": {
+              "content": "テーマ：留学(りゅうがく)",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "テーマ：留学(りゅうがく)",
+            "href": null
+          }
+        ]
+      }
+    },
+    "url": "https://app.notion.com/p/392edc468f208233a67801da38434f82",
+    "public_url": null,
+    "archived": false,
+    "request_id": "893f3a58-917f-4d0d-b0b6-ad0e19c47233"
+  },
+  "blocks": [
+    {
+      "object": "block",
+      "id": "831edc46-8f20-8253-9a2c-8154d0ce88a9",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "toggle",
+      "toggle": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "レ ッ ス ン 流 れ",
+              "link": null
+            },
+            "annotations": {
+              "bold": true,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "レ ッ ス ン 流 れ",
+            "href": null
+          }
+        ],
+        "color": "default"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "cededc46-8f20-823b-97fb-015af31826d9",
+          "parent": {
+            "type": "block_id",
+            "block_id": "831edc46-8f20-8253-9a2c-8154d0ce88a9"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "①単語やフレーズの確認",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "①単語やフレーズの確認",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "f07edc46-8f20-8370-9d94-01c2869ba778",
+          "parent": {
+            "type": "block_id",
+            "block_id": "831edc46-8f20-8253-9a2c-8154d0ce88a9"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "意味、発音、例文の確認",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "意味、発音、例文の確認",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "07fedc46-8f20-83d2-ab28-01c2baff555b",
+          "parent": {
+            "type": "block_id",
+            "block_id": "831edc46-8f20-8253-9a2c-8154d0ce88a9"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "②ロープレ",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "②ロープレ",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "f96edc46-8f20-82ce-b362-8137495fe7f9",
+          "parent": {
+            "type": "block_id",
+            "block_id": "831edc46-8f20-8253-9a2c-8154d0ce88a9"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "会話文練習",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "会話文練習",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "ca0edc46-8f20-8229-b297-01c72186017b",
+          "parent": {
+            "type": "block_id",
+            "block_id": "831edc46-8f20-8253-9a2c-8154d0ce88a9"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "単語やフレーズの使われ方をチェックし、理解する",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "単語やフレーズの使われ方をチェックし、理解する",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "9efedc46-8f20-8272-bb0f-81db75c637bd",
+          "parent": {
+            "type": "block_id",
+            "block_id": "831edc46-8f20-8253-9a2c-8154d0ce88a9"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "③ペアワーク",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "③ペアワーク",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "cb7edc46-8f20-826f-a375-8120b12d6c43",
+          "parent": {
+            "type": "block_id",
+            "block_id": "831edc46-8f20-8253-9a2c-8154d0ce88a9"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "シチュエーションを決めてペアで話す練習をする",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "シチュエーションを決めてペアで話す練習をする",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "64aedc46-8f20-828d-933b-0163dbba4e4e",
+          "parent": {
+            "type": "block_id",
+            "block_id": "831edc46-8f20-8253-9a2c-8154d0ce88a9"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "④質問に対して答える練習",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "④質問に対して答える練習",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "848edc46-8f20-827d-92d4-8109bfe8d323",
+          "parent": {
+            "type": "block_id",
+            "block_id": "831edc46-8f20-8253-9a2c-8154d0ce88a9"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "講師側が質問し、生徒さんに答えてもらう",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "講師側が質問し、生徒さんに答えてもらう",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "321edc46-8f20-8367-9249-8157c60d8167",
+          "parent": {
+            "type": "block_id",
+            "block_id": "831edc46-8f20-8253-9a2c-8154d0ce88a9"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "文法ミスなどをチェックしていく",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "文法ミスなどをチェックしていく",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "460edc46-8f20-8321-97a2-01bc3ffee4d5",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "🔖  ① 単 語・フ レ ー ズ 確 認",
+              "link": null
+            },
+            "annotations": {
+              "bold": true,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "🔖  ① 単 語・フ レ ー ズ 確 認",
+            "href": null
+          }
+        ],
+        "icon": null,
+        "color": "gray_background"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "4ddedc46-8f20-8370-95d1-01de5b4824ec",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:04:00.000Z",
+      "last_edited_time": "2026-03-30T09:04:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "child_database",
+      "child_database": {
+        "title": "6-12 (3)"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "404edc46-8f20-83b2-8364-8115daaa91fe",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [],
+        "icon": null,
+        "color": "default"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "e73edc46-8f20-833b-be79-810677ed80e2",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "divider",
+      "divider": {},
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "0ecedc46-8f20-8377-93db-81d3eb6660c2",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "🗣️ ② 会 話 例 ： 留学で感じた価値観の違いと不安",
+              "link": null
+            },
+            "annotations": {
+              "bold": true,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "🗣️ ② 会 話 例 ： 留学で感じた価値観の違いと不安",
+            "href": null
+          }
+        ],
+        "icon": null,
+        "color": "gray_background"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "b20edc46-8f20-83d1-aa09-81a54cb885c6",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [],
+        "icon": null,
+        "color": "pink_background"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "bdfedc46-8f20-83b0-a8f8-817350721979",
+          "parent": {
+            "type": "block_id",
+            "block_id": "b20edc46-8f20-83d1-aa09-81a54cb885c6"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": true,
+          "in_trash": false,
+          "type": "toggle",
+          "toggle": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "🧒🏻アナ:",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "🧒🏻アナ:",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "留学してみて、国ごとに",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "留学してみて、国ごとに",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "価値観",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "価値観",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "が全然ちがうって実感したよ。",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "が全然ちがうって実感したよ。",
+                "href": null
+              }
+            ],
+            "color": "default"
+          },
+          "archived": false,
+          "children": [
+            {
+              "object": "block",
+              "id": "b45edc46-8f20-8365-9e76-819932df428f",
+              "parent": {
+                "type": "block_id",
+                "block_id": "bdfedc46-8f20-83b0-a8f8-817350721979"
+              },
+              "created_time": "2026-03-30T09:03:00.000Z",
+              "last_edited_time": "2026-03-30T09:03:00.000Z",
+              "created_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "last_edited_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "has_children": false,
+              "in_trash": false,
+              "type": "paragraph",
+              "paragraph": {
+                "rich_text": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "りゅうがくしてみて、くにごとに かちかん が ぜんぜん ちがうって じっかんしたよ。\nStudying abroad made me realize how different values are from country to country.",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "りゅうがくしてみて、くにごとに かちかん が ぜんぜん ちがうって じっかんしたよ。\nStudying abroad made me realize how different values are from country to country.",
+                    "href": null
+                  }
+                ],
+                "icon": null,
+                "color": "default"
+              },
+              "archived": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "560edc46-8f20-83a5-8498-0111bbed80f4",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [],
+        "icon": null,
+        "color": "blue_background"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "f50edc46-8f20-8399-90ac-01b23b204f22",
+          "parent": {
+            "type": "block_id",
+            "block_id": "560edc46-8f20-83a5-8498-0111bbed80f4"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": true,
+          "in_trash": false,
+          "type": "toggle",
+          "toggle": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "👦🏻ケン:",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "👦🏻ケン:",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "ほんとだね。最初はそのちがいに",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "ほんとだね。最初はそのちがいに",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "慣れる",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "慣れる",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "のが大変だったよ。",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "のが大変だったよ。",
+                "href": null
+              }
+            ],
+            "color": "default"
+          },
+          "archived": false,
+          "children": [
+            {
+              "object": "block",
+              "id": "70fedc46-8f20-83ff-a0b2-018207b86d89",
+              "parent": {
+                "type": "block_id",
+                "block_id": "f50edc46-8f20-8399-90ac-01b23b204f22"
+              },
+              "created_time": "2026-03-30T09:03:00.000Z",
+              "last_edited_time": "2026-03-30T09:03:00.000Z",
+              "created_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "last_edited_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "has_children": false,
+              "in_trash": false,
+              "type": "paragraph",
+              "paragraph": {
+                "rich_text": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "ほんとだね。さいしょは そのちがいに なれる のが たいへんだったよ。\nYeah, same here. It was hard to get used to those differences at first.",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "ほんとだね。さいしょは そのちがいに なれる のが たいへんだったよ。\nYeah, same here. It was hard to get used to those differences at first.",
+                    "href": null
+                  }
+                ],
+                "icon": null,
+                "color": "default"
+              },
+              "archived": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "425edc46-8f20-8295-93be-01fd61390261",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [],
+        "icon": null,
+        "color": "pink_background"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "ceaedc46-8f20-8225-b17b-81f1e876100e",
+          "parent": {
+            "type": "block_id",
+            "block_id": "425edc46-8f20-8295-93be-01fd61390261"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": true,
+          "in_trash": false,
+          "type": "toggle",
+          "toggle": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "🧒🏻アナ:",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "🧒🏻アナ:",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "私は授業についていけるかどうかが一番",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "私は授業についていけるかどうかが一番",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "不安",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "不安",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "だったな。",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "だったな。",
+                "href": null
+              }
+            ],
+            "color": "default"
+          },
+          "archived": false,
+          "children": [
+            {
+              "object": "block",
+              "id": "475edc46-8f20-821a-b5e8-013ddb712688",
+              "parent": {
+                "type": "block_id",
+                "block_id": "ceaedc46-8f20-8225-b17b-81f1e876100e"
+              },
+              "created_time": "2026-03-30T09:03:00.000Z",
+              "last_edited_time": "2026-03-30T09:03:00.000Z",
+              "created_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "last_edited_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "has_children": false,
+              "in_trash": false,
+              "type": "paragraph",
+              "paragraph": {
+                "rich_text": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "わたしは じゅぎょうに ついていけるか どうかが いちばん ふあん だったな。\nI was most worried about whether I could keep up with the classes.",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "わたしは じゅぎょうに ついていけるか どうかが いちばん ふあん だったな。\nI was most worried about whether I could keep up with the classes.",
+                    "href": null
+                  }
+                ],
+                "icon": null,
+                "color": "default"
+              },
+              "archived": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "29aedc46-8f20-8207-a4c5-013404d011ad",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [],
+        "icon": null,
+        "color": "blue_background"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "0b7edc46-8f20-827b-8b6c-01ec5d565bd0",
+          "parent": {
+            "type": "block_id",
+            "block_id": "29aedc46-8f20-8207-a4c5-013404d011ad"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": true,
+          "in_trash": false,
+          "type": "toggle",
+          "toggle": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "👦🏻ケン:",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "👦🏻ケン:",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "でも、先生もクラスメイトも優しくて、すぐ",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "でも、先生もクラスメイトも優しくて、すぐ",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "慣れた",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "慣れた",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "よ。",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "よ。",
+                "href": null
+              }
+            ],
+            "color": "default"
+          },
+          "archived": false,
+          "children": [
+            {
+              "object": "block",
+              "id": "a3eedc46-8f20-83b3-9c99-0145fe364019",
+              "parent": {
+                "type": "block_id",
+                "block_id": "0b7edc46-8f20-827b-8b6c-01ec5d565bd0"
+              },
+              "created_time": "2026-03-30T09:03:00.000Z",
+              "last_edited_time": "2026-03-30T09:03:00.000Z",
+              "created_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "last_edited_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "has_children": false,
+              "in_trash": false,
+              "type": "paragraph",
+              "paragraph": {
+                "rich_text": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "でも、せんせいも くらすめいとも やさしくて、すぐ なれた よ。\nBut the teachers and classmates were kind, so I got used to it quickly.",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "でも、せんせいも くらすめいとも やさしくて、すぐ なれた よ。\nBut the teachers and classmates were kind, so I got used to it quickly.",
+                    "href": null
+                  }
+                ],
+                "icon": null,
+                "color": "default"
+              },
+              "archived": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "e0cedc46-8f20-828b-ad12-8109e492b748",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [],
+        "icon": null,
+        "color": "pink_background"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "acaedc46-8f20-834b-a43f-01a6ddc0bc7a",
+          "parent": {
+            "type": "block_id",
+            "block_id": "e0cedc46-8f20-828b-ad12-8109e492b748"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": true,
+          "in_trash": false,
+          "type": "toggle",
+          "toggle": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "🧒🏻アナ:",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "🧒🏻アナ:",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "海外で生活すると、自分の",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "海外で生活すると、自分の",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "価値観",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "価値観",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "が広がるよね。",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "が広がるよね。",
+                "href": null
+              }
+            ],
+            "color": "default"
+          },
+          "archived": false,
+          "children": [
+            {
+              "object": "block",
+              "id": "72eedc46-8f20-82c2-8735-815987d5fadd",
+              "parent": {
+                "type": "block_id",
+                "block_id": "acaedc46-8f20-834b-a43f-01a6ddc0bc7a"
+              },
+              "created_time": "2026-03-30T09:03:00.000Z",
+              "last_edited_time": "2026-03-30T09:03:00.000Z",
+              "created_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "last_edited_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "has_children": false,
+              "in_trash": false,
+              "type": "paragraph",
+              "paragraph": {
+                "rich_text": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "かいがいで せいかつすると、じぶんの かちかん が ひろがるよね。\nLiving abroad really broadens your values.",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "かいがいで せいかつすると、じぶんの かちかん が ひろがるよね。\nLiving abroad really broadens your values.",
+                    "href": null
+                  }
+                ],
+                "icon": null,
+                "color": "default"
+              },
+              "archived": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "8c8edc46-8f20-8359-bda2-01c9779e98cf",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [],
+        "icon": null,
+        "color": "blue_background"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "2e0edc46-8f20-83b5-b095-81c56aee675b",
+          "parent": {
+            "type": "block_id",
+            "block_id": "8c8edc46-8f20-8359-bda2-01c9779e98cf"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": true,
+          "in_trash": false,
+          "type": "toggle",
+          "toggle": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "👦🏻ケン:",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "👦🏻ケン:",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "うん。いろんな経験が、人として",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "うん。いろんな経験が、人として",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "成長する",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "成長する",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "きっかけになる。",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "きっかけになる。",
+                "href": null
+              }
+            ],
+            "color": "default"
+          },
+          "archived": false,
+          "children": [
+            {
+              "object": "block",
+              "id": "c71edc46-8f20-833d-9f96-8112b04db374",
+              "parent": {
+                "type": "block_id",
+                "block_id": "2e0edc46-8f20-83b5-b095-81c56aee675b"
+              },
+              "created_time": "2026-03-30T09:03:00.000Z",
+              "last_edited_time": "2026-03-30T09:03:00.000Z",
+              "created_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "last_edited_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "has_children": false,
+              "in_trash": false,
+              "type": "paragraph",
+              "paragraph": {
+                "rich_text": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "うん。いろんな けいけんが、ひととして せいちょうする きっかけに なる。\nYeah, all those experiences help you grow as a person.",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "うん。いろんな けいけんが、ひととして せいちょうする きっかけに なる。\nYeah, all those experiences help you grow as a person.",
+                    "href": null
+                  }
+                ],
+                "icon": null,
+                "color": "default"
+              },
+              "archived": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "176edc46-8f20-82ae-a851-813a7b861f91",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [],
+        "icon": null,
+        "color": "pink_background"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "9f9edc46-8f20-8326-a541-812b064ae7f1",
+          "parent": {
+            "type": "block_id",
+            "block_id": "176edc46-8f20-82ae-a851-813a7b861f91"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": true,
+          "in_trash": false,
+          "type": "toggle",
+          "toggle": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "🧒🏻アナ:",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "🧒🏻アナ:",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "でも、こっちの",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "でも、こっちの",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "生活費",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "生活費",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "って思っていたより高くてびっくりした。",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "って思っていたより高くてびっくりした。",
+                "href": null
+              }
+            ],
+            "color": "default"
+          },
+          "archived": false,
+          "children": [
+            {
+              "object": "block",
+              "id": "e8aedc46-8f20-831d-99b8-81785544b0ab",
+              "parent": {
+                "type": "block_id",
+                "block_id": "9f9edc46-8f20-8326-a541-812b064ae7f1"
+              },
+              "created_time": "2026-03-30T09:03:00.000Z",
+              "last_edited_time": "2026-03-30T09:03:00.000Z",
+              "created_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "last_edited_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "has_children": false,
+              "in_trash": false,
+              "type": "paragraph",
+              "paragraph": {
+                "rich_text": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "でも、こっちの せいかつひ って おもっていたより たかくて びっくりした。\nBut the cost of living here was much higher than I expected.",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "でも、こっちの せいかつひ って おもっていたより たかくて びっくりした。\nBut the cost of living here was much higher than I expected.",
+                    "href": null
+                  }
+                ],
+                "icon": null,
+                "color": "default"
+              },
+              "archived": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "78aedc46-8f20-8315-9820-01d0a54cda2c",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [],
+        "icon": null,
+        "color": "blue_background"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "838edc46-8f20-82e6-9123-81833e2c12fb",
+          "parent": {
+            "type": "block_id",
+            "block_id": "78aedc46-8f20-8315-9820-01d0a54cda2c"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": true,
+          "in_trash": false,
+          "type": "toggle",
+          "toggle": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "👦🏻ケン:",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "👦🏻ケン:",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "わかる。家賃とか食費とか、ぜんぶ高いよね。",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "わかる。家賃とか食費とか、ぜんぶ高いよね。",
+                "href": null
+              }
+            ],
+            "color": "default"
+          },
+          "archived": false,
+          "children": [
+            {
+              "object": "block",
+              "id": "110edc46-8f20-8217-a06c-81716d2230b3",
+              "parent": {
+                "type": "block_id",
+                "block_id": "838edc46-8f20-82e6-9123-81833e2c12fb"
+              },
+              "created_time": "2026-03-30T09:03:00.000Z",
+              "last_edited_time": "2026-03-30T09:03:00.000Z",
+              "created_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "last_edited_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "has_children": false,
+              "in_trash": false,
+              "type": "paragraph",
+              "paragraph": {
+                "rich_text": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "わかる。やちんとか しょくひとか、ぜんぶ たかいよね。",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "わかる。やちんとか しょくひとか、ぜんぶ たかいよね。",
+                    "href": null
+                  }
+                ],
+                "icon": null,
+                "color": "default"
+              },
+              "archived": false
+            },
+            {
+              "object": "block",
+              "id": "17aedc46-8f20-826a-beb5-015d0a93e5a3",
+              "parent": {
+                "type": "block_id",
+                "block_id": "838edc46-8f20-82e6-9123-81833e2c12fb"
+              },
+              "created_time": "2026-03-30T09:03:00.000Z",
+              "last_edited_time": "2026-03-30T09:03:00.000Z",
+              "created_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "last_edited_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "has_children": false,
+              "in_trash": false,
+              "type": "paragraph",
+              "paragraph": {
+                "rich_text": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "I know. Rent, food—everything’s expensive.",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "I know. Rent, food—everything’s expensive.",
+                    "href": null
+                  }
+                ],
+                "icon": null,
+                "color": "default"
+              },
+              "archived": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "fe2edc46-8f20-831b-948c-019fd5c0f736",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [],
+        "icon": null,
+        "color": "pink_background"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "d6dedc46-8f20-8209-bb3c-81a879b300f6",
+          "parent": {
+            "type": "block_id",
+            "block_id": "fe2edc46-8f20-831b-948c-019fd5c0f736"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": true,
+          "in_trash": false,
+          "type": "toggle",
+          "toggle": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "🧒🏻アナ:",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "🧒🏻アナ:",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "だから、お金のことを考えるとときどき",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "だから、お金のことを考えるとときどき",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "不安",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "不安",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "になるんだよね。",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "になるんだよね。",
+                "href": null
+              }
+            ],
+            "color": "default"
+          },
+          "archived": false,
+          "children": [
+            {
+              "object": "block",
+              "id": "c97edc46-8f20-82eb-adb1-011d4f30bbb9",
+              "parent": {
+                "type": "block_id",
+                "block_id": "d6dedc46-8f20-8209-bb3c-81a879b300f6"
+              },
+              "created_time": "2026-03-30T09:03:00.000Z",
+              "last_edited_time": "2026-03-30T09:03:00.000Z",
+              "created_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "last_edited_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "has_children": false,
+              "in_trash": false,
+              "type": "paragraph",
+              "paragraph": {
+                "rich_text": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "だから、おかねのことを かんがえると ときどき ふあん になるんだよね。\nSo sometimes I get anxious when I think about money.",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "だから、おかねのことを かんがえると ときどき ふあん になるんだよね。\nSo sometimes I get anxious when I think about money.",
+                    "href": null
+                  }
+                ],
+                "icon": null,
+                "color": "default"
+              },
+              "archived": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "4e8edc46-8f20-831d-b75c-818f6d43643f",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [],
+        "icon": null,
+        "color": "blue_background"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "9a6edc46-8f20-82b9-934a-8165da2a33c0",
+          "parent": {
+            "type": "block_id",
+            "block_id": "4e8edc46-8f20-831d-b75c-818f6d43643f"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": true,
+          "in_trash": false,
+          "type": "toggle",
+          "toggle": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "👦🏻ケン:",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "👦🏻ケン:",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "でも、この経験はきっとあとで「留学して",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "でも、この経験はきっとあとで「留学して",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "成長した",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": true,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "成長した",
+                "href": null
+              },
+              {
+                "type": "text",
+                "text": {
+                  "content": "な」って思えるよ。",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "な」って思えるよ。",
+                "href": null
+              }
+            ],
+            "color": "default"
+          },
+          "archived": false,
+          "children": [
+            {
+              "object": "block",
+              "id": "c1aedc46-8f20-8281-8c5b-819e9804bddb",
+              "parent": {
+                "type": "block_id",
+                "block_id": "9a6edc46-8f20-82b9-934a-8165da2a33c0"
+              },
+              "created_time": "2026-03-30T09:03:00.000Z",
+              "last_edited_time": "2026-03-30T09:03:00.000Z",
+              "created_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "last_edited_by": {
+                "object": "user",
+                "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+              },
+              "has_children": false,
+              "in_trash": false,
+              "type": "paragraph",
+              "paragraph": {
+                "rich_text": [
+                  {
+                    "type": "text",
+                    "text": {
+                      "content": "でも、この けいけんは きっと あとで「りゅうがくして せいちょうした な」って おもえるよ。\nBut later, you’ll definitely feel like studying abroad helped you grow.",
+                      "link": null
+                    },
+                    "annotations": {
+                      "bold": false,
+                      "italic": false,
+                      "strikethrough": false,
+                      "underline": false,
+                      "code": false,
+                      "color": "default"
+                    },
+                    "plain_text": "でも、この けいけんは きっと あとで「りゅうがくして せいちょうした な」って おもえるよ。\nBut later, you’ll definitely feel like studying abroad helped you grow.",
+                    "href": null
+                  }
+                ],
+                "icon": null,
+                "color": "default"
+              },
+              "archived": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "901edc46-8f20-83d1-9b62-018a2a55111d",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "divider",
+      "divider": {},
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "e01edc46-8f20-8261-9138-0148dc2a1996",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "👫🏻 ③ ペ ア ワ ー ク ",
+              "link": null
+            },
+            "annotations": {
+              "bold": true,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "👫🏻 ③ ペ ア ワ ー ク ",
+            "href": null
+          }
+        ],
+        "icon": null,
+        "color": "gray_background"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "2ededc46-8f20-8203-847e-814c9bb418b6",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "toggle",
+      "toggle": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "留学先で困りそうなことを3つあげて、対策を考えてみましょう",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "留学先で困りそうなことを3つあげて、対策を考えてみましょう",
+            "href": null
+          }
+        ],
+        "color": "default"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "e7bedc46-8f20-83e0-8c46-01ddf343982b",
+          "parent": {
+            "type": "block_id",
+            "block_id": "2ededc46-8f20-8203-847e-814c9bb418b6"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "りゅうがくさきで こまりそうな ことを みっつ あげて、たいさくを かんがえてみましょう",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "りゅうがくさきで こまりそうな ことを みっつ あげて、たいさくを かんがえてみましょう",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "0f0edc46-8f20-83c8-88d2-817fedece067",
+          "parent": {
+            "type": "block_id",
+            "block_id": "2ededc46-8f20-8203-847e-814c9bb418b6"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "List three things you might struggle with while studying abroad and think about how to deal with",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "List three things you might struggle with while studying abroad and think about how to deal with",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "0f8edc46-8f20-82be-9520-0149ef06f372",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "✍️",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "✍️",
+            "href": null
+          }
+        ],
+        "icon": null,
+        "color": "default"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "85fedc46-8f20-83d0-b7c2-0162ab4ef93f",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "toggle",
+      "toggle": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "生活費を節約するアイデアを出し合ってみましょう",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "生活費を節約するアイデアを出し合ってみましょう",
+            "href": null
+          }
+        ],
+        "color": "default"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "783edc46-8f20-83a5-a4ab-81cd779b7cb5",
+          "parent": {
+            "type": "block_id",
+            "block_id": "85fedc46-8f20-83d0-b7c2-0162ab4ef93f"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "せいかつひを せつやくする アイデアを だしあってみましょう",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "せいかつひを せつやくする アイデアを だしあってみましょう",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "b1aedc46-8f20-82b6-bcf6-81d7f18fe7c8",
+          "parent": {
+            "type": "block_id",
+            "block_id": "85fedc46-8f20-83d0-b7c2-0162ab4ef93f"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "Share ideas on how to save living expenses while studying abroad.",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "Share ideas on how to save living expenses while studying abroad.",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "828edc46-8f20-8324-aecf-01b88f4d91ff",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "✍️",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "✍️",
+            "href": null
+          }
+        ],
+        "icon": null,
+        "color": "default"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "53bedc46-8f20-8296-bbd3-81474fa595c5",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "toggle",
+      "toggle": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "留学で得られる成長について話し合ってみましょう",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "留学で得られる成長について話し合ってみましょう",
+            "href": null
+          }
+        ],
+        "color": "default"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "3e8edc46-8f20-8346-8456-01733f90b10f",
+          "parent": {
+            "type": "block_id",
+            "block_id": "53bedc46-8f20-8296-bbd3-81474fa595c5"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "りゅうがくで えられる せいちょうに ついて はなしあってみましょう",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "りゅうがくで えられる せいちょうに ついて はなしあってみましょう",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "753edc46-8f20-827a-af92-013f3a462266",
+          "parent": {
+            "type": "block_id",
+            "block_id": "53bedc46-8f20-8296-bbd3-81474fa595c5"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "Discuss what kinds of growth you can gain through studying abroad.",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "Discuss what kinds of growth you can gain through studying abroad.",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "f58edc46-8f20-82e7-bd7c-81cdb8dd9939",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "✍️",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "✍️",
+            "href": null
+          }
+        ],
+        "icon": null,
+        "color": "default"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "4ceedc46-8f20-8393-bc09-01b03470c3d0",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "divider",
+      "divider": {},
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "178edc46-8f20-830d-9ad3-01c9bc0ac520",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "callout",
+      "callout": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "📘 ④ 質 問 に 対 し て 答 え る 練 習  ",
+              "link": null
+            },
+            "annotations": {
+              "bold": true,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "📘 ④ 質 問 に 対 し て 答 え る 練 習  ",
+            "href": null
+          }
+        ],
+        "icon": null,
+        "color": "gray_background"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "909edc46-8f20-83f4-a011-0136a5f1004f",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "toggle",
+      "toggle": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "留学に興味はありますか？",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "留学に興味はありますか？",
+            "href": null
+          }
+        ],
+        "color": "default"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "511edc46-8f20-828f-9274-01126e07769b",
+          "parent": {
+            "type": "block_id",
+            "block_id": "909edc46-8f20-83f4-a011-0136a5f1004f"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "りゅうがくに きょうみは ありますか？\nAre you interested in studying abroad?",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "りゅうがくに きょうみは ありますか？\nAre you interested in studying abroad?",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "446edc46-8f20-83ae-85bf-817b69d11009",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "✍️",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "✍️",
+            "href": null
+          }
+        ],
+        "icon": null,
+        "color": "default"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "34cedc46-8f20-836d-a9e4-013da38c592a",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "toggle",
+      "toggle": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "留学するとしたら、どんな国に行ってみたいですか？",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "留学するとしたら、どんな国に行ってみたいですか？",
+            "href": null
+          }
+        ],
+        "color": "default"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "8d2edc46-8f20-8253-80e9-818b0c1f2350",
+          "parent": {
+            "type": "block_id",
+            "block_id": "34cedc46-8f20-836d-a9e4-013da38c592a"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "りゅうがくするとしたら、どんな くにに いってみたいですか？",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "りゅうがくするとしたら、どんな くにに いってみたいですか？",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "817edc46-8f20-83d3-a3e0-01ec86ecf4b0",
+          "parent": {
+            "type": "block_id",
+            "block_id": "34cedc46-8f20-836d-a9e4-013da38c592a"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "If you were to study abroad, what kind of country would you want to go to?",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "If you were to study abroad, what kind of country would you want to go to?",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "e89edc46-8f20-8296-9fbb-81db0129e874",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "✍️",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "✍️",
+            "href": null
+          }
+        ],
+        "icon": null,
+        "color": "default"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "e39edc46-8f20-8226-b13f-81e9acf4600e",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "toggle",
+      "toggle": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "留学について、良いところは何だと思いますか？",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "留学について、良いところは何だと思いますか？",
+            "href": null
+          }
+        ],
+        "color": "default"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "c67edc46-8f20-8290-ba8a-816801250f1b",
+          "parent": {
+            "type": "block_id",
+            "block_id": "e39edc46-8f20-8226-b13f-81e9acf4600e"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "りゅうがくについて、よい ところは なんだと おもいますか？\nWhat do you think are the good points of studying abroad?",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "りゅうがくについて、よい ところは なんだと おもいますか？\nWhat do you think are the good points of studying abroad?",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "255edc46-8f20-8296-b5cd-8195f58336e0",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "✍️",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "✍️",
+            "href": null
+          }
+        ],
+        "icon": null,
+        "color": "default"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "cddedc46-8f20-83ca-a495-8130e19d1868",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "toggle",
+      "toggle": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "逆に、留学にはどんな大変さがあると思いますか？",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "逆に、留学にはどんな大変さがあると思いますか？",
+            "href": null
+          }
+        ],
+        "color": "default"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "7c0edc46-8f20-8220-9176-01033ab146ee",
+          "parent": {
+            "type": "block_id",
+            "block_id": "cddedc46-8f20-83ca-a495-8130e19d1868"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "ぎゃくに、りゅうがくには どんな たいへんさが あると おもいますか？",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "ぎゃくに、りゅうがくには どんな たいへんさが あると おもいますか？",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "97eedc46-8f20-8321-bc2a-01738527b395",
+          "parent": {
+            "type": "block_id",
+            "block_id": "cddedc46-8f20-83ca-a495-8130e19d1868"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "On the other hand, what difficulties do you think studying abroad might involve?",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "On the other hand, what difficulties do you think studying abroad might involve?",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "ab3edc46-8f20-833a-996e-0161fb511ca5",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "✍️",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "✍️",
+            "href": null
+          }
+        ],
+        "icon": null,
+        "color": "default"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "db1edc46-8f20-83d1-8fc8-017b3779de43",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": true,
+      "in_trash": false,
+      "type": "toggle",
+      "toggle": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "海外で生活すると、どんなスキルが身につくと思いますか？",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "海外で生活すると、どんなスキルが身につくと思いますか？",
+            "href": null
+          }
+        ],
+        "color": "default"
+      },
+      "archived": false,
+      "children": [
+        {
+          "object": "block",
+          "id": "49eedc46-8f20-8338-9a44-81baa8ae5f9b",
+          "parent": {
+            "type": "block_id",
+            "block_id": "db1edc46-8f20-83d1-8fc8-017b3779de43"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "かいがいで せいかつすると、どんな スキルが みにつくと おもいますか？",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "かいがいで せいかつすると、どんな スキルが みにつくと おもいますか？",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        },
+        {
+          "object": "block",
+          "id": "a8dedc46-8f20-8382-827f-816e86934d1c",
+          "parent": {
+            "type": "block_id",
+            "block_id": "db1edc46-8f20-83d1-8fc8-017b3779de43"
+          },
+          "created_time": "2026-03-30T09:03:00.000Z",
+          "last_edited_time": "2026-03-30T09:03:00.000Z",
+          "created_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+          },
+          "has_children": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "What skills do you think you can gain by living abroad?",
+                  "link": null
+                },
+                "annotations": {
+                  "bold": false,
+                  "italic": false,
+                  "strikethrough": false,
+                  "underline": false,
+                  "code": false,
+                  "color": "default"
+                },
+                "plain_text": "What skills do you think you can gain by living abroad?",
+                "href": null
+              }
+            ],
+            "icon": null,
+            "color": "default"
+          },
+          "archived": false
+        }
+      ]
+    },
+    {
+      "object": "block",
+      "id": "1a3edc46-8f20-83be-804d-0153a70f90ff",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "✍️",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "✍️",
+            "href": null
+          }
+        ],
+        "icon": null,
+        "color": "default"
+      },
+      "archived": false
+    },
+    {
+      "object": "block",
+      "id": "973edc46-8f20-8237-91c4-81b1ce67190d",
+      "parent": {
+        "type": "page_id",
+        "page_id": "392edc46-8f20-8233-a678-01da38434f82"
+      },
+      "created_time": "2026-03-30T09:03:00.000Z",
+      "last_edited_time": "2026-03-30T09:03:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "24bd872b-594c-81fb-948d-0002bdbf228d"
+      },
+      "has_children": false,
+      "in_trash": false,
+      "type": "divider",
+      "divider": {},
+      "archived": false
+    }
+  ]
+}
