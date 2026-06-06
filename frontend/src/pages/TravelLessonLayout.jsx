@@ -23,6 +23,20 @@ const TranslationControls = ({ id, rawText, isTranslated, onToggle }) => (
   </div>
 );
 
+const VocabCard = ({ phrase, reading, meaning, isTranslated, onToggle, wordId, showFurigana, pos }) => (
+  <div className="vocab-card">
+    <div className="vocab-word">{phrase}</div>
+    {showFurigana && reading && <div className="note" style={{ margin: '0 0 4px 0' }}>{reading}</div>}
+    {pos && <span className="note" style={{ color: 'var(--primary)', fontWeight: 'bold' }}>[{pos}]</span>}
+    {meaning && (
+      <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
+        <button className="vocab-toggle" onClick={() => onToggle(wordId)}>訳を見る</button>
+        <p className="vocab-meaning-en">{meaning}</p>
+      </div>
+    )}
+  </div>
+);
+
 const NumberCard = ({ digit, hiragana, kanji, english, isTranslated, onToggle, wordId, showFurigana }) => (
   <div className="example">
     <div className="jp">{kanji || hiragana} {digit && `(${digit})`}</div>
