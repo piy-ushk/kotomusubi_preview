@@ -72,34 +72,50 @@ const Lessons = () => {
     ? (activeTab === 0 ? hirakataLessons : elementaryLessons)
     : lessons;
 
-  const renderLessonList = (lessonList, offset = 0) => (
+  const renderLessonCard = (lesson, index) => (
+    <motion.div
+      key={lesson.id}
+      className="stagger-item"
+      style={{ animationDelay: `${index * 50}ms` }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <Link
+        to={`/lesson/${lesson.id}`}
+        state={{ textbookTitle: textbookTitleState }}
+        className={`lesson-card ${lesson.completed ? 'completed' : ''}`}
+        style={{ display: 'flex' }}
+      >
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="lesson-title">
+            {lesson.title.split('|')[0].split('｜')[0].trim()}
+          </div>
+        </div>
+        <span style={{ color: lesson.completed ? 'var(--primary)' : 'var(--text-sub)', flexShrink: 0 }}>
+          {lesson.completed ? <CheckCircle /> : <ChevronRight />}
+        </span>
+      </Link>
+    </motion.div>
+  );
+
+  const renderLessonList = (lessonList) => (
     <div className="materials-card-grid" style={{ padding: '0 24px 24px' }}>
-      {lessonList.map((lesson, index) => (
-        <motion.div
-          key={lesson.id}
-          className="stagger-item"
-          style={{ animationDelay: `${(index + offset) * 50}ms` }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <Link
-            to={`/lesson/${lesson.id}`}
-            state={{ textbookTitle: textbookTitleState }}
-            className={`lesson-card ${lesson.completed ? 'completed' : ''}`}
-            style={{ display: 'flex' }}
-          >
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div className="lesson-title">
-                {lesson.title.split('|')[0].split('｜')[0].trim()}
+      {lessonList.map((item, index) => {
+        if (item.is_chapter) {
+          return (
+            <div key={item.id} style={{ gridColumn: '1 / -1', marginTop: index === 0 ? '0' : '24px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text)', marginBottom: '12px', paddingLeft: '4px' }}>
+                {item.title}
+              </h3>
+              <div className="materials-card-grid" style={{ padding: 0 }}>
+                {item.lessons.map((lesson, subIndex) => renderLessonCard(lesson, index + subIndex))}
               </div>
             </div>
-            <span style={{ color: lesson.completed ? 'var(--primary)' : 'var(--text-sub)', flexShrink: 0 }}>
-              {lesson.completed ? <CheckCircle /> : <ChevronRight />}
-            </span>
-          </Link>
-        </motion.div>
-      ))}
+          );
+        }
+        return renderLessonCard(item, index);
+      })}
       {lessonList.length === 0 && (
-        <div className="empty-state">レッスンが見つかりませんでした</div>
+        <div className="empty-state" style={{ gridColumn: '1 / -1' }}>レッスンが見つかりませんでした</div>
       )}
     </div>
   );

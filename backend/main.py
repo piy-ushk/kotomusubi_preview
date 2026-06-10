@@ -112,12 +112,22 @@ async def get_lessons(level_id: str):
         pages = await notion.fetch_database_pages(db_id)
         for p in pages:
             if is_upper_intermediate:
-                # Check if this page has child databases (meaning it's a chapter)
                 child_dbs_in_page = await notion.fetch_child_database_ids(p["id"])
                 if child_dbs_in_page:
+                    chapter_lessons = []
                     for child_db_id in child_dbs_in_page:
                         sub_pages = await notion.fetch_database_pages(child_db_id)
-                        all_lessons.extend([{"id": sp["id"], "title": notion.extract_page_title(sp)} for sp in sub_pages])
+                        chapter_lessons.extend([{"id": sp["id"], "title": notion.extract_page_title(sp)} for sp in sub_pages])
+                    
+                    if chapter_lessons:
+                        all_lessons.append({
+                            "id": p["id"],
+                            "title": notion.extract_page_title(p),
+                            "is_chapter": True,
+                            "lessons": chapter_lessons
+                        })
+                    else:
+                        all_lessons.append({"id": p["id"], "title": notion.extract_page_title(p)})
                 else:
                     all_lessons.append({"id": p["id"], "title": notion.extract_page_title(p)})
             else:
@@ -134,7 +144,10 @@ async def get_lessons(level_id: str):
         return [9999, title.lower()]
     
     all_lessons.sort(key=natural_sort_key)
-        
+    for lesson in all_lessons:
+        if lesson.get("is_chapter") and "lessons" in lesson:
+            lesson["lessons"].sort(key=natural_sort_key)
+            
     return all_lessons
 
 def extract_text(block):
@@ -233,9 +246,9 @@ async def get_lesson_content(lesson_id: str):
         }
 
         # 1. Map Japanese / Title
-        for pn in ["Name", "Word", "名前", "単語", "Vocabulary"]:
-            if pn in props and props[pn].get("type") == "title":
-                vocab["jp"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("title", [])])
+        for pn, pd in props.items():
+            if pd.get("type") == "title":
+                vocab["jp"] = "".join([rt.get("plain_text", "") for rt in pd.get("title", [])])
                 break
 
         # 2. Map Reading
@@ -360,19 +373,18 @@ async def get_lesson_content(lesson_id: str):
                 item_vocab = item["vocab"]
                 props = item.get("raw_props", {})
                 
-                # If the DB wasn't explicitly named vocabulary, check if the items look like vocab
-                if is_vocab or is_vocab_item(props) or (item_vocab["jp"] and (item_vocab["reading"] or item_vocab["en"])):
-                    if item_vocab["jp"]:
-                        vocabulary.append({
-                            "id": item["id"],
-                            "word": item_vocab["jp"],
-                            "reading": item_vocab["reading"],
-                            "meaning": item_vocab["en"],
-                            "kanji": item_vocab["kanji"],
-                            "pos": item_vocab["pos"],
-                            "example": item_vocab["example"],
-                            "status": "not yet"
-                        })
+                # Always include if it has a Japanese word mapped.
+                if item_vocab["jp"]:
+                    vocabulary.append({
+                        "id": item["id"],
+                        "word": item_vocab["jp"],
+                        "reading": item_vocab["reading"],
+                        "meaning": item_vocab["en"],
+                        "kanji": item_vocab["kanji"],
+                        "pos": item_vocab["pos"],
+                        "example": item_vocab["example"],
+                        "status": "not yet"
+                    })
         except Exception as e:
             continue
     

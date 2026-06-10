@@ -934,6 +934,12 @@ body {
   overflow-x: hidden;
   scrollbar-width: none;
   padding: 16px 24px;
+  width: 100%;
+}
+.lesson-slide-area img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .lesson-slide-area::-webkit-scrollbar { display: none; }
@@ -1006,6 +1012,7 @@ body {
   color: #4A4A4A;
   line-height: 1.6;
   margin-bottom: 4px;
+  word-break: break-word;
 }
 
 ruby {
@@ -1080,6 +1087,7 @@ ruby rt {
   display: flex;
   align-items: flex-start;
   gap: 12px;
+  min-width: 0;
 }
 
 .callout-emoji { font-size: 22px; line-height: 1.4; }
@@ -1089,6 +1097,7 @@ ruby rt {
   font-weight: 600;
   color: #1A1A1A;
   line-height: 1.5;
+  word-break: break-word;
 }
 
 .callout-children {
@@ -1102,6 +1111,7 @@ ruby rt {
   gap: 12px;
   margin-bottom: 12px;
   padding-left: 8px;
+  min-width: 0;
 }
 
 .bullet-dot {
@@ -1421,6 +1431,7 @@ ruby rt {
 @media (max-width: 600px) {
   .block-column {
     min-width: 100%;
+    flex-basis: 100%;
   }
 }
 
@@ -1429,6 +1440,8 @@ ruby rt {
   margin: 16px 0;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-light);
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .block-table table {
