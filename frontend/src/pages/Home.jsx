@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getTextbooks } from '../services/api';
 import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 
 
 /* Inline Chevron icon */
@@ -28,6 +29,7 @@ const getIcon = (title) => {
 const Home = ({ onGoToMaterials }) => {
   const [textbooks, setTextbooks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     getTextbooks()
@@ -38,15 +40,17 @@ const Home = ({ onGoToMaterials }) => {
       .catch(() => { setTextbooks([]); setLoading(false); });
   }, []);
 
+  const firstName = user?.user_metadata?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'Learner';
+
   return (
     <div className="page-pad fade-in">
       {/* Header */}
       <div className="page-header">
         <div className="page-header-left">
           <img src="/logo.png" alt="Kotomusubi" className="logo-main" />
-          <div className="greeting-title">Good Morning!</div>
+          <div className="greeting-title">Welcome back, {firstName}!</div>
           <div className="greeting-sub">
-            Hello Learner, good morning to you.
+            It's great to see you again.
           </div>
         </div>
         <div className="profile-circle">

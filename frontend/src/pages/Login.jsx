@@ -76,7 +76,7 @@ const Login = () => {
         maxWidth: '400px',
         textAlign: 'center'
       }}>
-        <img src="/logo.png" alt="Kotomusubi Logo" style={{ height: '48px', marginBottom: '24px' }} />
+        <img src="/logo.png" alt="Kotomusubi Logo" style={{ height: '120px', marginBottom: '24px' }} />
         <h2 style={{ color: 'var(--text)', marginBottom: '8px', fontSize: '1.5rem' }}>
           {isSignUp ? 'Create an Account' : 'Welcome Back'}
         </h2>
