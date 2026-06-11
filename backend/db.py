@@ -32,10 +32,10 @@ def add_annotation(user_id, lesson_id, block_id, action, content):
     conn.close()
     return inserted_id
 
-def delete_annotation(annotation_id):
+def delete_annotation(annotation_id, user_id):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute('DELETE FROM annotations WHERE id = ?', (annotation_id,))
+    c.execute('DELETE FROM annotations WHERE id = ? AND user_id = ?', (annotation_id, user_id))
     conn.commit()
     conn.close()
     return True

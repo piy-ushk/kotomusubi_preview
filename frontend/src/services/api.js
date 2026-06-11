@@ -1,8 +1,17 @@
 import axios from 'axios';
+import { supabase } from '../lib/supabaseClient';
 
 const api = axios.create({
   // In development, use localhost. In production, use relative path which Vercel will route
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+});
+
+api.interceptors.request.use(async (config) => {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session?.access_token) {
+    config.headers.Authorization = `Bearer ${session.access_token}`;
+  }
+  return config;
 });
 
 export const getTextbooks = () => api.get('/textbooks');

@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './index.css';
 
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import Login from './pages/Login';
 
 import Home from './pages/Home';
 import TextbooksList from './pages/TextbooksList';
@@ -32,8 +35,17 @@ export const FlashcardIcon = ({ size = 22 }) => (
   </svg>
 );
 
+export const LogoutIcon = ({ size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+    <polyline points="16 17 21 12 16 7"/>
+    <line x1="21" y1="12" x2="9" y2="12"/>
+  </svg>
+);
+
 /* ---- Bottom Navigation (Mobile) ---- */
 function BottomNav({ currentTab, onTabChange }) {
+  const { signOut } = useAuth();
   return (
     <nav className="bottom-nav">
       <button className={`bottom-nav-item ${currentTab === 0 ? 'active' : ''}`} onClick={() => onTabChange(0)}>
@@ -45,12 +57,16 @@ function BottomNav({ currentTab, onTabChange }) {
       <button className={`bottom-nav-item ${currentTab === 2 ? 'active' : ''}`} onClick={() => onTabChange(2)}>
         <FlashcardIcon /> Wordbook
       </button>
+      <button className="bottom-nav-item" onClick={signOut}>
+        <LogoutIcon /> Logout
+      </button>
     </nav>
   );
 }
 
 /* ---- Side Navigation (Desktop) ---- */
 function SideNav({ currentTab, onTabChange }) {
+  const { signOut } = useAuth();
   return (
     <aside className="desktop-sidebar">
       <div className="sidebar-logo">
@@ -65,6 +81,10 @@ function SideNav({ currentTab, onTabChange }) {
         </button>
         <button className={`sidebar-nav-item ${currentTab === 2 ? 'active' : ''}`} onClick={() => onTabChange(2)}>
           <FlashcardIcon /> Wordbook
+        </button>
+        <div style={{ flexGrow: 1 }}></div>
+        <button className="sidebar-nav-item" onClick={signOut} style={{ marginTop: 'auto', color: 'var(--text-muted)' }}>
+          <LogoutIcon /> Logout
         </button>
       </nav>
     </aside>
@@ -118,17 +138,21 @@ function DetailShell({ children }) {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Dashboard routes */}
-        <Route path="/" element={<DashboardShell />} />
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          
+          {/* Dashboard routes */}
+          <Route path="/" element={<ProtectedRoute><DashboardShell /></ProtectedRoute>} />
 
-        {/* Detail routes */}
-        <Route path="/textbook/:textbookId" element={<DetailShell><Levels /></DetailShell>} />
-        <Route path="/level/:levelId" element={<DetailShell><Lessons /></DetailShell>} />
-        <Route path="/lesson/:lessonId" element={<DetailShell><LessonDetail /></DetailShell>} />
-      </Routes>
-    </Router>
+          {/* Detail routes */}
+          <Route path="/textbook/:textbookId" element={<ProtectedRoute><DetailShell><Levels /></DetailShell></ProtectedRoute>} />
+          <Route path="/level/:levelId" element={<ProtectedRoute><DetailShell><Lessons /></DetailShell></ProtectedRoute>} />
+          <Route path="/lesson/:lessonId" element={<ProtectedRoute><DetailShell><LessonDetail /></DetailShell></ProtectedRoute>} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
