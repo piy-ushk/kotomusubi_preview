@@ -47,10 +47,13 @@ const Login = () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
+        options: {
+          redirectTo: window.location.origin
+        }
       });
       if (error) throw error;
     } catch (error) {
-      setMessage({ text: error.message, type: 'error' });
+      setMessage({ text: error.message || 'An error occurred with Google Sign-in', type: 'error' });
       setLoading(false);
     }
   };
@@ -96,6 +99,7 @@ const Login = () => {
         )}
 
         <button
+          type="button"
           onClick={handleGoogleAuth}
           disabled={loading}
           style={{
