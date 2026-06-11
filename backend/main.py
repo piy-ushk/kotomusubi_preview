@@ -1,19 +1,41 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import asyncio
 import os
 import re
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from notion_service import NotionService
+from supabase import create_client, Client
 import db
 
 load_dotenv()
 db.init_db()
 
-load_dotenv()
-
 app = FastAPI()
+
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
+
+if SUPABASE_URL and SUPABASE_ANON_KEY:
+    supabase_client: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
+else:
+    supabase_client = None
+
+security = HTTPBearer()
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    if not supabase_client:
+        return "default_user"
+    token = credentials.credentials
+    try:
+        response = supabase_client.auth.get_user(token)
+        if response and response.user:
+            return response.user.id
+        raise HTTPException(status_code=401, detail="Invalid token")
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Authentication failed: {str(e)}")
 
 app.add_middleware(
     CORSMiddleware,
@@ -185,18 +207,17 @@ class AnnotationRequest(BaseModel):
     content: str = ""
 
 @app.post("/api/lessons/{lesson_id}/annotations")
-async def add_lesson_annotation(lesson_id: str, req: AnnotationRequest):
-    user_id = "default_user" # Simplified for MVP
+async def add_lesson_annotation(lesson_id: str, req: AnnotationRequest, user_id: str = Depends(get_current_user)):
     ann_id = db.add_annotation(user_id, lesson_id, req.block_id, req.action, req.content)
     return {"success": True, "annotation_id": ann_id}
 
 @app.delete("/api/annotations/{annotation_id}")
-async def remove_annotation(annotation_id: int):
-    db.delete_annotation(annotation_id)
+async def remove_annotation(annotation_id: int, user_id: str = Depends(get_current_user)):
+    db.delete_annotation(annotation_id, user_id)
     return {"success": True}
 
 @app.get("/api/lessons/{lesson_id}")
-async def get_lesson_content(lesson_id: str):
+async def get_lesson_content(lesson_id: str, user_id: str = Depends(get_current_user)):
     lesson_page = await notion.fetch_page(lesson_id)
     lesson_title = notion.extract_page_title(lesson_page)
     blocks = await notion.fetch_blocks_with_children(lesson_id)
@@ -505,7 +526,6 @@ async def get_lesson_content(lesson_id: str):
         else:
             test_sections.append(current_section)
         
-    user_id = "default_user"
     annotations = db.get_annotations(user_id, lesson_id)
         
     return {
