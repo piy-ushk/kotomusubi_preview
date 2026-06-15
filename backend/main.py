@@ -1,19 +1,24 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import asyncio
 import os
-import re
+import json
 from dotenv import load_dotenv
 from pydantic import BaseModel
-from notion_service import NotionService
 from supabase import create_client, Client
 import db
+import sync_service
 
 load_dotenv()
 db.init_db()
 
 app = FastAPI()
+
+# Mount static files for images
+os.makedirs(os.path.join(os.path.dirname(__file__), "static", "images"), exist_ok=True)
+app.mount("/static", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static")), name="static")
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
@@ -45,161 +50,76 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-notion = NotionService(api_key=os.getenv("NOTION_API_KEY", ""))
-
 @app.get("/")
 async def root():
-    return {"message": "Japanese Textbook API is running"}
+    return {"message": "Japanese Textbook API (SQLite Sync Edition) is running"}
+
+@app.post("/api/sync")
+async def trigger_sync(background_tasks: BackgroundTasks):
+    api_key = os.getenv("NOTION_API_KEY")
+    db_id = os.getenv("NOTION_DATABASE_ID")
+    if not api_key or not db_id:
+        raise HTTPException(status_code=500, detail="Missing Notion credentials in .env")
+        
+    service = sync_service.SyncService(api_key, db_id)
+    # Run sync in background so it doesn't block the request timeout
+    background_tasks.add_task(service.sync_all)
+    return {"success": True, "message": "Sync started in background."}
 
 @app.get("/api/textbooks")
 async def get_textbooks():
-    db_id = os.getenv("NOTION_DATABASE_ID")
-    if not db_id:
-        raise HTTPException(status_code=500, detail="NOTION_DATABASE_ID not configured")
-    
-    pages = await notion.fetch_database_pages(db_id)
-    textbooks = []
-    for page in pages:
-        textbooks.append({
-            "id": page["id"],
-            "title": notion.extract_page_title(page)
-        })
-    
-    # Sort matching original logic
-    textbook_order = ["Grammar Textbook", "Japanese Travel Column", "Topic Talk"]
-    def get_sort_key(t):
-        title = t["title"].lower()
-        for i, order in enumerate(textbook_order):
-            if order.lower() in title: return i
-        return 999
-    textbooks.sort(key=get_sort_key)
-    return textbooks
+    conn = db.get_connection()
+    c = conn.cursor()
+    c.execute("SELECT id, title FROM textbooks ORDER BY sort_order ASC")
+    res = [{"id": r["id"], "title": r["title"]} for r in c.fetchall()]
+    conn.close()
+    return res
 
 @app.get("/api/textbooks/{textbook_id}/levels")
 async def get_levels(textbook_id: str):
-    db_ids = await notion.fetch_child_database_ids(textbook_id)
-    if not db_ids: return []
-    pages = await notion.fetch_database_pages(db_ids[0])
-    
-    levels = []
-    for p in pages:
-        cover_url = ""
-        if p.get("cover"):
-            cover_type = p["cover"]["type"]
-            cover_url = p["cover"][cover_type]["url"]
-            
-        # Optional: check if there's a custom image property if cover is none
-        if not cover_url and "properties" in p:
-            for prop in p["properties"].values():
-                if prop.get("type") == "files" and prop.get("files") and len(prop["files"]) > 0:
-                    file_info = prop["files"][0]
-                    if file_info.get("type") in ["file", "external"]:
-                        f_type = file_info["type"]
-                        cover_url = file_info[f_type]["url"]
-                        break
-        
-        levels.append({
-            "id": p["id"],
-            "title": notion.extract_page_title(p),
-            "cover": cover_url
-        })
-    
-    level_order = ["Super Beginner", "超初級", "Beginner", "初級", "Upper Intermediate", "中上級"]
-    def get_sort_key(l):
-        title = l["title"].lower()
-        for i, order in enumerate(level_order):
-            if order.lower() in title: return i
-        return 999
-        
-    levels.reverse()  # Reverse to fix Notion's default reverse-chronological created_time ordering
-    levels.sort(key=get_sort_key)
-    return levels
+    conn = db.get_connection()
+    c = conn.cursor()
+    c.execute("SELECT id, title, cover_url FROM levels WHERE textbook_id = ? ORDER BY sort_order ASC", (textbook_id,))
+    res = [{"id": r["id"], "title": r["title"], "cover": r["cover_url"]} for r in c.fetchall()]
+    conn.close()
+    return res
 
 @app.get("/api/levels/{level_id}/lessons")
 async def get_lessons(level_id: str):
-    level_page = await notion.fetch_page(level_id)
-    level_title = notion.extract_page_title(level_page)
-
-    # For Topic Talk, the theme itself is the lesson
-    if "テーマ：" in level_title or "Topic:" in level_title:
-        return [{"id": level_id, "title": level_title}]
-
-    db_ids = await notion.fetch_child_database_ids(level_id)
-    if not db_ids: return []
-
-    is_upper_intermediate = "Upper" in level_title or "中上級" in level_title
-
-    all_lessons = []
-    for db_id in db_ids:
-        pages = await notion.fetch_database_pages(db_id)
-        for p in pages:
-            if is_upper_intermediate:
-                child_dbs_in_page = await notion.fetch_child_database_ids(p["id"])
-                if child_dbs_in_page:
-                    chapter_lessons = []
-                    for child_db_id in child_dbs_in_page:
-                        sub_pages = await notion.fetch_database_pages(child_db_id)
-                        chapter_lessons.extend([{"id": sp["id"], "title": notion.extract_page_title(sp)} for sp in sub_pages])
-                    
-                    if chapter_lessons:
-                        all_lessons.append({
-                            "id": p["id"],
-                            "title": notion.extract_page_title(p),
-                            "is_chapter": True,
-                            "lessons": chapter_lessons
-                        })
-                    else:
-                        all_lessons.append({"id": p["id"], "title": notion.extract_page_title(p)})
-                else:
-                    all_lessons.append({"id": p["id"], "title": notion.extract_page_title(p)})
-            else:
-                all_lessons.append({"id": p["id"], "title": notion.extract_page_title(p)})
+    conn = db.get_connection()
+    c = conn.cursor()
+    c.execute("SELECT id, chapter_id, title, is_chapter, sort_order FROM lessons WHERE level_id = ? ORDER BY is_chapter DESC, sort_order ASC", (level_id,))
+    rows = c.fetchall()
+    conn.close()
     
-    # Sort by numbers only — ignores text prefix so "Capter12" and "Chapter 12" both sort as [12].
-    # Falls back to full title string if no number found.
-    import re as _re
-    def natural_sort_key(x):
-        title = x["title"]
-        nums = _re.findall(r'\d+', title)
-        if nums:
-            return [int(n) for n in nums]
-        return [9999, title.lower()]
+    # Rebuild hierarchical structure for chapters
+    chapters = {}
+    standalone_lessons = []
     
-    all_lessons.sort(key=natural_sort_key)
-    for lesson in all_lessons:
-        if lesson.get("is_chapter") and "lessons" in lesson:
-            lesson["lessons"].sort(key=natural_sort_key)
+    for r in rows:
+        if r["is_chapter"]:
+            chapters[r["id"]] = {"id": r["id"], "title": r["title"], "is_chapter": True, "lessons": [], "sort_order": r["sort_order"]}
+        elif r["chapter_id"]:
+            if r["chapter_id"] in chapters:
+                chapters[r["chapter_id"]]["lessons"].append({"id": r["id"], "title": r["title"], "sort_order": r["sort_order"]})
+        else:
+            standalone_lessons.append({"id": r["id"], "title": r["title"], "sort_order": r["sort_order"]})
             
+    # Sort children within chapters
+    for ch in chapters.values():
+        ch["lessons"].sort(key=lambda x: x["sort_order"])
+        
+    all_lessons = list(chapters.values()) + standalone_lessons
+    all_lessons.sort(key=lambda x: x["sort_order"])
+    
+    # Clean out sort_order for response
+    for item in all_lessons:
+        item.pop("sort_order", None)
+        if "lessons" in item:
+            for l in item["lessons"]:
+                l.pop("sort_order", None)
+                
     return all_lessons
-
-def extract_text(block):
-    b_type = block["type"]
-    data = block.get(b_type, {})
-    if not data: return ""
-    if "rich_text" in data:
-        return "".join([rt["plain_text"] for rt in data["rich_text"]])
-    return ""
-
-def should_expand_database_page(db_title: str, page_title: str, props: dict) -> bool:
-    """
-    Chapter pages use generic inline database names, while vocab databases are
-    often titled by lesson number. Expand only page-like database rows.
-    """
-    title = (db_title or "").lower()
-    page = page_title or ""
-    if any(k in title for k in ["vocabulary", "vocab", "new word", "word", "単語", "新出"]):
-        return False
-    if any(k in title for k in ["new database", "chapter", "lesson", "test", "チェック", "レベル"]):
-        return True
-    if re.search(r'【\s*\d+[-ー]\d+\s*】', page):
-        return True
-    if re.search(r'(chapter|lesson|test)', page, re.IGNORECASE):
-        return True
-    marker_text = " ".join(str(v) for v in props.values()).upper()
-    return "NEW WORD" not in marker_text and len(props) <= 3
-
-def has_emoji(text):
-    return any(32 <= ord(c) <= 126 for c in text) is False or re.search(r'[^\w\s,.!?]', text) # Simplified emoji check
 
 class AnnotationRequest(BaseModel):
     block_id: str
@@ -218,319 +138,55 @@ async def remove_annotation(annotation_id: int, user_id: str = Depends(get_curre
 
 @app.get("/api/lessons/{lesson_id}")
 async def get_lesson_content(lesson_id: str, user_id: str = Depends(get_current_user)):
-    lesson_page = await notion.fetch_page(lesson_id)
-    lesson_title = notion.extract_page_title(lesson_page)
-    blocks = await notion.fetch_blocks_with_children(lesson_id)
+    conn = db.get_connection()
+    c = conn.cursor()
     
-    # Gather child DB IDs from the lesson itself AND from any child_page blocks
-    top_blocks = await notion.fetch_page_blocks(lesson_id)
+    # Title
+    c.execute("SELECT title FROM lessons WHERE id = ?", (lesson_id,))
+    row = c.fetchone()
+    title = row["title"] if row else ""
     
-    def is_vocab_db(block):
-        if block["type"] != "child_database": return False
-        title = block.get("child_database", {}).get("title", "").lower()
-        return any(k in title for k in ["new word", "vocabulary", "vocab", "単語", "word"])
-
-    def is_vocab_item(page_props):
-        """
-        Checks if a database item is marked as a 'NEW WORD'.
-        The marker can be in the Title or any other property.
-        """
-        marker = "NEW WORD"
-        for pn, pd in page_props.items():
-            content = ""
-            ptype = pd.get("type")
-            if ptype == "title":
-                content = "".join([rt.get("plain_text", "") for rt in pd.get("title", [])])
-            elif ptype == "rich_text":
-                content = "".join([rt.get("plain_text", "") for rt in pd.get("rich_text", [])])
-            elif ptype == "select":
-                content = pd.get("select", {}).get("name", "") if pd.get("select") else ""
-            elif ptype == "multi_select":
-                content = ",".join([ms.get("name", "") for ms in pd.get("multi_select", [])])
-            
-            if marker in content.upper():
-                return True
-        return False
-
-    def map_vocab_properties(props):
-        """
-        Maps Notion properties to a standard vocabulary object.
-        Supports both English and Japanese property names.
-        """
-        vocab = {
-            "jp": "",
-            "reading": "",
-            "en": "",
-            "kanji": "",
-            "pos": "",
-            "example": ""
-        }
-
-        # 1. Map Japanese / Title
-        for pn, pd in props.items():
-            if pd.get("type") == "title":
-                vocab["jp"] = "".join([rt.get("plain_text", "") for rt in pd.get("title", [])])
-                break
-
-        # 2. Map Reading
-        for pn in ["Reading", "Hiragana", "Pronunciation", "よみかた", "読み方", "ひらがな"]:
-            if pn in props:
-                ptype = props[pn].get("type")
-                if ptype == "rich_text":
-                    vocab["reading"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("rich_text", [])])
-                elif ptype == "title":
-                    vocab["reading"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("title", [])])
-                if vocab["reading"]: break
-
-        # 3. Map English / Meaning
-        for pn in ["English", "Meaning", "Translation", "いみ", "意味"]:
-            if pn in props:
-                ptype = props[pn].get("type")
-                if ptype == "rich_text":
-                    vocab["en"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("rich_text", [])])
-                if vocab["en"]: break
-
-        # 4. Map Kanji
-        for pn in ["Kanji", "かんじ", "漢字"]:
-            if pn in props:
-                ptype = props[pn].get("type")
-                if ptype == "rich_text":
-                    vocab["kanji"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("rich_text", [])])
-                if vocab["kanji"]: break
-
-        # 5. Map Part of Speech
-        for pn in ["POS", "Type", "ひんし", "品詞"]:
-            if pn in props:
-                ptype = props[pn].get("type")
-                if ptype == "rich_text":
-                    vocab["pos"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("rich_text", [])])
-                elif ptype == "select":
-                    vocab["pos"] = props[pn].get("select", {}).get("name", "")
-                if vocab["pos"]: break
-
-        # 6. Map Example
-        for pn in ["Example", "Reibun", "れいぶん", "例文"]:
-            if pn in props:
-                ptype = props[pn].get("type")
-                if ptype == "rich_text":
-                    vocab["example"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("rich_text", [])])
-                if vocab["example"]: break
-
-        return vocab
-
-    # Recursively find all child_database blocks and fetch their items inline
-    async def fetch_inline_databases(blocks_list):
-        for b in blocks_list:
-            if b["type"] == "child_database":
-                try:
-                    db_title = b.get("child_database", {}).get("title", "")
-                    db_pages = await notion.fetch_database_pages(b["id"])
-                    async def map_database_page(p):
-                        props = p.get("properties", {})
-                        item_vocab = map_vocab_properties(props)
-                        
-                        extra_props = {}
-                        for pn, pd in props.items():
-                            content = ""
-                            ptype = pd.get("type")
-                            if ptype == "title":
-                                content = "".join([rt.get("plain_text", "") for rt in pd.get("title", [])])
-                            elif ptype == "rich_text":
-                                content = "".join([rt.get("plain_text", "") for rt in pd.get("rich_text", [])])
-                            elif ptype == "select":
-                                content = pd.get("select", {}).get("name", "") if pd.get("select") else ""
-                            elif ptype == "multi_select":
-                                content = ",".join([ms.get("name", "") for ms in pd.get("multi_select", [])])
-                            if content:
-                                extra_props[pn] = content
-
-                        page_title = notion.extract_page_title(p)
-                        page_blocks = []
-                        if should_expand_database_page(db_title, page_title, extra_props):
-                            page_blocks = await notion.fetch_blocks_with_children(p["id"])
-                            await fetch_inline_databases(page_blocks)
-
-                        return {
-                            "id": p["id"],
-                            "title": page_title,
-                            "vocab": item_vocab,
-                            "raw_props": extra_props,
-                            "page_blocks": page_blocks
-                        }
-
-                    items = await asyncio.gather(*(map_database_page(p) for p in db_pages))
-                    b["database_items"] = items
-                except Exception as e:
-                    print(f"Error fetching inline DB {b['id']}: {type(e).__name__}: {repr(e)}")
-            if "children" in b:
-                await fetch_inline_databases(b["children"])
-                
-    await fetch_inline_databases(blocks)
-
-    def find_all_databases(blocks_list):
-        dbs = []
-        for b in blocks_list:
-            if b["type"] == "child_database":
-                dbs.append(b)
-            if "children" in b:
-                dbs.extend(find_all_databases(b["children"]))
-        return dbs
-
-    all_dbs = find_all_databases(blocks)
+    # Blocks
+    c.execute("SELECT role, content_json FROM lesson_blocks WHERE lesson_id = ? ORDER BY sort_order ASC", (lesson_id,))
+    blocks_rows = c.fetchall()
     
-    vocabulary = []
-    # Process child databases for the global vocabulary tab
-    for db_block in all_dbs:
-        try:
-            # Check if it's a vocabulary item by checking if it matches vocab naming,
-            # or if it has valid words mapped.
-            is_vocab = False
-            title = db_block.get("child_database", {}).get("title", "").lower()
-            if any(k in title for k in ["new word", "vocabulary", "vocab", "単語", "word"]):
-                is_vocab = True
-                
-            items = db_block.get("database_items", [])
-            for item in items:
-                item_vocab = item["vocab"]
-                props = item.get("raw_props", {})
-                
-                # Always include if it has a Japanese word mapped.
-                if item_vocab["jp"]:
-                    vocabulary.append({
-                        "id": item["id"],
-                        "word": item_vocab["jp"],
-                        "reading": item_vocab["reading"],
-                        "meaning": item_vocab["en"],
-                        "kanji": item_vocab["kanji"],
-                        "pos": item_vocab["pos"],
-                        "example": item_vocab["example"],
-                        "status": "not yet"
-                    })
-        except Exception as e:
-            continue
-    
-    # Chunking blocks into sections based on headings or callouts (anchors)
     learning_slides = []
     test_sections = []
     
-    current_section = {"title": "Introduction", "content": []}
-    current_role = "learning"
-    in_vocab_section = False
-    
-    # Flatten child_page blocks inline so their content appears in the lesson slides
-    def flatten_blocks(raw_blocks):
-        result = []
-        for b in raw_blocks:
-            if b["type"] == "child_page":
-                # Inline the sub-page's children instead of the child_page block itself
-                children = b.get("children", [])
-                result.extend(flatten_blocks(children))
+    for br in blocks_rows:
+        try:
+            content = json.loads(br["content_json"])
+            if br["role"] == "learning":
+                learning_slides.append(content)
             else:
-                result.append(b)
-        return result
+                test_sections.append(content)
+        except:
+            pass
+            
+    # Vocabulary
+    c.execute("SELECT id, jp, reading, en, kanji, pos, example FROM vocabulary WHERE lesson_id = ?", (lesson_id,))
+    vocab_rows = c.fetchall()
+    vocabulary = [
+        {
+            "id": vr["id"],
+            "word": vr["jp"],
+            "reading": vr["reading"],
+            "meaning": vr["en"],
+            "kanji": vr["kanji"],
+            "pos": vr["pos"],
+            "example": vr["example"],
+            "status": "not yet"
+        }
+        for vr in vocab_rows
+    ]
     
-    blocks = flatten_blocks(blocks)
+    conn.close()
     
-    for block in blocks:
-        b_type = block["type"]
-        text = extract_text(block).strip()
-        text_lower = text.lower()
-        
-        # Skip empty text blocks that have no children, preventing empty spaces
-        if b_type in ["paragraph", "heading_1", "heading_2", "heading_3", "bulleted_list_item", "numbered_list_item", "quote"]:
-            if not text and not block.get("has_children"):
-                continue
-
-        is_anchor = False
-        # Use divider or major headings to split slides cleanly
-        if b_type in ["heading_1", "heading_2", "heading_3", "divider"]:
-            is_anchor = True
-        
-        if is_anchor:
-            # Save the previous section if it has meaningful content
-            # Images, callouts, paragraphs etc are all meaningful
-            meaningful = any(
-                b["type"] not in ["divider"] and (
-                    b["type"] in ["image", "child_database"] or 
-                    extract_text(b).strip() or 
-                    b.get("has_children")
-                )
-                for b in current_section["content"]
-            )
-            if meaningful:
-                if current_role == "learning":
-                    learning_slides.append(current_section)
-                else:
-                    test_sections.append(current_section)
-            
-            # Determine new role from text if present
-            if text:
-                if any(keyword in text_lower for keyword in ["question", "discussion", "test", "quiz", "revise", "exercise", "practice", "質問", "ディスカッション", "テスト"]):
-                    current_role = "test"
-                    in_vocab_section = False
-                elif any(keyword in text_lower for keyword in ["vocabulary", "new word", "単語", "新出単語", "新出"]):
-                    current_role = "learning"
-                    in_vocab_section = True
-                elif any(keyword in text_lower for keyword in ["article", "grammar", "reading", "learning", "topic", "talk", "記事", "文法", "introduction", "はじめに"]):
-                    current_role = "learning"
-                    in_vocab_section = False
-            
-            # Start new section (do not include divider block in content)
-            current_section = {
-                "title": text if b_type != "divider" else "",
-                "content": [block] if b_type != "divider" else []
-            }
-        else:
-            current_section["content"].append(block)
-            
-        # If we are in a vocabulary section, try to extract words inline (fallback if no child DB)
-        if in_vocab_section and not vocabulary and text and b_type not in ["heading_1", "heading_2", "heading_3", "divider"]:
-            # Pattern: "JP | Reading | EN" or "JP | EN"
-            parts = re.split(r'[|｜]', text)
-            if len(parts) >= 2:
-                jp_raw = parts[0].strip()
-                # Try to separate Kanji and Reading if in "Kanji(Reading)" format
-                reading = ""
-                jp = jp_raw
-                match = re.match(r'(.+)[(（](.+)[)）]', jp_raw)
-                if match:
-                    jp = match.group(1).strip()
-                    reading = match.group(2).strip()
-                
-                if len(parts) >= 3:
-                    if not reading: reading = parts[1].strip()
-                    en = parts[2].strip()
-                else:
-                    en = parts[1].strip()
-                
-                vocabulary.append({
-                    "id": block["id"],
-                    "jp": jp,
-                    "reading": reading,
-                    "en": en,
-                    "lesson_id": lesson_id
-                })
-            
-    # Save the last section if meaningful
-    meaningful = any(
-        b["type"] not in ["divider"] and (
-            b["type"] in ["image", "child_database"] or 
-            extract_text(b).strip() or 
-            b.get("has_children")
-        )
-        for b in current_section["content"]
-    )
-    if meaningful:
-        if current_role == "learning":
-            learning_slides.append(current_section)
-        else:
-            test_sections.append(current_section)
-        
     annotations = db.get_annotations(user_id, lesson_id)
         
     return {
         "id": lesson_id,
-        "title": lesson_title,
+        "title": title,
         "learning_slides": learning_slides,
         "test_sections": test_sections,
         "vocabulary": vocabulary,

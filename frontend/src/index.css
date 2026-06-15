@@ -17,23 +17,25 @@
 }
 
 :root {
-  --primary:        #f18b5b;
-  --primary-light:  rgba(241, 139, 91, 0.08);
-  --primary-border: rgba(241, 139, 91, 0.15);
-  --secondary:      #ffec9d;
-  --bg-primary:     #fff1e3;
-  --bg-surface:     #FFFFFF;
-  --text-primary:   #222020;
-  --text-sub:       #222020;
-  --border:         #222020;
-  --border-light:   rgba(34, 32, 32, 0.15);
+  --primary:        #ff6b35; /* vibrant modern orange */
+  --primary-light:  rgba(255, 107, 53, 0.1);
+  --primary-border: rgba(255, 107, 53, 0.2);
+  --secondary:      #ffbc42; /* striking warm yellow */
+  --bg-primary:     #f4f6f8; /* sleek, modern neutral background */
+  --bg-surface:     rgba(255, 255, 255, 0.7); /* translucent for glassmorphism */
+  --text-primary:   #1a1a24; /* deeper contrast */
+  --text-sub:       #5a5a6e;
+  --border:         rgba(0,0,0,0.1);
+  --border-light:   rgba(0,0,0,0.06);
   --radius-sm:      8px;
-  --radius-md:      12px;
-  --radius-lg:      16px;
-  --radius-xl:      24px;
-  --shadow-sm:      0 2px 8px rgba(0,0,0,0.06);
-  --shadow-md:      0 4px 20px rgba(0,0,0,0.08);
-  --transition:     0.2s ease;
+  --radius-md:      16px;
+  --radius-lg:      24px;
+  --radius-xl:      32px;
+  --shadow-sm:      0 4px 12px rgba(0,0,0,0.03);
+  --shadow-md:      0 12px 32px rgba(0,0,0,0.06);
+  --shadow-hover:   0 16px 48px rgba(255, 107, 53, 0.15);
+  --transition:     0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --glass-blur:     16px;
 }
 
 html, body {
@@ -95,7 +97,7 @@ body {
 /* Desktop: Sidebar + Expanded Content */
 @media (min-width: 768px) {
   .app-container {
-    background: linear-gradient(135deg, var(--bg-primary) 0%, #ffe8d0 100%);
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
   }
   
   .app-main {
@@ -115,6 +117,8 @@ body {
     flex-direction: column;
     width: 280px;
     background: var(--bg-surface);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
     border-right: 1px solid var(--border-light);
     padding: 32px 24px;
     flex-shrink: 0;
@@ -405,19 +409,20 @@ body {
 
 .outline-button:hover { background: var(--primary-light); }
 
-/* ===== MATERIALS CARD ===== */
 .materials-card {
   display: flex;
   align-items: center;
   gap: 16px;
   padding: 24px;
   background: var(--bg-surface);
-  border: 1px solid var(--border-light);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(255,255,255,0.4);
   border-radius: var(--radius-lg);
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-  transition: box-shadow var(--transition), transform var(--transition);
+  transition: all var(--transition);
   width: 100%;
 }
 
