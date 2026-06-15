@@ -223,7 +223,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       if (!url) return null;
       return (
         <div style={{ margin: '16px 0', textAlign: 'center' }}>
-          <img src={url} alt="Content" className="vocab-img" style={{ maxHeight: '300px', objectFit: 'contain' }} />
+          <img src={url} alt="Content" className="vocab-img" style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain' }} />
         </div>
       );
     }

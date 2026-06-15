@@ -101,8 +101,8 @@
 .travel-lesson-page .conj-note-text.compact { white-space: normal; }
 .travel-lesson-page .ta-exception-row { margin-top: 0.8rem; }
 @media (max-width: 720px) {
-  .ta-chart-grid { grid-template-columns: 1fr; }
-  .ta-group-1 { grid-template-columns: 1fr; }
+  .travel-lesson-page .ta-chart-grid { grid-template-columns: 1fr; }
+  .travel-lesson-page .ta-group-1 { grid-template-columns: 1fr; }
 }
 .travel-lesson-page .en-wrap { margin-top: 0.5rem; }
 .travel-lesson-page .en-wrap .en { display: none; font-size: var(--fs-en); color: var(--text-muted); margin: 0.4rem 0 0; line-height: 1.6; }
@@ -111,7 +111,7 @@
 .travel-lesson-page .example { padding: 1.2rem 1.3rem; background: #FBF7EE; border-left: 4px solid var(--accent); border-radius: 8px; display: flex; flex-direction: column; gap: 0.9rem; align-items: stretch; }
 .travel-lesson-page .example-img { width: 100%; height: 220px; object-fit: contain; background: transparent; }
 .travel-lesson-page .example-content { flex: 1; min-width: 0; }
-@media (max-width: 640px) { .examples { grid-template-columns: 1fr; } .example-img { height: 200px; } }
+@media (max-width: 640px) { .travel-lesson-page .examples { grid-template-columns: 1fr; } .travel-lesson-page .example-img { height: 200px; } }
 .travel-lesson-page .example .jp { font-family: var(--font-jp); font-size: var(--fs-example); font-weight: 500; line-height: 2.1; margin: 0; }
 .travel-lesson-page .example .en, .bubble > .en { display: none; font-size: var(--fs-en); color: var(--text-muted); margin: 0.4rem 0 0; line-height: 1.6; }
 .travel-lesson-page.show-en .example .en, .travel-lesson-page.show-en .bubble > .en, .example.show-en .en, .bubble.show-en > .en { display: block; }
@@ -166,11 +166,11 @@
 @media (max-width: 640px) {
   .travel-lesson-page { --fs-title: 1.8rem; --fs-example: 1.2rem; --fs-section: 1.1rem; --pad-section: 1.25rem; }
   body { padding: 1rem 0.6rem; }
-  .hero { padding: 2rem 1.25rem; }
-  .form-table th { width: 40%; padding: 0.7rem 0.6rem; }
-  .form-table td { padding: 0.7rem 0.6rem; }
-  .drills { grid-template-columns: 1fr; }
-  .bubble { max-width: 96%; }
+  .travel-lesson-page .hero { padding: 2rem 1.25rem; }
+  .travel-lesson-page .form-table th { width: 40%; padding: 0.7rem 0.6rem; }
+  .travel-lesson-page .form-table td { padding: 0.7rem 0.6rem; }
+  .travel-lesson-page .drills { grid-template-columns: 1fr; }
+  .travel-lesson-page .bubble { max-width: 96%; }
 }
 @media print {
   .travel-lesson-page { background: #fff; padding: 0; }
