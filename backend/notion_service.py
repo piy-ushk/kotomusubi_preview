@@ -16,14 +16,18 @@ class NotionService:
         }
 
     async def _request_with_retry(self, client: httpx.AsyncClient, method: str, url: str, **kwargs):
-        max_retries = 5
+        max_retries = 10
         base_delay = 2
         for attempt in range(max_retries):
             try:
                 response = await client.request(method, url, headers=self.headers, **kwargs)
                 if response.status_code in [429, 502, 503, 504]:
-                    print(f"Notion API {response.status_code} at {url}, retrying {attempt+1}/{max_retries}...")
-                    await asyncio.sleep(base_delay * (2 ** attempt))
+                    retry_after_header = response.headers.get("Retry-After")
+                    delay = int(retry_after_header) if retry_after_header else base_delay * (2 ** attempt)
+                    # Cap max delay to 60s so it doesn't wait indefinitely if attempt is high
+                    delay = min(delay, 60)
+                    print(f"Notion API {response.status_code} at {url}, retrying {attempt+1}/{max_retries} in {delay}s...")
+                    await asyncio.sleep(delay)
                     continue
                 response.raise_for_status()
                 return response
