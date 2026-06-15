@@ -62,8 +62,10 @@ class SyncService:
             return url
 
     async def _process_image_blocks(self, blocks: List[Dict], prefix: str):
-        """Recursively process blocks and download images."""
-        for block in blocks:
+        """Recursively process blocks and download images concurrently."""
+        tasks = []
+
+        async def process_single_block(block):
             if block["type"] == "image":
                 img_data = block.get("image", {})
                 img_type = img_data.get("type")
@@ -74,6 +76,12 @@ class SyncService:
             
             if "children" in block:
                 await self._process_image_blocks(block["children"], prefix)
+
+        for block in blocks:
+            tasks.append(process_single_block(block))
+            
+        if tasks:
+            await asyncio.gather(*tasks)
 
     async def sync_all(self):
         """Main entry point to perform a full sync."""
