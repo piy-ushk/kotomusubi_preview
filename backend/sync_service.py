@@ -104,8 +104,10 @@ class SyncService:
                     
                 c.execute("INSERT INTO textbooks (id, title, sort_order) VALUES (?, ?, ?)", 
                           (tb_id, title, sort_val))
+                conn.commit()
                 
                 await self._sync_levels(tb_id, title, c)
+                conn.commit()
                 
             c.execute("INSERT INTO sync_metadata (status, details) VALUES ('SUCCESS', 'Full sync completed')")
             conn.commit()
@@ -154,6 +156,7 @@ class SyncService:
                       (lvl_id, textbook_id, title, cover_url, sort_val))
                       
             await self._sync_lessons(lvl_id, title, c)
+            c.connection.commit()
 
     async def _sync_lessons(self, level_id: str, level_title: str, c):
         print(f"    Fetching lessons for level {level_title}")

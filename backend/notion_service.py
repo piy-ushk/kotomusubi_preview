@@ -28,6 +28,9 @@ class NotionService:
                 response.raise_for_status()
                 return response
             except httpx.HTTPStatusError as e:
+                # Do not retry 400 Bad Request, 401, 403, 404
+                if e.response.status_code >= 400 and e.response.status_code < 500 and e.response.status_code != 429:
+                    raise e
                 if attempt == max_retries - 1: raise e
                 print(f"HTTP error {e} at {url}, retrying {attempt+1}/{max_retries}...")
                 await asyncio.sleep(base_delay * (2 ** attempt))
