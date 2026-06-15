@@ -23,22 +23,20 @@ class SyncService:
             return url
             
         try:
-            # Generate a clean filename based on the URL or prefix
+            import hashlib
             parsed_url = urllib.parse.urlparse(url)
-            # Some Notion URLs have very long query params, we only want a hash or the basename
             base_name = os.path.basename(parsed_url.path)
-            if not base_name:
-                base_name = "image.png"
+            
+            ext = os.path.splitext(base_name)[1]
+            if not ext or len(ext) > 10:
+                ext = ".png"
                 
-            # Make sure it has an extension
-            if '.' not in base_name:
-                base_name += ".png"
-                
-            safe_name = f"{prefix}_{hash(url)}_{base_name}"
-            safe_name = re.sub(r'[^a-zA-Z0-9_\-\.]', '_', safe_name)
+            # Create a short, safe filename using MD5 to avoid Windows MAX_PATH errors
+            url_hash = hashlib.md5(url.encode('utf-8')).hexdigest()[:12]
+            safe_name = f"{prefix}_{url_hash}{ext}"
+            
             local_path = os.path.join(STATIC_IMG_DIR, safe_name)
             
-            # Skip if already downloaded (basic caching)
             if not os.path.exists(local_path):
                 async with httpx.AsyncClient() as client:
                     resp = await client.get(url)
@@ -49,7 +47,7 @@ class SyncService:
             return f"/static/images/{safe_name}"
         except Exception as e:
             print(f"Failed to download image {url}: {e}")
-            return url # Fallback to original url if download fails
+            return url
 
     async def _process_image_blocks(self, blocks: List[Dict], prefix: str):
         """Recursively process blocks and download images."""

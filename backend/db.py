@@ -6,7 +6,8 @@ DB_PATH = os.path.join(os.path.dirname(__file__), "app.db") # Rename DB for clar
 
 def get_connection():
     # Helper to return connection with dictionary rows
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=20)
+    conn.execute('PRAGMA journal_mode=WAL')
     conn.row_factory = sqlite3.Row
     return conn
 
