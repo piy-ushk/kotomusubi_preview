@@ -12,6 +12,18 @@ import db
 STATIC_IMG_DIR = os.path.join(os.path.dirname(__file__), "static", "images")
 os.makedirs(STATIC_IMG_DIR, exist_ok=True)
 
+def clean_text(text: str) -> str:
+    """Removes emojis, dingbats, and excessive whitespace from text."""
+    if not text: return ""
+    # Strip miscellaneous symbols and dingbats (e.g. ♨️)
+    text = re.sub(r'[\u2600-\u27bf\u2b50\u2b55]', '', text)
+    # Strip Supplementary Multilingual Plane (most emojis)
+    text = re.sub(r'[\U0001f000-\U0001fa7f]', '', text)
+    # Normalize whitespace
+    text = re.sub(r'\s+', ' ', text)
+    return text.strip()
+
+
 class SyncService:
     def __init__(self, api_key: str, db_id: str):
         self.notion = NotionService(api_key=api_key)
@@ -84,7 +96,7 @@ class SyncService:
             
             for tb_page in textbook_pages:
                 tb_id = tb_page["id"]
-                title = self.notion.extract_page_title(tb_page)
+                title = clean_text(self.notion.extract_page_title(tb_page))
                 
                 sort_val = 999
                 for i, order in enumerate(textbook_order):
@@ -116,7 +128,7 @@ class SyncService:
         
         for idx, p in enumerate(reversed(level_pages)): # Reverse chronological fix
             lvl_id = p["id"]
-            title = self.notion.extract_page_title(p)
+            title = clean_text(self.notion.extract_page_title(p))
             
             cover_url = ""
             if p.get("cover"):
@@ -166,7 +178,7 @@ class SyncService:
             pages = await self.notion.fetch_database_pages(db_id)
             for p in pages:
                 p_id = p["id"]
-                title = self.notion.extract_page_title(p)
+                title = clean_text(self.notion.extract_page_title(p))
                 sort_val = extract_number(title)
                 
                 if is_upper_intermediate:
@@ -179,7 +191,7 @@ class SyncService:
                             sub_pages = await self.notion.fetch_database_pages(child_db_id)
                             for sp in sub_pages:
                                 sp_id = sp["id"]
-                                sp_title = self.notion.extract_page_title(sp)
+                                sp_title = clean_text(self.notion.extract_page_title(sp))
                                 sp_sort = extract_number(sp_title)
                                 
                                 c.execute("INSERT INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
@@ -200,7 +212,8 @@ class SyncService:
         data = block.get(b_type, {})
         if not data: return ""
         if "rich_text" in data:
-            return "".join([rt["plain_text"] for rt in data["rich_text"]])
+            raw = "".join([rt["plain_text"] for rt in data["rich_text"]])
+            return clean_text(raw)
         return ""
 
     def _should_expand(self, db_title, page_title, props):
@@ -265,9 +278,9 @@ class SyncService:
                             elif ptype == "rich_text": content = "".join([rt.get("plain_text", "") for rt in pd.get("rich_text", [])])
                             elif ptype == "select": content = pd.get("select", {}).get("name", "") if pd.get("select") else ""
                             elif ptype == "multi_select": content = ",".join([ms.get("name", "") for ms in pd.get("multi_select", [])])
-                            if content: extra[pn] = content
+                            if content: extra[pn] = clean_text(content)
                             
-                        p_title = self.notion.extract_page_title(p)
+                        p_title = clean_text(self.notion.extract_page_title(p))
                         page_blocks = []
                         if self._should_expand(db_title, p_title, extra):
                             page_blocks = await self.notion.fetch_blocks_with_children(p["id"])

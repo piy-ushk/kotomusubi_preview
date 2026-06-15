@@ -1,7 +1,12 @@
-﻿.env
+.env
 .env.local
 node_modules/
 dist/
 __pycache__/
 *.pyc
 .DS_Store
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
