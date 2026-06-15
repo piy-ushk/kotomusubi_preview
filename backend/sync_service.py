@@ -61,11 +61,11 @@ class SyncService:
         c = conn.cursor()
         
         # Clear existing non-user data safely
-        c.execute("DELETE FROM textbooks")
-        c.execute("DELETE FROM levels")
-        c.execute("DELETE FROM lessons")
-        c.execute("DELETE FROM lesson_blocks")
-        c.execute("DELETE FROM vocabulary")
+        # c.execute("DELETE FROM textbooks")
+        # c.execute("DELETE FROM levels")
+        # c.execute("DELETE FROM lessons")
+        # c.execute("DELETE FROM lesson_blocks")
+        # c.execute("DELETE FROM vocabulary")
         
         try:
             # 1. Fetch Textbooks
@@ -78,11 +78,14 @@ class SyncService:
                 tb_id = tb_page["id"]
                 title = clean_text(self.notion.extract_page_title(tb_page))
                 
+                if "Topic Talk" not in title and "Grammar" not in title:
+                    continue
+                
                 sort_val = 999
                 for i, order in enumerate(textbook_order):
                     if order.lower() in title.lower(): sort_val = i
                     
-                c.execute("INSERT INTO textbooks (id, title, sort_order) VALUES (?, ?, ?)", 
+                c.execute("INSERT OR IGNORE INTO textbooks (id, title, sort_order) VALUES (?, ?, ?)", 
                           (tb_id, title, sort_val))
                 conn.commit()
                 
@@ -112,6 +115,9 @@ class SyncService:
             lvl_id = p["id"]
             title = clean_text(self.notion.extract_page_title(p))
             
+            if "Grammar" in textbook_title and "Upper" not in title and "中上級" not in title:
+                continue
+            
             cover_url = ""
             if p.get("cover"):
                 ctype = p["cover"]["type"]
@@ -132,27 +138,29 @@ class SyncService:
             for i, order in enumerate(level_order):
                 if order.lower() in title.lower(): sort_val = i
                 
-            c.execute("INSERT INTO levels (id, textbook_id, title, cover_url, sort_order) VALUES (?, ?, ?, ?, ?)",
+            c.execute("INSERT OR IGNORE INTO levels (id, textbook_id, title, cover_url, sort_order) VALUES (?, ?, ?, ?, ?)",
                       (lvl_id, textbook_id, title, cover_url, sort_val))
+            c.connection.commit()
                       
             await self._sync_lessons(lvl_id, title, c)
-            c.connection.commit()
 
     async def _sync_lessons(self, level_id: str, level_title: str, c):
         print(f"    Fetching lessons for level {level_title}")
         
         if "テーマ：" in level_title or "Topic:" in level_title:
             # Topic talk theme is the lesson itself
-            c.execute("INSERT INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
+            c.execute("INSERT OR IGNORE INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
                       (level_id, level_id, None, level_title, False, 0))
+            c.connection.commit()
             await self._sync_lesson_content(level_id, c)
             return
 
         db_ids = await self.notion.fetch_child_database_ids(level_id)
         if not db_ids:
             # If there's no child database, this "level" is actually the lesson itself (e.g. Travel Column articles)
-            c.execute("INSERT INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
+            c.execute("INSERT OR IGNORE INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
                       (level_id, level_id, None, level_title, False, 0))
+            c.connection.commit()
             await self._sync_lesson_content(level_id, c)
             return
 
@@ -172,8 +180,9 @@ class SyncService:
                 if is_upper_intermediate:
                     child_dbs = await self.notion.fetch_child_database_ids(p_id)
                     if child_dbs:
-                        c.execute("INSERT INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
+                        c.execute("INSERT OR IGNORE INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
                                   (p_id, level_id, None, title, True, sort_val))
+                        c.connection.commit()
                                   
                         for child_db_id in child_dbs:
                             sub_pages = await self.notion.fetch_database_pages(child_db_id)
@@ -182,16 +191,19 @@ class SyncService:
                                 sp_title = clean_text(self.notion.extract_page_title(sp))
                                 sp_sort = extract_number(sp_title)
                                 
-                                c.execute("INSERT INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
+                                c.execute("INSERT OR IGNORE INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
                                           (sp_id, level_id, p_id, sp_title, False, sp_sort))
+                                c.connection.commit()
                                 await self._sync_lesson_content(sp_id, c)
                     else:
-                        c.execute("INSERT INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
+                        c.execute("INSERT OR IGNORE INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
                                   (p_id, level_id, None, title, False, sort_val))
+                        c.connection.commit()
                         await self._sync_lesson_content(p_id, c)
                 else:
-                    c.execute("INSERT INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
+                    c.execute("INSERT OR IGNORE INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
                               (p_id, level_id, None, title, False, sort_val))
+                    c.connection.commit()
                     await self._sync_lesson_content(p_id, c)
 
     # --- Copying parsing logic directly from old main.py ---
@@ -313,6 +325,11 @@ class SyncService:
         return res
 
     async def _sync_lesson_content(self, lesson_id: str, c):
+        existing = c.execute("SELECT 1 FROM lesson_blocks WHERE lesson_id = ?", (lesson_id,)).fetchone()
+        if existing:
+            print(f"      Skipping already fetched lesson {lesson_id}")
+            return
+            
         print(f"      Fetching content for lesson {lesson_id}")
         blocks = await self.notion.fetch_blocks_with_children(lesson_id)
         
