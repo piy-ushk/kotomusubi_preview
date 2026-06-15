@@ -9,6 +9,7 @@ class NotionService:
         self.base_url = "https://api.notion.com/v1"
         self.timeout = httpx.Timeout(120.0, connect=10.0)
         self._block_fetch_semaphore = asyncio.Semaphore(8)
+        self._api_lock = asyncio.Lock()
         self.headers = {
             "Authorization": f"Bearer {api_key}",
             "Notion-Version": "2022-06-28",
@@ -19,6 +20,10 @@ class NotionService:
         max_retries = 10
         base_delay = 2
         for attempt in range(max_retries):
+            # Strictly space out requests to respect Notion's 3 requests per second limit
+            async with self._api_lock:
+                await asyncio.sleep(0.35)
+                
             try:
                 response = await client.request(method, url, headers=self.headers, **kwargs)
                 if response.status_code in [429, 502, 503, 504]:
