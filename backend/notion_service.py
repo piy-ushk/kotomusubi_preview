@@ -15,18 +15,35 @@ class NotionService:
             "Content-Type": "application/json",
         }
 
+    async def _request_with_retry(self, client: httpx.AsyncClient, method: str, url: str, **kwargs):
+        max_retries = 5
+        base_delay = 2
+        for attempt in range(max_retries):
+            try:
+                response = await client.request(method, url, headers=self.headers, **kwargs)
+                if response.status_code in [429, 502, 503, 504]:
+                    print(f"Notion API {response.status_code} at {url}, retrying {attempt+1}/{max_retries}...")
+                    await asyncio.sleep(base_delay * (2 ** attempt))
+                    continue
+                response.raise_for_status()
+                return response
+            except httpx.HTTPStatusError as e:
+                if attempt == max_retries - 1: raise e
+                print(f"HTTP error {e} at {url}, retrying {attempt+1}/{max_retries}...")
+                await asyncio.sleep(base_delay * (2 ** attempt))
+            except httpx.RequestError as e:
+                print(f"Network error at {url}, retrying {attempt+1}/{max_retries}: {e}")
+                if attempt == max_retries - 1: raise e
+                await asyncio.sleep(base_delay * (2 ** attempt))
+        raise Exception(f"Failed after {max_retries} retries")
+
     async def fetch_database_pages(self, database_id: str) -> List[Dict[str, Any]]:
         results = []
         next_cursor = None
         async with httpx.AsyncClient(timeout=self.timeout) as client:
             while True:
                 payload = {"start_cursor": next_cursor} if next_cursor else {}
-                response = await client.post(
-                    f"{self.base_url}/databases/{database_id}/query",
-                    headers=self.headers,
-                    json=payload,
-                )
-                response.raise_for_status()
+                response = await self._request_with_retry(client, "POST", f"{self.base_url}/databases/{database_id}/query", json=payload)
                 data = response.json()
                 results.extend(data.get("results", []))
                 next_cursor = data.get("next_cursor")
@@ -42,8 +59,7 @@ class NotionService:
                 url = f"{self.base_url}/blocks/{page_id}/children"
                 if next_cursor:
                     url += f"?start_cursor={next_cursor}"
-                response = await client.get(url, headers=self.headers)
-                response.raise_for_status()
+                response = await self._request_with_retry(client, "GET", url)
                 data = response.json()
                 results.extend(data.get("results", []))
                 next_cursor = data.get("next_cursor")
@@ -56,12 +72,9 @@ class NotionService:
             return await self._fetch_page_blocks_with_client(page_id, client)
 
     async def _fetch_blocks_with_children_with_client(self, page_id: str, client: httpx.AsyncClient) -> List[Dict[str, Any]]:
-        """Fetches blocks and recursively fetches children for blocks that support them."""
         blocks = await self._fetch_page_blocks_with_client(page_id, client)
         async def hydrate_block(block: Dict[str, Any]) -> None:
-            # child_page blocks are sub-pages, so they contain blocks even if has_children is False/omitted in the parent block object
             if block.get("has_children") or block["type"] == "child_page":
-                # Recursive fetch for nested content blocks
                 if block["type"] in ["toggle", "table", "column_list", "column", "callout",
                                      "bulleted_list_item", "numbered_list_item", "child_page",
                                      "heading_1", "heading_2", "heading_3"]:
@@ -79,31 +92,21 @@ class NotionService:
 
     async def fetch_page(self, page_id: str) -> Dict[str, Any]:
         async with httpx.AsyncClient(timeout=self.timeout) as client:
-            response = await client.get(
-                f"{self.base_url}/pages/{page_id}",
-                headers=self.headers
-            )
-            response.raise_for_status()
+            response = await self._request_with_retry(client, "GET", f"{self.base_url}/pages/{page_id}")
             return response.json()
 
     def extract_page_title(self, page: Dict[str, Any]) -> str:
         try:
             properties = page.get("properties", {})
             title_prop = None
-            
-            # First try to find the property of type 'title'
             for prop_name, prop_data in properties.items():
                 if prop_data.get("type") == "title":
                     title_prop = prop_data
                     break
-            
-            # Fallback to common names if the above fails for some reason
             if not title_prop:
                 title_prop = properties.get("名前") or properties.get("Name") or properties.get("title") or properties.get("Title")
-                
             if not title_prop:
                 return ""
-            
             title_rich_text = title_prop.get("title", [])
             return "".join([p.get("plain_text", "") for p in title_rich_text]).strip()
         except Exception:
