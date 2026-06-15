@@ -51,6 +51,13 @@ const Lessons = () => {
     getLessons(levelId)
       .then(res => {
         const data = Array.isArray(res.data) ? res.data : [];
+        
+        // Auto-redirect for Travel Column articles which map exactly 1-to-1 (level=lesson)
+        if (data.length === 1 && !data[0].is_chapter) {
+          navigate(`/lesson/${data[0].id}`, { replace: true, state: { textbookTitle: textbookTitleState, levelTitle: levelTitleState } });
+          return;
+        }
+
         setLessons(data);
 
         // Detect if this is a Super Beginner level from lesson titles or if stored in level data

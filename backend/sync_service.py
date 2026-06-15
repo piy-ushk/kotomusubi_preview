@@ -166,7 +166,12 @@ class SyncService:
             return
 
         db_ids = await self.notion.fetch_child_database_ids(level_id)
-        if not db_ids: return
+        if not db_ids:
+            # If there's no child database, this "level" is actually the lesson itself (e.g. Travel Column articles)
+            c.execute("INSERT INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
+                      (level_id, level_id, None, level_title, False, 0))
+            await self._sync_lesson_content(level_id, c)
+            return
 
         is_upper_intermediate = "Upper" in level_title or "中上級" in level_title
         
