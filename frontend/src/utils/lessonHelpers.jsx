@@ -236,7 +236,21 @@ export const getNotionColorStyle = (color) => {
 
 export const renderRichText = (richText, showFurigana) => {
   if (!Array.isArray(richText) || richText.length === 0) return '';
-  return richText.map((rt, idx) => {
+  
+  const result = [];
+  for (let idx = 0; idx < richText.length; idx++) {
+    const rt = richText[idx];
+    let plainText = rt.plain_text || '';
+    
+    let hasSeparator = false;
+    if (plainText.includes('｜')) {
+      plainText = plainText.split('｜')[0];
+      hasSeparator = true;
+    } else if (plainText.includes('|')) {
+      plainText = plainText.split('|')[0];
+      hasSeparator = true;
+    }
+
     const { bold, italic, underline, strikethrough, code, color } = rt.annotations || {};
     const style = {
       ...getNotionColorStyle(color),
@@ -252,20 +266,29 @@ export const renderRichText = (richText, showFurigana) => {
       style.padding = '0 4px';
       style.borderRadius = '4px';
     }
-    const content = renderFuriganaText(cleanText(rt.plain_text || ''), showFurigana);
+    
+    const content = renderFuriganaText(cleanText(plainText), showFurigana);
+    
     if (rt.href) {
-      return (
+      result.push(
         <a key={idx} href={rt.href} target="_blank" rel="noreferrer" style={style}>
           {content}
         </a>
       );
+    } else {
+      result.push(
+        <span key={idx} style={style}>
+          {content}
+        </span>
+      );
     }
-    return (
-      <span key={idx} style={style}>
-        {content}
-      </span>
-    );
-  });
+
+    if (hasSeparator) {
+      break;
+    }
+  }
+  
+  return result;
 };
 
 export const preprocessBlocks = (blocks) => {

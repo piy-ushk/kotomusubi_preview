@@ -166,6 +166,8 @@
 .grammar-lesson-page .sample-body { display: none; margin-top: 0.7rem; padding: 0.85rem 1rem; background: #fff; border-radius: 8px; border-left: 3px solid var(--accent); }
 .grammar-lesson-page .sample-wrap.show .sample-body { display: block; }
 .grammar-lesson-page .sample-jp { margin: 0; font-family: var(--font-jp); line-height: 1.95; color: var(--text); }
+.grammar-lesson-page .vocab-toggle { display: inline-block; width: fit-content; margin-top: 0.45rem; background: transparent; border: 1px solid var(--line); color: var(--accent-dark); padding: 0.15rem 0.65rem; border-radius: 999px; font-size: 0.75rem; font-family: inherit; cursor: pointer; font-weight: 600; }
+.grammar-lesson-page .vocab-toggle:hover { background: var(--accent-soft); border-color: var(--accent); }
 @media (max-width: 640px) {
   .grammar-lesson-page { --fs-title: 1.8rem; --fs-example: 1.2rem; --fs-section: 1.1rem; --pad-section: 1.25rem; }
   body { padding: 1rem 0.6rem; }
