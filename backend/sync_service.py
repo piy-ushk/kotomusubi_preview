@@ -30,36 +30,8 @@ class SyncService:
         self.root_db_id = db_id
         
     async def download_image(self, url: str, prefix: str) -> str:
-        """Downloads an image from URL to local static folder and returns the local path."""
-        if not url or url.startswith("/static/"):
-            return url
-            
-        try:
-            import hashlib
-            parsed_url = urllib.parse.urlparse(url)
-            base_name = os.path.basename(parsed_url.path)
-            
-            ext = os.path.splitext(base_name)[1]
-            if not ext or len(ext) > 10:
-                ext = ".png"
-                
-            # Create a short, safe filename using MD5 to avoid Windows MAX_PATH errors
-            url_hash = hashlib.md5(url.encode('utf-8')).hexdigest()[:12]
-            safe_name = f"{prefix}_{url_hash}{ext}"
-            
-            local_path = os.path.join(STATIC_IMG_DIR, safe_name)
-            
-            if not os.path.exists(local_path):
-                async with httpx.AsyncClient() as client:
-                    resp = await client.get(url)
-                    resp.raise_for_status()
-                    with open(local_path, "wb") as f:
-                        f.write(resp.content)
-                        
-            return f"/static/images/{safe_name}"
-        except Exception as e:
-            print(f"Failed to download image {url}: {e}")
-            return url
+        """Bypass downloading completely and load directly from Notion as requested."""
+        return url
 
     async def _process_image_blocks(self, blocks: List[Dict], prefix: str):
         """Recursively process blocks and download images concurrently."""
@@ -275,43 +247,52 @@ class SyncService:
         return vocab
 
     async def _fetch_inline_databases(self, blocks_list):
-        for b in blocks_list:
-            if b["type"] == "child_database":
-                try:
-                    db_title = b.get("child_database", {}).get("title", "")
-                    db_pages = await self.notion.fetch_database_pages(b["id"])
+        async def process_child_database(b):
+            try:
+                db_title = b.get("child_database", {}).get("title", "")
+                db_pages = await self.notion.fetch_database_pages(b["id"])
+                
+                async def process_page(p):
+                    props = p.get("properties", {})
+                    item_vocab = self._map_vocab(props)
                     
-                    items = []
-                    for p in db_pages:
-                        props = p.get("properties", {})
-                        item_vocab = self._map_vocab(props)
+                    extra = {}
+                    for pn, pd in props.items():
+                        ptype = pd.get("type")
+                        content = ""
+                        if ptype == "title": content = "".join([rt.get("plain_text", "") for rt in pd.get("title", [])])
+                        elif ptype == "rich_text": content = "".join([rt.get("plain_text", "") for rt in pd.get("rich_text", [])])
+                        elif ptype == "select": content = pd.get("select", {}).get("name", "") if pd.get("select") else ""
+                        elif ptype == "multi_select": content = ",".join([ms.get("name", "") for ms in pd.get("multi_select", [])])
+                        if content: extra[pn] = clean_text(content)
                         
-                        extra = {}
-                        for pn, pd in props.items():
-                            ptype = pd.get("type")
-                            content = ""
-                            if ptype == "title": content = "".join([rt.get("plain_text", "") for rt in pd.get("title", [])])
-                            elif ptype == "rich_text": content = "".join([rt.get("plain_text", "") for rt in pd.get("rich_text", [])])
-                            elif ptype == "select": content = pd.get("select", {}).get("name", "") if pd.get("select") else ""
-                            elif ptype == "multi_select": content = ",".join([ms.get("name", "") for ms in pd.get("multi_select", [])])
-                            if content: extra[pn] = clean_text(content)
-                            
-                        p_title = clean_text(self.notion.extract_page_title(p))
-                        page_blocks = []
-                        if self._should_expand(db_title, p_title, extra):
-                            page_blocks = await self.notion.fetch_blocks_with_children(p["id"])
-                            await self._fetch_inline_databases(page_blocks)
-                            
-                        items.append({
-                            "id": p["id"],
-                            "title": p_title,
-                            "vocab": item_vocab,
-                            "raw_props": extra,
-                            "page_blocks": page_blocks
-                        })
-                    b["database_items"] = items
-                except Exception as e:
-                    print(f"Error inline DB {b['id']}: {e}")
+                    p_title = clean_text(self.notion.extract_page_title(p))
+                    page_blocks = []
+                    if self._should_expand(db_title, p_title, extra):
+                        page_blocks = await self.notion.fetch_blocks_with_children(p["id"])
+                        await self._fetch_inline_databases(page_blocks)
+                        
+                    return {
+                        "id": p["id"],
+                        "title": p_title,
+                        "vocab": item_vocab,
+                        "raw_props": extra,
+                        "page_blocks": page_blocks
+                    }
+                
+                if db_pages:
+                    items = await asyncio.gather(*(process_page(p) for p in db_pages))
+                else:
+                    items = []
+                b["database_items"] = items
+            except Exception as e:
+                print(f"Error inline DB {b['id']}: {e}")
+
+        db_tasks = [process_child_database(b) for b in blocks_list if b["type"] == "child_database"]
+        if db_tasks:
+            await asyncio.gather(*db_tasks)
+            
+        for b in blocks_list:
             if "children" in b:
                 await self._fetch_inline_databases(b["children"])
 

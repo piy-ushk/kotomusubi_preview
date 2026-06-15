@@ -10,6 +10,7 @@ class NotionService:
         self.timeout = httpx.Timeout(120.0, connect=10.0)
         self._block_fetch_semaphore = asyncio.Semaphore(8)
         self._api_lock = asyncio.Lock()
+        self._last_request_time = 0.0
         self.headers = {
             "Authorization": f"Bearer {api_key}",
             "Notion-Version": "2022-06-28",
@@ -17,12 +18,17 @@ class NotionService:
         }
 
     async def _request_with_retry(self, client: httpx.AsyncClient, method: str, url: str, **kwargs):
+        import time
         max_retries = 10
         base_delay = 2
         for attempt in range(max_retries):
             # Strictly space out requests to respect Notion's 3 requests per second limit
             async with self._api_lock:
-                await asyncio.sleep(0.35)
+                now = time.time()
+                elapsed = now - getattr(self, "_last_request_time", 0.0)
+                if elapsed < 0.34:
+                    await asyncio.sleep(0.34 - elapsed)
+                self._last_request_time = time.time()
                 
             try:
                 response = await client.request(method, url, headers=self.headers, **kwargs)
