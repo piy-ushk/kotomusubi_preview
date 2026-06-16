@@ -464,9 +464,9 @@
     --pad-section: 1.25rem;
   }
   body { padding: 1rem 0.6rem; }
-  .hero { padding: 2rem 1.25rem; }
-  .vocab-grid { grid-template-columns: 1fr; }
-  .bubble { max-width: 96%; }
+  .topic-talk-lesson-page .hero { padding: 2rem 1.25rem; }
+  .topic-talk-lesson-page .vocab-grid { grid-template-columns: 1fr; }
+  .topic-talk-lesson-page .bubble { max-width: 96%; }
 }
 
 /* ===== 印刷／PDF ===== */

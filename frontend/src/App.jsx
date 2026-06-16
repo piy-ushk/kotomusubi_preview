@@ -43,9 +43,18 @@ export const LogoutIcon = ({ size = 22 }) => (
   </svg>
 );
 
+export const SyncIcon = ({ size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="23 4 23 10 17 10"/>
+    <polyline points="1 20 1 14 7 14"/>
+    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+  </svg>
+);
+
 /* ---- Bottom Navigation (Mobile) ---- */
 function BottomNav({ currentTab, onTabChange }) {
   const { signOut } = useAuth();
+
   return (
     <nav className="bottom-nav">
       <button className={`bottom-nav-item ${currentTab === 0 ? 'active' : ''}`} onClick={() => onTabChange(0)}>
@@ -67,6 +76,7 @@ function BottomNav({ currentTab, onTabChange }) {
 /* ---- Side Navigation (Desktop) ---- */
 function SideNav({ currentTab, onTabChange }) {
   const { signOut } = useAuth();
+
   return (
     <aside className="desktop-sidebar">
       <div className="sidebar-logo">
@@ -83,7 +93,7 @@ function SideNav({ currentTab, onTabChange }) {
           <FlashcardIcon /> Wordbook
         </button>
         <div style={{ flexGrow: 1 }}></div>
-        <button className="sidebar-nav-item" onClick={signOut} style={{ marginTop: 'auto', color: 'var(--text-muted)' }}>
+        <button className="sidebar-nav-item" onClick={signOut} style={{ color: 'var(--text-muted)', marginTop: 'auto' }}>
           <LogoutIcon /> Logout
         </button>
       </nav>

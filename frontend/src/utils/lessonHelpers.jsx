@@ -41,7 +41,7 @@ export const ChevronLeft = () => (
 export const speak = (text) => {
   if (!text || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const jpText = text.split('|')[0].split('｜')[0].trim();
+  const jpText = text.split('|')[0].split('｜')[0].split('/')[0].split('／')[0].trim();
   const utt = new SpeechSynthesisUtterance(jpText);
   utt.lang = 'ja-JP';
   utt.rate = 0.8;
@@ -125,29 +125,53 @@ export const splitTranslation = (text, language = 'en') => {
   if (typeof text !== 'string') return { jp: String(text ?? ''), en: '', translations: {} };
   let rawJp = text;
   let translationParts = [];
-  if (text.includes('｜')) { 
-    const p = text.split('｜'); 
-    rawJp = p[0] || ''; 
-    translationParts = p.slice(1); 
-  } else if (text.includes('|')) { 
-    const p = text.split('|'); 
-    rawJp = p[0] || ''; 
-    translationParts = p.slice(1); 
+  
+  let separator = '';
+  if (text.includes('｜')) separator = '｜';
+  else if (text.includes('|')) separator = '|';
+  else if (text.includes('／')) separator = '／';
+  else if (text.includes('/')) {
+    if (!text.includes('http://') && !text.includes('https://')) {
+      separator = '/';
+    }
   }
+  
+  if (separator) {
+    const p = text.split(separator);
+    rawJp = p[0] || '';
+    translationParts = p.slice(1);
+  }
+  
   const translations = parseLanguageSegments(translationParts, true);
   return { jp: cleanText(rawJp), en: selectTranslation(translations, language), translations };
 };
 
 export const getTranslationOnly = (text, language = 'en') => {
   if (typeof text !== 'string') return '';
-  const parts = text.includes('｜') ? text.split('｜') : (text.includes('|') ? text.split('|') : [text]);
+  let parts = [text];
+  if (text.includes('｜')) parts = text.split('｜');
+  else if (text.includes('|')) parts = text.split('|');
+  else if (text.includes('／')) parts = text.split('／');
+  else if (text.includes('/')) {
+    if (!text.includes('http://') && !text.includes('https://')) {
+      parts = text.split('/');
+    }
+  }
   const translations = parseLanguageSegments(parts, true);
   return selectTranslation(translations, language);
 };
 
 export const getTranslationsFromText = (text) => {
   if (typeof text !== 'string') return {};
-  const parts = text.includes('｜') ? text.split('｜') : (text.includes('|') ? text.split('|') : [text]);
+  let parts = [text];
+  if (text.includes('｜')) parts = text.split('｜');
+  else if (text.includes('|')) parts = text.split('|');
+  else if (text.includes('／')) parts = text.split('／');
+  else if (text.includes('/')) {
+    if (!text.includes('http://') && !text.includes('https://')) {
+      parts = text.split('/');
+    }
+  }
   return parseLanguageSegments(parts, true);
 };
 
@@ -236,7 +260,36 @@ export const getNotionColorStyle = (color) => {
 
 export const renderRichText = (richText, showFurigana) => {
   if (!Array.isArray(richText) || richText.length === 0) return '';
-  return richText.map((rt, idx) => {
+  
+  const result = [];
+  for (let idx = 0; idx < richText.length; idx++) {
+    const rt = richText[idx];
+    let plainText = rt.plain_text || '';
+    
+    // Skip file attachment links (e.g. て形.png or URLs linking to S3)
+    const isFileLink = plainText.match(/\.(png|jpg|jpeg|gif|pdf|zip|mp3|wav|mp4|mov)$/i) || 
+                       (rt.href && (rt.href.includes('prod-files-secure.s3') || rt.href.includes('amazonaws.com')));
+    if (isFileLink) {
+      continue;
+    }
+    
+    let hasSeparator = false;
+    if (plainText.includes('｜')) {
+      plainText = plainText.split('｜')[0];
+      hasSeparator = true;
+    } else if (plainText.includes('|')) {
+      plainText = plainText.split('|')[0];
+      hasSeparator = true;
+    } else if (plainText.includes('／')) {
+      plainText = plainText.split('／')[0];
+      hasSeparator = true;
+    } else if (plainText.includes('/')) {
+      if (!plainText.includes('http://') && !plainText.includes('https://')) {
+        plainText = plainText.split('/')[0];
+        hasSeparator = true;
+      }
+    }
+
     const { bold, italic, underline, strikethrough, code, color } = rt.annotations || {};
     const style = {
       ...getNotionColorStyle(color),
@@ -252,28 +305,112 @@ export const renderRichText = (richText, showFurigana) => {
       style.padding = '0 4px';
       style.borderRadius = '4px';
     }
-    const content = renderFuriganaText(cleanText(rt.plain_text || ''), showFurigana);
+    
+    const content = renderFuriganaText(cleanText(plainText), showFurigana);
+    
     if (rt.href) {
-      return (
+      result.push(
         <a key={idx} href={rt.href} target="_blank" rel="noreferrer" style={style}>
           {content}
         </a>
       );
+    } else {
+      result.push(
+        <span key={idx} style={style}>
+          {content}
+        </span>
+      );
     }
-    return (
-      <span key={idx} style={style}>
-        {content}
-      </span>
-    );
-  });
+
+    if (hasSeparator) {
+      break;
+    }
+  }
+  
+  return result;
+};
+
+const shouldIgnoreBlock = (block) => {
+  if (!block || !block.type) return false;
+  const type = block.type;
+  const blockData = block[type];
+  if (!blockData) return false;
+
+  // 1. Filter out Notion link_to_page blocks completely
+  if (type === 'link_to_page') {
+    return true;
+  }
+
+  // 2. Filter out bookmarks linking to notion.so / notion.site
+  if (type === 'bookmark') {
+    const url = blockData.url || '';
+    const lowerUrl = url.toLowerCase();
+    if (lowerUrl.includes('notion.so') || lowerUrl.includes('notion.site')) {
+      return true;
+    }
+  }
+
+  // 3. Filter out file/pdf blocks completely (actual images/audio have their own block types)
+  if (type === 'file' || type === 'pdf') {
+    return true;
+  }
+
+  // Check if the block consists only of file attachment links
+  if (blockData.rich_text && blockData.rich_text.length > 0) {
+    const allFileLinks = blockData.rich_text.every(rt => {
+      const plainText = rt.plain_text || '';
+      return plainText.match(/\.(png|jpg|jpeg|gif|pdf|zip|mp3|wav|mp4|mov)$/i) || 
+             (rt.href && (rt.href.includes('prod-files-secure.s3') || rt.href.includes('amazonaws.com')));
+    });
+    if (allFileLinks) {
+      return true;
+    }
+  }
+
+  // Extract raw text
+  let rawText = '';
+  if (blockData.rich_text) {
+    rawText = blockData.rich_text.map(rt => rt.plain_text).join('');
+  } else if (blockData.text) {
+    rawText = blockData.text;
+  }
+
+  if (rawText) {
+    const lowerText = rawText.toLowerCase();
+    // 4. Filter out blocks containing "関連ページ", "Related page", or "Rerated page" (case-insensitive)
+    if (
+      lowerText.includes('関連ページ') || 
+      lowerText.includes('related page') || 
+      lowerText.includes('rerated page')
+    ) {
+      return true;
+    }
+    
+    // 5. Filter out blocks containing "notion.so" or "notion.site" URLs
+    if (lowerText.includes('notion.so') || lowerText.includes('notion.site')) {
+      return true;
+    }
+  }
+
+  // 6. Filter out blocks that have talking head/speaking head icon/emoji
+  const emoji = blockData.icon?.emoji;
+  if (emoji && (emoji === '🗣️' || emoji === '🗣' || emoji.includes('🗣'))) {
+    return true;
+  }
+
+  return false;
 };
 
 export const preprocessBlocks = (blocks) => {
   const result = [];
   if (!blocks) return result;
-  for (let i = 0; i < blocks.length; i++) {
-    const block = blocks[i];
-    const nextBlock = blocks[i + 1];
+  
+  // First, filter out ignored blocks
+  const filteredBlocks = blocks.filter(b => !shouldIgnoreBlock(b));
+  
+  for (let i = 0; i < filteredBlocks.length; i++) {
+    const block = filteredBlocks[i];
+    const nextBlock = filteredBlocks[i + 1];
     
     let jpText = getRawText(block);
     let nextText = nextBlock ? getRawText(nextBlock) : '';
