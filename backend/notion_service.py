@@ -108,6 +108,11 @@ class NotionService:
         blocks = await self.fetch_page_blocks(page_id)
         return [b["id"] for b in blocks if b["type"] == "child_database"]
 
+    async def fetch_block(self, block_id: str) -> Dict[str, Any]:
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
+            response = await self._request_with_retry(client, "GET", f"{self.base_url}/blocks/{block_id}")
+            return response.json()
+
     async def fetch_page(self, page_id: str) -> Dict[str, Any]:
         async with httpx.AsyncClient(timeout=self.timeout) as client:
             response = await self._request_with_retry(client, "GET", f"{self.base_url}/pages/{page_id}")
