@@ -188,6 +188,18 @@ app.add_middleware(
 async def root():
     return {"message": "Japanese Textbook API (SQLite Sync Edition) is running"}
 
+async def run_full_sync_sequence(api_key: str, db_id: str):
+    try:
+        service = sync_service.SyncService(api_key, db_id)
+        print("Starting background Notion sync...")
+        await service.sync_all()
+        print("Notion sync complete. Starting media upload to Supabase...")
+        import cache_all_media
+        await cache_all_media.main()
+        print("Full sync and upload sequence complete.")
+    except Exception as e:
+        print(f"Background sync sequence failed: {e}")
+
 @app.api_route("/api/sync", methods=["GET", "POST"])
 async def trigger_sync(background_tasks: BackgroundTasks):
     api_key = os.getenv("NOTION_API_KEY")
@@ -195,12 +207,8 @@ async def trigger_sync(background_tasks: BackgroundTasks):
     if not api_key or not db_id:
         raise HTTPException(status_code=500, detail="Missing Notion credentials in .env")
         
-    service = sync_service.SyncService(api_key, db_id)
-    # Run sync in background so it doesn't block the request timeout
-    background_tasks.add_task(service.sync_all)
-    
-    # Also trigger the media cache to Supabase
-    background_tasks.add_task(cache_all_media.main)
+    # Run sync and cache sequentially in background
+    background_tasks.add_task(run_full_sync_sequence, api_key, db_id)
     
     return {"success": True, "message": "Sync and Supabase cache started in background."}
 
