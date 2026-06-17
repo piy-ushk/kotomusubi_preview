@@ -317,7 +317,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'callout': {
       if (!jp && !subBlocks) return null;
       return (
-        <div className="callout" style={{ padding: '12px', background: 'var(--bg-subtle)', borderRadius: '8px', margin: '16px 0', borderLeft: '4px solid var(--primary)' }} onContextMenu={handleContext}>
+        <div className="callout" style={{ padding: '16px', background: 'var(--card)', borderRadius: '12px', margin: '16px 0', borderLeft: '4px solid var(--primary)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }} onContextMenu={handleContext}>
           {blockData.icon && blockData.icon.emoji && <span style={{ marginRight: '8px' }}>{blockData.icon.emoji}</span>}
           <strong style={{ fontSize: '1.1em' }}>{jpContent}</strong>
           {en && (
@@ -507,7 +507,7 @@ const TopicTalkLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) =>
                     {splitTranslation(currentSlide.title).jp}
                   </h2>
                 )}
-                <div className="dialogue">
+                <div className="slide-content">
                   {preprocessBlocks(currentSlide.content || []).map((item, i) => {
                     const blockId = `slide_${currentSlideIndex}_block_${i}`;
                     return (

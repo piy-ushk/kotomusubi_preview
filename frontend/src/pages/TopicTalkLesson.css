@@ -147,6 +147,11 @@
   box-shadow: var(--shadow);
   margin-bottom: var(--gap);
 }
+.topic-talk-lesson-page .slide-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 .topic-talk-lesson-page .section-title {
   display: flex;
   align-items: center;
