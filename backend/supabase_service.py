@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY") or os.environ.get("SUPABASE_ANON_KEY")
 
 supabase_client: Client | None = None
 
