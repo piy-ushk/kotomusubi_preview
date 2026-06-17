@@ -55,13 +55,7 @@ app = FastAPI(lifespan=lifespan)
 os.makedirs(os.path.join(os.path.dirname(__file__), "static", "images"), exist_ok=True)
 app.mount("/static", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static")), name="static")
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
 
-if SUPABASE_URL and SUPABASE_ANON_KEY:
-    supabase_client: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
-else:
-    supabase_client = None
 
 security = HTTPBearer()
 
