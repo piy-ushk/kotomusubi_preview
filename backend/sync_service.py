@@ -38,6 +38,10 @@ class SyncService:
             import urllib.parse, hashlib, httpx
             from supabase_service import SupabaseService
             
+            needs_fresh = not url.startswith("http")
+            if needs_fresh:
+                return url # we can't fetch it, return as is (cache_all_media will pick it up)
+            
             parsed_url = urllib.parse.urlparse(url)
             base_name = os.path.basename(parsed_url.path)
             ext = os.path.splitext(base_name)[1]

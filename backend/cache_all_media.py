@@ -44,9 +44,17 @@ async def ensure_supabase_media(block_id: str, url: str, content_type: str, noti
     async with SEMAPHORE:
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
-                resp = await client.get(url)
-                if resp.status_code in [401, 403]:
-                    print(f"  [Media Expired] Block {block_id}. Fetching fresh block...")
+                needs_fresh = False
+                if not url.startswith("http"):
+                    needs_fresh = True
+                    resp = None
+                else:
+                    resp = await client.get(url)
+                    if resp.status_code in [401, 403, 404]:
+                        needs_fresh = True
+
+                if needs_fresh:
+                    print(f"  [Media Expired/Local] Block {block_id}. Fetching fresh block...")
                     fresh_block = await notion_service.fetch_block(block_id)
                     media_key = "image" if "image" in content_type else "audio"
                     fresh_data = fresh_block.get(media_key, {})
@@ -190,9 +198,17 @@ async def main():
             
             async with SEMAPHORE:
                 async with httpx.AsyncClient(timeout=30.0) as client:
-                    resp = await client.get(url)
-                    if resp.status_code in [401, 403]:
-                        print(f"  [Cover Expired] Level {level_id}. Fetching fresh cover...")
+                    needs_fresh = False
+                    if not url.startswith("http"):
+                        needs_fresh = True
+                        resp = None
+                    else:
+                        resp = await client.get(url)
+                        if resp.status_code in [401, 403, 404]:
+                            needs_fresh = True
+
+                    if needs_fresh:
+                        print(f"  [Cover Expired/Local] Level {level_id}. Fetching fresh cover...")
                         fresh_page = await ns.fetch_page(level_id)
                         cover_data = fresh_page.get("cover")
                         if cover_data:
