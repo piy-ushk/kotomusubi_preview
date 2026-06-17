@@ -40,4 +40,4 @@ class SupabaseService:
             return public_url
         except Exception as e:
             print(f"Failed to upload to Supabase: {e}")
-            return None
+            raise e

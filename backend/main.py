@@ -212,6 +212,19 @@ async def trigger_sync(background_tasks: BackgroundTasks):
     
     return {"success": True, "message": "Sync and Supabase cache started in background."}
 
+@app.get("/api/debug/supabase")
+async def debug_supabase():
+    from supabase_service import SupabaseService
+    sb_service = SupabaseService()
+    try:
+        url = sb_service.upload_file_bytes("media/debug_test.txt", b"Hello from Render!", "text/plain")
+        if url:
+            return {"success": True, "url": url}
+        else:
+            return {"success": False, "error": "Upload returned None"}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
 @app.get("/api/textbooks")
 async def get_textbooks():
     conn = db.get_connection()
