@@ -227,34 +227,26 @@ async def debug_supabase():
 
 @app.get("/api/textbooks")
 async def get_textbooks():
-    conn = db.get_connection()
-    c = conn.cursor()
-    c.execute("SELECT id, title FROM textbooks ORDER BY sort_order ASC")
-    res = [{"id": r["id"], "title": r["title"]} for r in c.fetchall()]
-    conn.close()
-    return res
+    if not supabase_client: return []
+    res = supabase_client.table('textbooks').select('id, title').order('sort_order').execute()
+    return res.data
 
 async def cache_levels_covers_background(rows_data: list, ns: NotionService):
-    conn = db.get_connection()
-    c = conn.cursor()
     for r in rows_data:
         lvl_id = r["id"]
         cover_url = r["cover_url"]
         try:
             local_cover_url = await ensure_local_cover(lvl_id, cover_url, ns)
-            if local_cover_url != cover_url:
-                c.execute("UPDATE levels SET cover_url = ? WHERE id = ?", (local_cover_url, lvl_id))
-                conn.commit()
+            if local_cover_url != cover_url and supabase_client:
+                supabase_client.table('levels').update({'cover_url': local_cover_url}).eq('id', lvl_id).execute()
         except Exception as e:
             print(f"Background cover caching failed for {lvl_id}: {e}")
-    conn.close()
 
 @app.get("/api/textbooks/{textbook_id}/levels")
 async def get_levels(textbook_id: str, background_tasks: BackgroundTasks):
-    conn = db.get_connection()
-    c = conn.cursor()
-    c.execute("SELECT id, title, cover_url FROM levels WHERE textbook_id = ? ORDER BY sort_order ASC", (textbook_id,))
-    rows = c.fetchall()
+    if not supabase_client: return []
+    db_res = supabase_client.table('levels').select('id, title, cover_url').eq('textbook_id', textbook_id).order('sort_order').execute()
+    rows = db_res.data
     
     api_key = os.getenv("NOTION_API_KEY")
     ns = NotionService(api_key) if api_key else None
@@ -270,8 +262,6 @@ async def get_levels(textbook_id: str, background_tasks: BackgroundTasks):
             
         res.append({"id": lvl_id, "title": r["title"], "cover": cover_url})
         
-    conn.close()
-    
     if need_caching and ns:
         background_tasks.add_task(cache_levels_covers_background, need_caching, ns)
         
@@ -279,11 +269,10 @@ async def get_levels(textbook_id: str, background_tasks: BackgroundTasks):
 
 @app.get("/api/levels/{level_id}/lessons")
 async def get_lessons(level_id: str):
-    conn = db.get_connection()
-    c = conn.cursor()
-    c.execute("SELECT id, chapter_id, title, is_chapter, sort_order FROM lessons WHERE level_id = ? ORDER BY is_chapter DESC, sort_order ASC", (level_id,))
-    rows = c.fetchall()
-    conn.close()
+    if not supabase_client: return []
+    # Order by is_chapter DESC, sort_order ASC
+    db_res = supabase_client.table('lessons').select('id, chapter_id, title, is_chapter, sort_order').eq('level_id', level_id).order('is_chapter', desc=True).order('sort_order', desc=False).execute()
+    rows = db_res.data
     
     # Rebuild hierarchical structure for chapters
     chapters = {}
@@ -331,47 +320,31 @@ async def remove_annotation(annotation_id: int, user_id: str = Depends(get_curre
 
 @app.get("/api/lessons/{lesson_id}")
 async def get_lesson_content(lesson_id: str, user_id: str = Depends(get_current_user)):
-    conn = db.get_connection()
-    c = conn.cursor()
-    
+    if not supabase_client:
+        return {"id": lesson_id, "title": "", "learning_slides": [], "test_sections": [], "vocabulary": [], "annotations": {}}
+        
     # Title
-    c.execute("SELECT title FROM lessons WHERE id = ?", (lesson_id,))
-    row = c.fetchone()
-    title = row["title"] if row else ""
+    title_res = supabase_client.table('lessons').select('title').eq('id', lesson_id).execute()
+    title = title_res.data[0]['title'] if title_res.data else ""
     
-    # Blocks (retrieve with ID to support inline cache updating)
-    c.execute("SELECT id, role, content_json FROM lesson_blocks WHERE lesson_id = ? ORDER BY sort_order ASC", (lesson_id,))
-    blocks_rows = c.fetchall()
-    
-    api_key = os.getenv("NOTION_API_KEY")
-    ns = NotionService(api_key) if api_key else None
+    # Blocks
+    blocks_res = supabase_client.table('lesson_blocks').select('id, role, content_json').eq('lesson_id', lesson_id).order('sort_order').execute()
     
     learning_slides = []
     test_sections = []
     
-    for br in blocks_rows:
+    for br in blocks_res.data:
         try:
             content = json.loads(br["content_json"])
-            
-            # Dynamically cache image/audio blocks on demand
-            if ns:
-                modified = await process_and_cache_media(content, ns)
-                if modified:
-                    c.execute("UPDATE lesson_blocks SET content_json = ? WHERE id = ?", 
-                              (json.dumps(content), br["id"]))
-                    conn.commit()
-            
             if br["role"] == "learning":
                 learning_slides.append(content)
             else:
                 test_sections.append(content)
         except Exception as e:
-            print(f"Error loading/caching lesson block: {e}")
-            pass
+            print(f"Error loading lesson block: {e}")
             
     # Vocabulary
-    c.execute("SELECT id, jp, reading, en, kanji, pos, example FROM vocabulary WHERE lesson_id = ?", (lesson_id,))
-    vocab_rows = c.fetchall()
+    vocab_res = supabase_client.table('vocabulary').select('id, jp, reading, en, kanji, pos, example').eq('lesson_id', lesson_id).execute()
     vocabulary = [
         {
             "id": vr["id"],
@@ -383,10 +356,8 @@ async def get_lesson_content(lesson_id: str, user_id: str = Depends(get_current_
             "example": vr["example"],
             "status": "not yet"
         }
-        for vr in vocab_rows
+        for vr in vocab_res.data
     ]
-    
-    conn.close()
     
     annotations = db.get_annotations(user_id, lesson_id)
         

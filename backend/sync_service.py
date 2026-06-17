@@ -7,7 +7,7 @@ from typing import Dict, Any, List
 import httpx
 
 from notion_service import NotionService
-import db
+from supabase_service import supabase_client
 
 STATIC_IMG_DIR = os.path.join(os.path.dirname(__file__), "static", "images")
 os.makedirs(STATIC_IMG_DIR, exist_ok=True)
@@ -100,16 +100,10 @@ class SyncService:
 
     async def sync_all(self):
         """Main entry point to perform a full sync."""
-        conn = db.get_connection()
-        c = conn.cursor()
-        
-        # Clear existing non-user data safely
-        # c.execute("DELETE FROM textbooks")
-        # c.execute("DELETE FROM levels")
-        # c.execute("DELETE FROM lessons")
-        # c.execute("DELETE FROM lesson_blocks")
-        # c.execute("DELETE FROM vocabulary")
-        
+        if not supabase_client:
+            print("Supabase client not configured")
+            return
+            
         try:
             # 1. Fetch Textbooks
             print(f"Fetching textbooks from root DB: {self.root_db_id}")
@@ -128,25 +122,20 @@ class SyncService:
                 for i, order in enumerate(textbook_order):
                     if order.lower() in title.lower(): sort_val = i
                     
-                c.execute("INSERT OR IGNORE INTO textbooks (id, title, sort_order) VALUES (?, ?, ?)", 
-                          (tb_id, title, sort_val))
-                conn.commit()
+                supabase_client.table('textbooks').upsert({
+                    "id": tb_id, 
+                    "title": title, 
+                    "sort_order": sort_val
+                }).execute()
                 
-                await self._sync_levels(tb_id, title, c)
-                conn.commit()
+                await self._sync_levels(tb_id, title)
                 
-            c.execute("INSERT INTO sync_metadata (status, details) VALUES ('SUCCESS', 'Full sync completed')")
-            conn.commit()
             print("Sync complete!")
         except Exception as e:
-            c.execute("INSERT INTO sync_metadata (status, details) VALUES ('ERROR', ?)", (str(e),))
-            conn.commit()
             print(f"Sync failed: {e}")
             raise e
-        finally:
-            conn.close()
 
-    async def _sync_levels(self, textbook_id: str, textbook_title: str, c):
+    async def _sync_levels(self, textbook_id: str, textbook_title: str):
         print(f"  Fetching levels for {textbook_title}")
         db_ids = await self.notion.fetch_child_database_ids(textbook_id)
         if not db_ids: return
@@ -181,30 +170,32 @@ class SyncService:
             for i, order in enumerate(level_order):
                 if order.lower() in title.lower(): sort_val = i
                 
-            c.execute("INSERT OR IGNORE INTO levels (id, textbook_id, title, cover_url, sort_order) VALUES (?, ?, ?, ?, ?)",
-                      (lvl_id, textbook_id, title, cover_url, sort_val))
-            c.connection.commit()
+            supabase_client.table('levels').upsert({
+                "id": lvl_id,
+                "textbook_id": textbook_id,
+                "title": title,
+                "cover_url": cover_url,
+                "sort_order": sort_val
+            }).execute()
                       
-            await self._sync_lessons(lvl_id, title, c)
+            await self._sync_lessons(lvl_id, title)
 
-    async def _sync_lessons(self, level_id: str, level_title: str, c):
+    async def _sync_lessons(self, level_id: str, level_title: str):
         print(f"    Fetching lessons for level {level_title}")
         
         if "テーマ：" in level_title or "Topic:" in level_title:
-            # Topic talk theme is the lesson itself
-            c.execute("INSERT OR IGNORE INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
-                      (level_id, level_id, None, level_title, False, 0))
-            c.connection.commit()
-            await self._sync_lesson_content(level_id, c)
+            supabase_client.table('lessons').upsert({
+                "id": level_id, "level_id": level_id, "chapter_id": None, "title": level_title, "is_chapter": False, "sort_order": 0
+            }).execute()
+            await self._sync_lesson_content(level_id)
             return
 
         db_ids = await self.notion.fetch_child_database_ids(level_id)
         if not db_ids:
-            # If there's no child database, this "level" is actually the lesson itself (e.g. Travel Column articles)
-            c.execute("INSERT OR IGNORE INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
-                      (level_id, level_id, None, level_title, False, 0))
-            c.connection.commit()
-            await self._sync_lesson_content(level_id, c)
+            supabase_client.table('lessons').upsert({
+                "id": level_id, "level_id": level_id, "chapter_id": None, "title": level_title, "is_chapter": False, "sort_order": 0
+            }).execute()
+            await self._sync_lesson_content(level_id)
             return
 
         is_upper_intermediate = "Upper" in level_title or "中上級" in level_title
@@ -223,9 +214,9 @@ class SyncService:
                 if is_upper_intermediate:
                     child_dbs = await self.notion.fetch_child_database_ids(p_id)
                     if child_dbs:
-                        c.execute("INSERT OR IGNORE INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
-                                  (p_id, level_id, None, title, True, sort_val))
-                        c.connection.commit()
+                        supabase_client.table('lessons').upsert({
+                            "id": p_id, "level_id": level_id, "chapter_id": None, "title": title, "is_chapter": True, "sort_order": sort_val
+                        }).execute()
                                   
                         for child_db_id in child_dbs:
                             sub_pages = await self.notion.fetch_database_pages(child_db_id)
@@ -234,20 +225,20 @@ class SyncService:
                                 sp_title = clean_text(self.notion.extract_page_title(sp))
                                 sp_sort = extract_number(sp_title)
                                 
-                                c.execute("INSERT OR IGNORE INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
-                                          (sp_id, level_id, p_id, sp_title, False, sp_sort))
-                                c.connection.commit()
-                                await self._sync_lesson_content(sp_id, c)
+                                supabase_client.table('lessons').upsert({
+                                    "id": sp_id, "level_id": level_id, "chapter_id": p_id, "title": sp_title, "is_chapter": False, "sort_order": sp_sort
+                                }).execute()
+                                await self._sync_lesson_content(sp_id)
                     else:
-                        c.execute("INSERT OR IGNORE INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
-                                  (p_id, level_id, None, title, False, sort_val))
-                        c.connection.commit()
-                        await self._sync_lesson_content(p_id, c)
+                        supabase_client.table('lessons').upsert({
+                            "id": p_id, "level_id": level_id, "chapter_id": None, "title": title, "is_chapter": False, "sort_order": sort_val
+                        }).execute()
+                        await self._sync_lesson_content(p_id)
                 else:
-                    c.execute("INSERT OR IGNORE INTO lessons (id, level_id, chapter_id, title, is_chapter, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
-                              (p_id, level_id, None, title, False, sort_val))
-                    c.connection.commit()
-                    await self._sync_lesson_content(p_id, c)
+                    supabase_client.table('lessons').upsert({
+                        "id": p_id, "level_id": level_id, "chapter_id": None, "title": title, "is_chapter": False, "sort_order": sort_val
+                    }).execute()
+                    await self._sync_lesson_content(p_id)
 
     # --- Copying parsing logic directly from old main.py ---
     def _extract_text(self, block):
@@ -367,9 +358,9 @@ class SyncService:
                 res.append(b)
         return res
 
-    async def _sync_lesson_content(self, lesson_id: str, c):
-        existing = c.execute("SELECT 1 FROM lesson_blocks WHERE lesson_id = ?", (lesson_id,)).fetchone()
-        if existing:
+    async def _sync_lesson_content(self, lesson_id: str):
+        existing = supabase_client.table('lesson_blocks').select('id').eq('lesson_id', lesson_id).limit(1).execute()
+        if existing.data:
             print(f"      Skipping already fetched lesson {lesson_id}")
             return
             
@@ -388,10 +379,9 @@ class SyncService:
             for item in items:
                 v = item["vocab"]
                 if v["jp"]:
-                    c.execute('''
-                        INSERT OR REPLACE INTO vocabulary (id, lesson_id, jp, reading, en, kanji, pos, example)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                    ''', (item["id"], lesson_id, v["jp"], v["reading"], v["en"], v["kanji"], v["pos"], v["example"]))
+                    supabase_client.table('vocabulary').upsert({
+                        "id": item["id"], "lesson_id": lesson_id, "jp": v["jp"], "reading": v["reading"], "en": v["en"], "kanji": v["kanji"], "pos": v["pos"], "example": v["example"]
+                    }).execute()
 
         # Chunk blocks into learning and test sections
         blocks = self._flatten_blocks(blocks)
@@ -446,10 +436,9 @@ class SyncService:
                         jp, reading = match.group(1).strip(), match.group(2).strip()
                     en = parts[2].strip() if len(parts) >= 3 else parts[1].strip()
                     
-                    c.execute('''
-                        INSERT OR REPLACE INTO vocabulary (id, lesson_id, jp, reading, en, kanji)
-                        VALUES (?, ?, ?, ?, ?, ?)
-                    ''', (block["id"], lesson_id, jp, reading, en, ""))
+                    supabase_client.table('vocabulary').upsert({
+                        "id": block["id"], "lesson_id": lesson_id, "jp": jp, "reading": reading, "en": en, "kanji": ""
+                    }).execute()
                     
         meaningful = any(b["type"] != "divider" and (b["type"] in ["image", "child_database"] or self._extract_text(b).strip() or b.get("has_children")) for b in current_section["content"])
         if meaningful:
@@ -458,12 +447,14 @@ class SyncService:
             
         # Store the chunked structures into lesson_blocks
         for i, slide in enumerate(learning_slides):
-            c.execute("INSERT INTO lesson_blocks (id, lesson_id, role, content_json, sort_order) VALUES (?, ?, ?, ?, ?)",
-                      (f"{lesson_id}_learn_{i}", lesson_id, "learning", json.dumps(slide), i))
+            supabase_client.table('lesson_blocks').upsert({
+                "id": f"{lesson_id}_learn_{i}", "lesson_id": lesson_id, "role": "learning", "content_json": json.dumps(slide), "sort_order": i
+            }).execute()
                       
         for i, slide in enumerate(test_sections):
-            c.execute("INSERT INTO lesson_blocks (id, lesson_id, role, content_json, sort_order) VALUES (?, ?, ?, ?, ?)",
-                      (f"{lesson_id}_test_{i}", lesson_id, "test", json.dumps(slide), i))
+            supabase_client.table('lesson_blocks').upsert({
+                "id": f"{lesson_id}_test_{i}", "lesson_id": lesson_id, "role": "test", "content_json": json.dumps(slide), "sort_order": i
+            }).execute()
 
 if __name__ == "__main__":
     import asyncio
@@ -478,6 +469,5 @@ if __name__ == "__main__":
         print("Missing credentials in .env")
         exit(1)
         
-    db.init_db() # Ensure schema exists
     service = SyncService(api_key, db_id)
     asyncio.run(service.sync_all())
