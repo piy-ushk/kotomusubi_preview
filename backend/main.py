@@ -10,7 +10,7 @@ import urllib.parse
 import httpx
 from dotenv import load_dotenv
 from pydantic import BaseModel
-from supabase import create_client, Client
+from supabase_service import supabase_client
 import db
 import sync_service
 from notion_service import NotionService
