@@ -257,18 +257,20 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'table': {
       const hasHeader = blockData.has_column_header;
       return (
-        <table className="form-table" style={{ margin: '16px 0' }}>
-          <tbody>
-            {block.children && block.children.map((row, ri) => (
-              <tr key={ri}>
-                {row.table_row?.cells?.map((cell, ci) => {
-                  const cellText = cell.map(rt => rt.plain_text).join('');
-                  return (ri === 0 && hasHeader) ? <th key={ci}>{cellText}</th> : <td key={ci}>{cellText}</td>;
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="table-responsive-wrapper" style={{ overflowX: 'auto', maxWidth: '100%', margin: '16px 0' }}>
+          <table className="form-table" style={{ margin: 0 }}>
+            <tbody>
+              {block.children && block.children.map((row, ri) => (
+                <tr key={ri}>
+                  {row.table_row?.cells?.map((cell, ci) => {
+                    const cellText = cell.map(rt => rt.plain_text).join('');
+                    return (ri === 0 && hasHeader) ? <th key={ci}>{cellText}</th> : <td key={ci}>{cellText}</td>;
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       );
     }
 
