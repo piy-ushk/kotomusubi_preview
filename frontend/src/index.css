@@ -17,25 +17,64 @@
 }
 
 :root {
-  --primary:        #ff6b35; /* vibrant modern orange */
-  --primary-light:  rgba(255, 107, 53, 0.1);
-  --primary-border: rgba(255, 107, 53, 0.2);
-  --secondary:      #ffbc42; /* striking warm yellow */
-  --bg-primary:     #f4f6f8; /* sleek, modern neutral background */
-  --bg-surface:     rgba(255, 255, 255, 0.7); /* translucent for glassmorphism */
-  --text-primary:   #1a1a24; /* deeper contrast */
-  --text-sub:       #5a5a6e;
-  --border:         rgba(0,0,0,0.1);
-  --border-light:   rgba(0,0,0,0.06);
+  /* KOTOMUSUBI / NOTION BEIGE THEME */
+  --primary:        #C9A876; /* from --accent */
+  --primary-light:  #EFE4D0; /* from --accent-soft */
+  --primary-border: #D9C9AC; /* from --line */
+  --secondary:      #D98E3A; /* from --orange */
+  
+  --bg-primary:     #FAF6EE; /* from --bg */
+  --bg-surface:     #FFFFFF; /* from --card */
+  
+  --text-primary:   #2E2418; /* from --text */
+  --text-sub:       #7A6A55; /* from --text-muted */
+  
+  --border:         #D9C9AC; /* from --line */
+  --border-light:   rgba(217, 201, 172, 0.4); 
+  
   --radius-sm:      8px;
-  --radius-md:      16px;
-  --radius-lg:      24px;
+  --radius-md:      12px; /* --radius */
+  --radius-lg:      20px; /* --radius-lg */
   --radius-xl:      32px;
-  --shadow-sm:      0 4px 12px rgba(0,0,0,0.03);
-  --shadow-md:      0 12px 32px rgba(0,0,0,0.06);
-  --shadow-hover:   0 16px 48px rgba(255, 107, 53, 0.15);
+  
+  --shadow-sm:      0 4px 12px rgba(139, 111, 71, 0.08);
+  --shadow-md:      0 12px 32px rgba(139, 111, 71, 0.12);
+  --shadow-hover:   0 16px 48px rgba(139, 111, 71, 0.18);
+  
   --transition:     0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --glass-blur:     16px;
+  
+  /* Additional Notion-specific variables for lessons */
+  --bg:           #FAF6EE;
+  --card:         #FFFFFF;
+  --accent:       #C9A876;
+  --accent-dark:  #8B6F47;
+  --accent-soft:  #EFE4D0;
+  --line:         #D9C9AC;
+  --text:         #2E2418;
+  --text-muted:   #7A6A55;
+  --highlight:    #FFF4E0;
+  --ok:           #6B9B7F;
+  --orange:       #D98E3A;
+  --orange-soft:  #FFF1DC;
+  --ken-bg:       #E8F0F7;
+  --ken-color:    #3D7BAF;
+  --ana-bg:       #FBE7EE;
+  --ana-color:    #C44A75;
+  --fs-eyebrow:   0.85rem;
+  --fs-title:     2.6rem;
+  --fs-subtitle:  1.1rem;
+  --fs-section:   1.25rem;
+  --fs-example:   1.5rem;
+  --fs-body:      1rem;
+  --fs-en:        0.95rem;
+  --fs-small:     0.85rem;
+  --pad-section:  1.75rem;
+  --gap:          1.25rem;
+  --max-width:    860px;
+  --font-jp:      'Zen Maru Gothic', 'Noto Sans JP', sans-serif;
+  --font-body:    'Noto Sans JP', sans-serif;
+  --shadow-notion: 0 4px 24px rgba(139, 111, 71, 0.08);
 }
 
 html, body {
@@ -65,7 +104,7 @@ body {
   display: flex;
   height: 100dvh;
   width: 100vw;
-  background-color: var(--bg-surface);
+  background-color: var(--bg-primary);
   overflow: hidden;
 }
 
@@ -97,7 +136,7 @@ body {
 /* Desktop: Sidebar + Expanded Content */
 @media (min-width: 768px) {
   .app-container {
-    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    background: var(--bg-primary);
   }
   
   .app-main {
