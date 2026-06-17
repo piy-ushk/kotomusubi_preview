@@ -5,3 +5,4 @@ notion-client
 httpx
 pydantic
 supabase
+apscheduler

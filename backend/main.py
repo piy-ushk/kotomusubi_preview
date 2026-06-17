@@ -18,9 +18,40 @@ from notion_service import NotionService
 load_dotenv()
 db.init_db()
 
-app = FastAPI()
+from contextlib import asynccontextmanager
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+import cache_all_media
 
-# Mount static files for images
+scheduler = AsyncIOScheduler()
+
+async def scheduled_sync():
+    api_key = os.getenv("NOTION_API_KEY")
+    db_id = os.getenv("NOTION_DATABASE_ID")
+    if not api_key or not db_id:
+        print("Scheduled Sync failed: Missing credentials")
+        return
+        
+    print("Starting scheduled 24-hour sync...")
+    try:
+        service = sync_service.SyncService(api_key, db_id)
+        await service.sync_all()
+        print("Sync complete. Starting media cache to Supabase...")
+        await cache_all_media.main()
+        print("Scheduled job completed successfully.")
+    except Exception as e:
+        print(f"Scheduled job failed: {e}")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Add a scheduled job to run every 24 hours
+    scheduler.add_job(scheduled_sync, 'interval', hours=24)
+    scheduler.start()
+    yield
+    scheduler.shutdown()
+
+app = FastAPI(lifespan=lifespan)
+
+# Mount static files for local audio/images fallback if needed
 os.makedirs(os.path.join(os.path.dirname(__file__), "static", "images"), exist_ok=True)
 app.mount("/static", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static")), name="static")
 
@@ -44,92 +75,16 @@ async def ensure_local_image(block_id: str, block_data: dict, notion_service: No
     img_type = block_data.get("type")
     if img_type not in ["file", "external"]:
         return ""
-    url = block_data[img_type]["url"]
-    if not url or url.startswith("/static/"):
-        return url
-        
-    parsed_url = urllib.parse.urlparse(url)
-    base_name = os.path.basename(parsed_url.path)
-    ext = os.path.splitext(base_name)[1]
-    if not ext or len(ext) > 10:
-        ext = ".png"
-        
-    url_hash = hashlib.md5(url.encode('utf-8')).hexdigest()[:12]
-    safe_name = f"block_{block_id}_{url_hash}{ext}"
-    local_path = os.path.join(STATIC_IMG_DIR, safe_name)
-    local_url = f"/static/images/{safe_name}"
-    
-    if os.path.exists(local_path):
-        return local_url
-        
-    try:
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(url)
-            if resp.status_code in [401, 403]:
-                print(f"Image URL for block {block_id} expired. Fetching fresh block info...")
-                fresh_block = await notion_service.fetch_block(block_id)
-                fresh_img_data = fresh_block.get("image", {})
-                fresh_img_type = fresh_img_data.get("type")
-                if fresh_img_type in ["file", "external"]:
-                    url = fresh_img_data[fresh_img_type]["url"]
-                    resp = await client.get(url)
-                    resp.raise_for_status()
-            else:
-                resp.raise_for_status()
-                
-            with open(local_path, "wb") as f:
-                f.write(resp.content)
-            return local_url
-    except Exception as e:
-        print(f"Failed to dynamically download image for block {block_id}: {e}")
-        return url
+    return await cache_all_media.ensure_supabase_media(block_id, block_data[img_type]["url"], "image/png", notion_service)
 
 async def ensure_local_audio(block_id: str, block_data: dict, notion_service: NotionService) -> str:
     aud_type = block_data.get("type")
     if aud_type not in ["file", "external"]:
         return ""
-    url = block_data[aud_type]["url"]
-    if not url or url.startswith("/static/"):
-        return url
-        
-    parsed_url = urllib.parse.urlparse(url)
-    base_name = os.path.basename(parsed_url.path)
-    ext = os.path.splitext(base_name)[1]
-    if not ext or len(ext) > 10:
-        ext = ".mp3"
-        
-    url_hash = hashlib.md5(url.encode('utf-8')).hexdigest()[:12]
-    safe_name = f"block_{block_id}_{url_hash}{ext}"
-    local_path = os.path.join(STATIC_AUD_DIR, safe_name)
-    local_url = f"/static/audio/{safe_name}"
-    
-    if os.path.exists(local_path):
-        return local_url
-        
-    try:
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(url)
-            if resp.status_code in [401, 403]:
-                print(f"Audio URL for block {block_id} expired. Fetching fresh block info...")
-                fresh_block = await notion_service.fetch_block(block_id)
-                fresh_aud_data = fresh_block.get("audio", {})
-                fresh_aud_type = fresh_aud_data.get("type")
-                if fresh_aud_type in ["file", "external"]:
-                    url = fresh_aud_data[fresh_aud_type]["url"]
-                    resp = await client.get(url)
-                    resp.raise_for_status()
-            else:
-                resp.raise_for_status()
-                
-            with open(local_path, "wb") as f:
-                f.write(resp.content)
-            return local_url
-    except Exception as e:
-        print(f"Failed to dynamically download audio for block {block_id}: {e}")
-        return url
+    return await cache_all_media.ensure_supabase_media(block_id, block_data[aud_type]["url"], "audio/mpeg", notion_service)
 
 async def ensure_local_cover(level_id: str, url: str, notion_service: NotionService) -> str:
-    if not url or url.startswith("/static/"):
+    if not url or "supabase.co" in url:
         return url
         
     try:
@@ -140,13 +95,8 @@ async def ensure_local_cover(level_id: str, url: str, notion_service: NotionServ
             ext = ".png"
             
         url_hash = hashlib.md5(url.encode('utf-8')).hexdigest()[:12]
-        safe_name = f"cover_{level_id}_{url_hash}{ext}"
-        local_path = os.path.join(STATIC_IMG_DIR, safe_name)
-        local_url = f"/static/images/{safe_name}"
+        bucket_path = f"media/cover_{level_id}_{url_hash}{ext}"
         
-        if os.path.exists(local_path):
-            return local_url
-            
         async with httpx.AsyncClient() as client:
             resp = await client.get(url)
             if resp.status_code in [401, 403]:
@@ -161,9 +111,10 @@ async def ensure_local_cover(level_id: str, url: str, notion_service: NotionServ
             else:
                 resp.raise_for_status()
                 
-            with open(local_path, "wb") as f:
-                f.write(resp.content)
-            return local_url
+            from supabase_service import SupabaseService
+            sb_service = SupabaseService()
+            public_url = sb_service.upload_file_bytes(bucket_path, resp.content, content_type="image/png")
+            return public_url if public_url else url
     except Exception as e:
         print(f"Failed to download cover for level {level_id}: {e}")
         return url
@@ -179,7 +130,7 @@ async def process_and_cache_media(content: dict, notion_service: NotionService) 
             img_type = img_data.get("type")
             if img_type in ["file", "external"]:
                 orig_url = img_data[img_type]["url"]
-                if orig_url and not orig_url.startswith("/static/"):
+                if orig_url and "supabase.co" not in orig_url:
                     local_url = await ensure_local_image(block["id"], img_data, notion_service)
                     if local_url != orig_url:
                         block["image"][img_type]["url"] = local_url
@@ -189,15 +140,23 @@ async def process_and_cache_media(content: dict, notion_service: NotionService) 
             aud_type = aud_data.get("type")
             if aud_type in ["file", "external"]:
                 orig_url = aud_data[aud_type]["url"]
-                if orig_url and not orig_url.startswith("/static/"):
+                if orig_url and "supabase.co" not in orig_url:
                     local_url = await ensure_local_audio(block["id"], aud_data, notion_service)
                     if local_url != orig_url:
                         block["audio"][aud_type]["url"] = local_url
                         modified = True
                         
+        tasks = []
         if "children" in block and block["children"]:
-            child_tasks = [process_block(child) for child in block["children"]]
-            await asyncio.gather(*child_tasks)
+            tasks.extend([process_block(child) for child in block["children"]])
+        if b_type == "child_database":
+            db_items = block.get("database_items", [])
+            for item in db_items:
+                p_blocks = item.get("page_blocks", [])
+                if p_blocks:
+                    tasks.extend([process_block(pb) for pb in p_blocks])
+        if tasks:
+            await asyncio.gather(*tasks)
 
     top_blocks = content.get("content", [])
     if top_blocks:
@@ -229,7 +188,7 @@ app.add_middleware(
 async def root():
     return {"message": "Japanese Textbook API (SQLite Sync Edition) is running"}
 
-@app.post("/api/sync")
+@app.api_route("/api/sync", methods=["GET", "POST"])
 async def trigger_sync(background_tasks: BackgroundTasks):
     api_key = os.getenv("NOTION_API_KEY")
     db_id = os.getenv("NOTION_DATABASE_ID")
@@ -239,7 +198,11 @@ async def trigger_sync(background_tasks: BackgroundTasks):
     service = sync_service.SyncService(api_key, db_id)
     # Run sync in background so it doesn't block the request timeout
     background_tasks.add_task(service.sync_all)
-    return {"success": True, "message": "Sync started in background."}
+    
+    # Also trigger the media cache to Supabase
+    background_tasks.add_task(cache_all_media.main)
+    
+    return {"success": True, "message": "Sync and Supabase cache started in background."}
 
 @app.get("/api/textbooks")
 async def get_textbooks():

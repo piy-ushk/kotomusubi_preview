@@ -38,7 +38,8 @@ class SyncService:
         tasks = []
 
         async def process_single_block(block):
-            if block["type"] == "image":
+            b_type = block["type"]
+            if b_type == "image":
                 img_data = block.get("image", {})
                 img_type = img_data.get("type")
                 if img_type in ["file", "external"]:
@@ -46,8 +47,17 @@ class SyncService:
                     local_url = await self.download_image(original_url, f"block_{block['id']}")
                     block["image"][img_type]["url"] = local_url
             
+            sub_tasks = []
             if "children" in block:
-                await self._process_image_blocks(block["children"], prefix)
+                sub_tasks.append(self._process_image_blocks(block["children"], prefix))
+            if b_type == "child_database":
+                db_items = block.get("database_items", [])
+                for item in db_items:
+                    p_blocks = item.get("page_blocks", [])
+                    if p_blocks:
+                        sub_tasks.append(self._process_image_blocks(p_blocks, prefix))
+            if sub_tasks:
+                await asyncio.gather(*sub_tasks)
 
         for block in blocks:
             tasks.append(process_single_block(block))

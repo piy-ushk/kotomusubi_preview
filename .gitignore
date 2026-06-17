@@ -10,3 +10,7 @@ __pycache__/
 *.db
 *.db-shm
 *.db-wal
+
+# Media Caching
+backend/static/images/
+backend/static/audio/
