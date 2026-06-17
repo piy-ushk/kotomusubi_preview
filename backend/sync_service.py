@@ -30,8 +30,37 @@ class SyncService:
         self.root_db_id = db_id
         
     async def download_image(self, url: str, prefix: str) -> str:
-        """Bypass downloading completely and load directly from Notion as requested."""
-        return url
+        """Downloads from Notion and uploads to Supabase immediately during sync."""
+        if not url or "supabase.co" in url:
+            return url
+            
+        try:
+            import urllib.parse, hashlib, httpx
+            from supabase_service import SupabaseService
+            
+            parsed_url = urllib.parse.urlparse(url)
+            base_name = os.path.basename(parsed_url.path)
+            ext = os.path.splitext(base_name)[1]
+            if not ext or len(ext) > 10:
+                ext = ".png"
+                
+            url_hash = hashlib.md5(url.encode('utf-8')).hexdigest()[:12]
+            bucket_path = f"media/{prefix}_{url_hash}{ext}"
+            
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                resp = await client.get(url)
+                resp.raise_for_status()
+                
+                sb_service = SupabaseService()
+                content_type = "audio/mpeg" if ext in [".mp3", ".wav"] else "image/png"
+                public_url = sb_service.upload_file_bytes(bucket_path, resp.content, content_type=content_type)
+                
+                if public_url:
+                    return public_url
+                return url
+        except Exception as e:
+            print(f"Failed to cache media for {prefix}: {e}")
+            return url
 
     async def _process_image_blocks(self, blocks: List[Dict], prefix: str):
         """Recursively process blocks and download images concurrently."""
