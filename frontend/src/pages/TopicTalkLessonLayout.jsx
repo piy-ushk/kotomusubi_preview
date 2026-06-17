@@ -316,8 +316,29 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
 
     case 'callout': {
       if (!jp && !subBlocks) return null;
+      
+      const bgColor = blockData.color || 'default';
+      let calloutStyle = {
+        padding: '16px',
+        background: 'var(--card)',
+        borderRadius: '12px',
+        margin: '16px 0',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+        borderLeft: '4px solid var(--primary)'
+      };
+      let customClass = 'callout';
+
+      if (bgColor === 'pink_background') {
+        delete calloutStyle.borderLeft;
+        calloutStyle.borderRight = '4px solid var(--ana-color)';
+        customClass += ' callout-ana';
+      } else if (bgColor === 'blue_background') {
+        calloutStyle.borderLeft = '4px solid var(--ken-color)';
+        customClass += ' callout-ken';
+      }
+
       return (
-        <div className="callout" style={{ padding: '16px', background: 'var(--card)', borderRadius: '12px', margin: '16px 0', borderLeft: '4px solid var(--primary)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }} onContextMenu={handleContext}>
+        <div className={customClass} style={calloutStyle} onContextMenu={handleContext}>
           {blockData.icon && blockData.icon.emoji && <span style={{ marginRight: '8px' }}>{blockData.icon.emoji}</span>}
           <strong style={{ fontSize: '1.1em' }}>{jpContent}</strong>
           {en && (
