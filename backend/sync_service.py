@@ -115,8 +115,7 @@ class SyncService:
                 tb_id = tb_page["id"]
                 title = clean_text(self.notion.extract_page_title(tb_page))
                 
-                if "Topic Talk" not in title and "Grammar" not in title:
-                    continue
+
                 
                 sort_val = 999
                 for i, order in enumerate(textbook_order):
@@ -147,8 +146,7 @@ class SyncService:
             lvl_id = p["id"]
             title = clean_text(self.notion.extract_page_title(p))
             
-            if "Grammar" in textbook_title and "Upper" not in title and "中上級" not in title:
-                continue
+
             
             cover_url = ""
             if p.get("cover"):
