@@ -555,7 +555,7 @@ const TopicTalkLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) =>
   };
 
   return (
-    <div className="topic-talk-lesson-page">
+    <div className={`topic-talk-lesson-page ${translateAll ? 'show-en' : ''}`}>
       <div className="page">
         <div className="toolbar">
           <button onClick={() => navigate(-1)} type="button">Back</button>
@@ -575,29 +575,116 @@ const TopicTalkLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) =>
           </div>
         </header>
 
-        {slides.map((slide, slideIndex) => (
-          <section className="section" key={`slide_${slideIndex}`}>
-            {slide.title && (
-              <h2 className="section-title">
-                <span className="num">{slideIndex + 1}</span>
-                {splitTranslation(slide.title).jp}
-              </h2>
-            )}
-            {renderGroupedBlocks(preprocessBlocks(slide.content || [], true), `slide_${slideIndex}`)}
-          </section>
-        ))}
+        {(() => {
+          // Flatten and chunk slides by headings
+          const allSections = [];
+          
+          slides.forEach(slide => {
+            let currentSection = {
+              title: slide.title,
+              content: []
+            };
+            
+            const processedBlocks = preprocessBlocks(slide.content || [], true);
+            
+            processedBlocks.forEach(item => {
+              const b = item.block;
+              if (b.type === 'heading_1' || b.type === 'heading_2') {
+                if (currentSection.title || currentSection.content.length > 0) {
+                  allSections.push(currentSection);
+                }
+                
+                let headingText = '';
+                if (b[b.type].rich_text) headingText = b[b.type].rich_text.map(rt => rt.plain_text).join('');
+                else if (b[b.type].text) headingText = b[b.type].text;
+                
+                currentSection = {
+                  title: headingText,
+                  content: []
+                };
+              } else {
+                currentSection.content.push(item);
+              }
+            });
+            
+            if (currentSection.title || currentSection.content.length > 0) {
+              allSections.push(currentSection);
+            }
+          });
 
-        {testSections.map((section, secIdx) => (
-          <section key={`test_${secIdx}`} className="section">
-            {section.title && (
-              <h2 className="section-title">
-                <span className="num">{slides.length + secIdx + 1}</span>
-                {splitTranslation(section.title).jp}
-              </h2>
-            )}
-            {renderGroupedBlocks(preprocessBlocks(section.content || [], true), `test_${secIdx}`)}
-          </section>
-        ))}
+          return allSections.map((section, secIdx) => (
+            <section className="section" key={`slide_sec_${secIdx}`}>
+              {section.title && (
+                <h2 className="section-title">
+                  <span className="num">{secIdx + 1}</span>
+                  {splitTranslation(section.title).jp}
+                </h2>
+              )}
+              {renderGroupedBlocks(section.content, `slide_sec_${secIdx}`)}
+            </section>
+          ));
+        })()}
+
+        {(() => {
+          // Also chunk test sections by headings
+          const allTestSections = [];
+          
+          testSections.forEach(section => {
+            let currentSection = {
+              title: section.title,
+              content: []
+            };
+            
+            const processedBlocks = preprocessBlocks(section.content || [], true);
+            
+            processedBlocks.forEach(item => {
+              const b = item.block;
+              if (b.type === 'heading_1' || b.type === 'heading_2') {
+                if (currentSection.title || currentSection.content.length > 0) {
+                  allTestSections.push(currentSection);
+                }
+                
+                let headingText = '';
+                if (b[b.type].rich_text) headingText = b[b.type].rich_text.map(rt => rt.plain_text).join('');
+                else if (b[b.type].text) headingText = b[b.type].text;
+                
+                currentSection = {
+                  title: headingText,
+                  content: []
+                };
+              } else {
+                currentSection.content.push(item);
+              }
+            });
+            
+            if (currentSection.title || currentSection.content.length > 0) {
+              allTestSections.push(currentSection);
+            }
+          });
+
+          // We need the number of slide sections to continue numbering
+          let totalSlideSections = 0;
+          slides.forEach(slide => {
+             const pb = preprocessBlocks(slide.content || [], true);
+             let count = 1;
+             pb.forEach(item => {
+                if (item.block.type === 'heading_1' || item.block.type === 'heading_2') count++;
+             });
+             totalSlideSections += count;
+          });
+
+          return allTestSections.map((section, secIdx) => (
+            <section key={`test_sec_${secIdx}`} className="section">
+              {section.title && (
+                <h2 className="section-title">
+                  <span className="num">{totalSlideSections + secIdx + 1}</span>
+                  {splitTranslation(section.title).jp}
+                </h2>
+              )}
+              {renderGroupedBlocks(section.content, `test_sec_${secIdx}`)}
+            </section>
+          ));
+        })()}
 
         <div className="toolbar" style={{ justifyContent: 'center', marginTop: '30px' }}>
           <button onClick={() => navigate(-1)} type="button" className="active" style={{ fontSize: '1.1rem', padding: '12px 30px' }}>Complete Lesson</button>
