@@ -401,12 +401,17 @@ const shouldIgnoreBlock = (block) => {
   return false;
 };
 
-export const preprocessBlocks = (blocks) => {
+export const preprocessBlocks = (blocks, isTopLevel = false) => {
   const result = [];
   if (!blocks) return result;
   
   // First, filter out ignored blocks
-  const filteredBlocks = blocks.filter(b => !shouldIgnoreBlock(b));
+  let filteredBlocks = blocks.filter(b => !shouldIgnoreBlock(b));
+
+  // Remove the very first block if it is an image (main thumbnail)
+  if (isTopLevel && filteredBlocks.length > 0 && filteredBlocks[0].type === 'image') {
+    filteredBlocks = filteredBlocks.slice(1);
+  }
   
   for (let i = 0; i < filteredBlocks.length; i++) {
     const block = filteredBlocks[i];

@@ -287,7 +287,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
             {pageItems.map((item, itemIdx) => (
               <section key={item.id} className="inline-page-section">
                 {item.title && <h3 className="subhead inline-page-title">{splitTranslation(item.title).jp}</h3>}
-                {preprocessBlocks(item.page_blocks).map((pageItem, pageBlockIdx) => (
+                {preprocessBlocks(item.page_blocks, true).map((pageItem, pageBlockIdx) => (
                   <BlockRenderer
                     key={`${blockId}_db${itemIdx}_b${pageBlockIdx}`}
                     block={pageItem.block}
@@ -556,7 +556,7 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
                     {splitTranslation(currentSlide.title).jp}
                   </h2>
                 )}
-                {preprocessBlocks(currentSlide.content || []).map((item, i) => {
+                {preprocessBlocks(currentSlide.content || [], true).map((item, i) => {
                   const blockId = `slide_${currentSlideIndex}_block_${i}`;
                   return (
                     <BlockRenderer
@@ -597,7 +597,7 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
                     {splitTranslation(section.title).jp}
                   </h2>
                 )}
-                {preprocessBlocks(section.content || []).map((item, i) => {
+                {preprocessBlocks(section.content || [], true).map((item, i) => {
                   const blockId = `test_${secIdx}_block_${i}`;
                   return (
                     <div key={blockId}>

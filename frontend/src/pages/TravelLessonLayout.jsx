@@ -507,7 +507,7 @@ const TravelLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
                     {splitTranslation(currentSlide.title).jp}
                   </h2>
                 )}
-                {preprocessBlocks(currentSlide.content || []).map((item, i) => {
+                {preprocessBlocks(currentSlide.content || [], true).map((item, i) => {
                   const blockId = `slide_${currentSlideIndex}_block_${i}`;
                   return (
                     <BlockRenderer
@@ -548,7 +548,7 @@ const TravelLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
                     {splitTranslation(section.title).jp}
                   </h2>
                 )}
-                {preprocessBlocks(section.content || []).map((item, i) => {
+                {preprocessBlocks(section.content || [], true).map((item, i) => {
                   const blockId = `test_${secIdx}_block_${i}`;
                   return (
                     <div key={blockId}>

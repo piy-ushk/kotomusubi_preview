@@ -529,7 +529,7 @@ const TopicTalkLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) =>
                   </h2>
                 )}
                 <div className="slide-content">
-                  {preprocessBlocks(currentSlide.content || []).map((item, i) => {
+                  {preprocessBlocks(currentSlide.content || [], true).map((item, i) => {
                     const blockId = `slide_${currentSlideIndex}_block_${i}`;
                     return (
                       <BlockRenderer
@@ -572,7 +572,7 @@ const TopicTalkLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) =>
                     {splitTranslation(section.title).jp}
                   </h2>
                 )}
-                {preprocessBlocks(section.content || []).map((item, i) => {
+                {preprocessBlocks(section.content || [], true).map((item, i) => {
                   const blockId = `test_${secIdx}_block_${i}`;
                   return (
                     <div key={blockId} style={{ marginBottom: '16px' }}>
