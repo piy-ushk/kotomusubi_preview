@@ -301,15 +301,24 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
 
     case 'quote': {
       if (!jp && !subBlocks) return null;
+      const aMatch = rawText.match(/^(?:👦🏻|🧒🏻|👩🏻|👨🏻|🧑🏻)?\s*(A|B|ケン|アナ|Ken|Ana|佐藤|Sato)[：:]\s*(.*)/);
       let speaker = '';
-      let text = jpContent.toString();
+      let bubbleContent = jpContent;
       
-      const aMatch = text.match(/^(A|B|ケン|アナ|Ken|Ana|佐藤|Sato)[：:]\s*(.*)/);
       if (aMatch) {
         speaker = aMatch[1];
-        text = aMatch[2];
+        if (blockData.rich_text) {
+          let modifiedRichText = JSON.parse(JSON.stringify(blockData.rich_text));
+          if (modifiedRichText.length > 0) {
+            modifiedRichText[0].text.content = modifiedRichText[0].text.content.replace(/^(?:👦🏻|🧒🏻|👩🏻|👨🏻|🧑🏻)?\s*(A|B|ケン|アナ|Ken|Ana|佐藤|Sato)[：:]\s*/, '');
+            modifiedRichText[0].plain_text = modifiedRichText[0].text.content;
+          }
+          bubbleContent = renderRichText(modifiedRichText, showFurigana);
+        } else {
+          bubbleContent = renderFuriganaText(aMatch[2], showFurigana);
+        }
       } else {
-        const isKenFallback = text.includes('ケン') || text.includes('Ken') || text.includes('A:');
+        const isKenFallback = rawText.includes('ケン') || rawText.includes('Ken') || rawText.includes('A:');
         speaker = isKenFallback ? 'ケン' : 'アナ';
       }
       
@@ -317,7 +326,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       return (
         <div className={`bubble ${isKen ? 'ken' : 'ana'}`} onContextMenu={handleContext}>
           <span className="speaker">{isKen ? '👦🏻 ケン' : '🧒🏻 アナ'}</span>
-          {text}
+          {bubbleContent}
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
               <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
@@ -519,9 +528,105 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
 
   const slides = data?.learning_slides || [];
   const testSections = data?.test_sections || [];
-  const vocabularyList = data?.vocabulary || [];
 
+  // Helper: render blocks with grouping of quotes -> .dialogue and toggles -> .drills 2-col grid
+  const renderGroupedBlocks = (items, prefix) => {
+    const elements = [];
+    let i = 0;
+    while (i < items.length) {
+      const item = items[i];
+      const blockType = item.block.type;
 
+      // Group consecutive quote blocks into a .dialogue wrapper
+      if (blockType === 'quote') {
+        const group = [];
+        const groupStart = i;
+        while (i < items.length && items[i].block.type === 'quote') {
+          group.push({ ...items[i], idx: i });
+          i++;
+        }
+        elements.push(
+          <div className="dialogue" key={`${prefix}_dialogue_${groupStart}`}>
+            {group.map((gItem) => {
+              const blockId = `${prefix}_block_${gItem.idx}`;
+              return (
+                <BlockRenderer
+                  key={blockId}
+                  block={gItem.block}
+                  enTranslation={gItem.enTranslation}
+                  blockId={blockId}
+                  translateAll={translateAll}
+                  individualTranslations={individualTranslations}
+                  onToggle={toggleTranslation}
+                  annotations={annotations}
+                  onContextMenu={handleContextMenu}
+                  onRemoveAnnotation={null}
+                  translationLanguage={translationLanguage}
+                  showFurigana={showFurigana}
+                />
+              );
+            })}
+          </div>
+        );
+        continue;
+      }
+
+      // Group consecutive toggle blocks into a .drills 2-column grid
+      if (blockType === 'toggle') {
+        const group = [];
+        const groupStart = i;
+        while (i < items.length && items[i].block.type === 'toggle') {
+          group.push({ ...items[i], idx: i });
+          i++;
+        }
+        elements.push(
+          <div className="drills" key={`${prefix}_drills_${groupStart}`}>
+            {group.map((gItem) => {
+              const blockId = `${prefix}_block_${gItem.idx}`;
+              return (
+                <BlockRenderer
+                  key={blockId}
+                  block={gItem.block}
+                  enTranslation={gItem.enTranslation}
+                  blockId={blockId}
+                  translateAll={translateAll}
+                  individualTranslations={individualTranslations}
+                  onToggle={toggleTranslation}
+                  annotations={annotations}
+                  onContextMenu={handleContextMenu}
+                  onRemoveAnnotation={null}
+                  translationLanguage={translationLanguage}
+                  showFurigana={showFurigana}
+                />
+              );
+            })}
+          </div>
+        );
+        continue;
+      }
+
+      // Regular block
+      const blockId = `${prefix}_block_${i}`;
+      elements.push(
+        <BlockRenderer
+          key={blockId}
+          block={item.block}
+          enTranslation={item.enTranslation}
+          blockId={blockId}
+          translateAll={translateAll}
+          individualTranslations={individualTranslations}
+          onToggle={toggleTranslation}
+          annotations={annotations}
+          onContextMenu={handleContextMenu}
+          onRemoveAnnotation={null}
+          translationLanguage={translationLanguage}
+          showFurigana={showFurigana}
+        />
+      );
+      i++;
+    }
+    return elements;
+  };
 
   return (
     <div className="grammar-lesson-page">
@@ -544,8 +649,6 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
           </div>
         </header>
 
-
-
         {slides.map((slide, slideIndex) => (
           <section className="section" key={`slide_${slideIndex}`}>
             {slide.title && (
@@ -554,25 +657,7 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
                 {splitTranslation(slide.title).jp}
               </h2>
             )}
-            {preprocessBlocks(slide.content || [], true).map((item, i) => {
-              const blockId = `slide_${slideIndex}_block_${i}`;
-              return (
-                <BlockRenderer
-                  key={blockId}
-                  block={item.block}
-                  enTranslation={item.enTranslation}
-                  blockId={blockId}
-                  translateAll={translateAll}
-                  individualTranslations={individualTranslations}
-                  onToggle={toggleTranslation}
-                  annotations={annotations}
-                  onContextMenu={handleContextMenu}
-                  onRemoveAnnotation={null}
-                  translationLanguage={translationLanguage}
-                  showFurigana={showFurigana}
-                />
-              );
-            })}
+            {renderGroupedBlocks(preprocessBlocks(slide.content || [], true), `slide_${slideIndex}`)}
           </section>
         ))}
 
@@ -580,38 +665,11 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
           <section key={`test_${secIdx}`} className="section">
             {section.title && (
               <h2 className="section-title">
-                <span className="num">✏️</span>
+                <span className="num">{slides.length + secIdx + 1}</span>
                 {splitTranslation(section.title).jp}
               </h2>
             )}
-            {preprocessBlocks(section.content || [], true).map((item, i) => {
-              const blockId = `test_${secIdx}_block_${i}`;
-              return (
-                <div key={blockId}>
-                  <BlockRenderer
-                    block={item.block}
-                    enTranslation={item.enTranslation}
-                    blockId={blockId}
-                    translateAll={translateAll}
-                    individualTranslations={individualTranslations}
-                    onToggle={toggleTranslation}
-                    annotations={annotations}
-                    onContextMenu={handleContextMenu}
-                    onRemoveAnnotation={null}
-                    translationLanguage={translationLanguage}
-                    showFurigana={showFurigana}
-                  />
-                  {shouldShowAnswerField(item.block, section.title) && (
-                    <textarea
-                      style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--line)', marginTop: '8px' }}
-                      placeholder="回答を書き込む"
-                      value={answerInputs[blockId] || ''}
-                      onChange={(e) => handleAnswerChange(blockId, e.target.value)}
-                    />
-                  )}
-                </div>
-              );
-            })}
+            {renderGroupedBlocks(preprocessBlocks(section.content || [], true), `test_${secIdx}`)}
           </section>
         ))}
 
@@ -619,7 +677,6 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
           <button onClick={() => navigate(-1)} type="button" className="active" style={{ fontSize: '1.1rem', padding: '12px 30px' }}>Complete Lesson</button>
         </div>
 
-        {/* Context Menu */}
         {contextMenu && (
           <div style={{
             position: 'absolute', top: contextMenu.y, left: contextMenu.x,
