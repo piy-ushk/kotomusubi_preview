@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getLessonContent, addAnnotation, deleteAnnotation } from '../services/api';
 import { vocabularyService } from '../services/vocabularyService';
-import { AnimatePresence, motion } from 'framer-motion';
 import {
   XIcon, Volume2, TranslateIcon, BookIcon, CheckIcon, ChevronLeft,
   speak, splitTranslation, getTranslationOnly, getTranslationsFromText,
@@ -397,10 +396,8 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
 
 const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
   const navigate = useNavigate();
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [translateAll, setTranslateAll] = useState(false);
   const [individualTranslations, setIndividualTranslations] = useState({});
-  const [viewMode, setViewMode] = useState(data?.learning_slides?.length > 0 ? 'learning' : (data?.vocabulary?.length > 0 ? 'vocabulary' : 'learning'));
   const [annotations, setAnnotations] = useState(data?.annotations || {});
   const [contextMenu, setContextMenu] = useState(null);
   const [showFurigana, setShowFurigana] = useState(false);
@@ -446,37 +443,7 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
 
   const slides = data?.learning_slides || [];
   const testSections = data?.test_sections || [];
-  const currentSlide = slides[currentSlideIndex] || {};
-  const isLastSlide = currentSlideIndex === slides.length - 1;
-
-  const goNext = () => {
-    if (viewMode === 'learning') {
-      if (!isLastSlide) {
-        setCurrentSlideIndex(i => i + 1);
-        setIndividualTranslations({});
-      } else {
-        if (testSections.length > 0) {
-          setViewMode('test');
-          setIndividualTranslations({});
-        } else {
-          navigate(-1);
-        }
-      }
-    }
-  };
-
-  const goPrev = () => {
-    if (viewMode === 'test') {
-      if (slides.length > 0) {
-        setViewMode('learning');
-        setCurrentSlideIndex(slides.length - 1);
-        setIndividualTranslations({});
-      }
-    } else if (currentSlideIndex > 0) {
-      setCurrentSlideIndex(i => i - 1);
-      setIndividualTranslations({});
-    }
-  };
+  const vocabularyList = data?.vocabulary || [];
 
   const renderVocabulary = () => {
     if (!data?.vocabulary || data.vocabulary.length === 0) {
@@ -540,99 +507,87 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
           </div>
         </header>
 
-        {viewMode === 'vocabulary' ? renderVocabulary() : viewMode === 'learning' ? (
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentSlideIndex}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.28 }}
-            >
-              <section className="section">
-                {currentSlide.title && (
-                  <h2 className="section-title">
-                    <span className="num">{currentSlideIndex + 1}</span>
-                    {splitTranslation(currentSlide.title).jp}
-                  </h2>
-                )}
-                {preprocessBlocks(currentSlide.content || [], true).map((item, i) => {
-                  const blockId = `slide_${currentSlideIndex}_block_${i}`;
-                  return (
-                    <BlockRenderer
-                      key={blockId}
-                      block={item.block}
-                      enTranslation={item.enTranslation}
-                      blockId={blockId}
-                      translateAll={translateAll}
-                      individualTranslations={individualTranslations}
-                      onToggle={toggleTranslation}
-                      annotations={annotations}
-                      onContextMenu={handleContextMenu}
-                      onRemoveAnnotation={null}
-                      translationLanguage={translationLanguage}
-                      showFurigana={showFurigana}
-                    />
-                  );
-                })}
-              </section>
-
-              <div className="toolbar" style={{ justifyContent: 'center' }}>
-                {currentSlideIndex > 0 && (
-                  <button onClick={goPrev} type="button">Back</button>
-                )}
-                <button onClick={goNext} type="button" className="active">
-                  {isLastSlide && testSections.length > 0 ? 'Test / Revision' : (isLastSlide ? 'Complete Lesson' : 'Next')}
-                </button>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        ) : (
-          <div className="test-view-area">
-            {testSections.map((section, secIdx) => (
-              <section key={secIdx} className="section">
-                {section.title && (
-                  <h2 className="section-title">
-                    <span className="num">{secIdx + 1}</span>
-                    {splitTranslation(section.title).jp}
-                  </h2>
-                )}
-                {preprocessBlocks(section.content || [], true).map((item, i) => {
-                  const blockId = `test_${secIdx}_block_${i}`;
-                  return (
-                    <div key={blockId}>
-                      <BlockRenderer
-                        block={item.block}
-                        enTranslation={item.enTranslation}
-                        blockId={blockId}
-                        translateAll={translateAll}
-                        individualTranslations={individualTranslations}
-                        onToggle={toggleTranslation}
-                        annotations={annotations}
-                        onContextMenu={handleContextMenu}
-                        onRemoveAnnotation={null}
-                        translationLanguage={translationLanguage}
-                        showFurigana={showFurigana}
-                      />
-                      {shouldShowAnswerField(item.block, section.title) && (
-                        <textarea
-                          style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--line)', marginTop: '8px' }}
-                          placeholder="回答を書き込む"
-                          value={answerInputs[blockId] || ''}
-                          onChange={(e) => handleAnswerChange(blockId, e.target.value)}
-                        />
-                      )}
-                    </div>
-                  );
-                })}
-              </section>
-            ))}
-            <div className="toolbar" style={{ justifyContent: 'center' }}>
-              <button onClick={goPrev} type="button">Back to Review</button>
-              <button onClick={() => navigate(-1)} type="button" className="active">Complete Lesson</button>
-            </div>
-          </div>
+        {vocabularyList && vocabularyList.length > 0 && (
+          <section className="section">
+            <h2 className="section-title">
+              <span className="num">📚</span> 単語 / Vocabulary
+            </h2>
+            {renderVocabulary()}
+          </section>
         )}
+
+        {slides.map((slide, slideIndex) => (
+          <section className="section" key={`slide_${slideIndex}`}>
+            {slide.title && (
+              <h2 className="section-title">
+                <span className="num">{slideIndex + 1}</span>
+                {splitTranslation(slide.title).jp}
+              </h2>
+            )}
+            {preprocessBlocks(slide.content || [], true).map((item, i) => {
+              const blockId = `slide_${slideIndex}_block_${i}`;
+              return (
+                <BlockRenderer
+                  key={blockId}
+                  block={item.block}
+                  enTranslation={item.enTranslation}
+                  blockId={blockId}
+                  translateAll={translateAll}
+                  individualTranslations={individualTranslations}
+                  onToggle={toggleTranslation}
+                  annotations={annotations}
+                  onContextMenu={handleContextMenu}
+                  onRemoveAnnotation={null}
+                  translationLanguage={translationLanguage}
+                  showFurigana={showFurigana}
+                />
+              );
+            })}
+          </section>
+        ))}
+
+        {testSections.map((section, secIdx) => (
+          <section key={`test_${secIdx}`} className="section">
+            {section.title && (
+              <h2 className="section-title">
+                <span className="num">✏️</span>
+                {splitTranslation(section.title).jp}
+              </h2>
+            )}
+            {preprocessBlocks(section.content || [], true).map((item, i) => {
+              const blockId = `test_${secIdx}_block_${i}`;
+              return (
+                <div key={blockId}>
+                  <BlockRenderer
+                    block={item.block}
+                    enTranslation={item.enTranslation}
+                    blockId={blockId}
+                    translateAll={translateAll}
+                    individualTranslations={individualTranslations}
+                    onToggle={toggleTranslation}
+                    annotations={annotations}
+                    onContextMenu={handleContextMenu}
+                    onRemoveAnnotation={null}
+                    translationLanguage={translationLanguage}
+                    showFurigana={showFurigana}
+                  />
+                  {shouldShowAnswerField(item.block, section.title) && (
+                    <textarea
+                      style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--line)', marginTop: '8px' }}
+                      placeholder="回答を書き込む"
+                      value={answerInputs[blockId] || ''}
+                      onChange={(e) => handleAnswerChange(blockId, e.target.value)}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </section>
+        ))}
+
+        <div className="toolbar" style={{ justifyContent: 'center', marginTop: '30px' }}>
+          <button onClick={() => navigate(-1)} type="button" className="active" style={{ fontSize: '1.1rem', padding: '12px 30px' }}>Complete Lesson</button>
+        </div>
 
         {/* Context Menu */}
         {contextMenu && (

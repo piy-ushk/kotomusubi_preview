@@ -7,9 +7,9 @@ import {
   XIcon, Volume2, TranslateIcon, BookIcon, CheckIcon, ChevronLeft,
   speak, splitTranslation, getTranslationOnly, getTranslationsFromText,
   getRawText, hasJapanese, renderFuriganaText, getNotionColorStyle, renderRichText,
-  preprocessBlocks, shouldShowAnswerField, renderAnnotations, cleanText
+  preprocessBlocks, shouldShowAnswerField, renderAnnotations
 } from '../utils/lessonHelpers';
-import './TravelLesson.css';
+import './GrammarLesson.css';
 
 /* ---- Block Components ---- */
 const TranslationControls = ({ id, rawText, isTranslated, onToggle }) => (
@@ -20,20 +20,6 @@ const TranslationControls = ({ id, rawText, isTranslated, onToggle }) => (
     <button className={`local-en-toggle ${isTranslated ? 'active' : ''}`} onClick={() => onToggle(id)}>
       <TranslateIcon size={12} /> {isTranslated ? 'Hide' : 'Translate'}
     </button>
-  </div>
-);
-
-const VocabCard = ({ phrase, reading, meaning, isTranslated, onToggle, wordId, showFurigana, pos }) => (
-  <div className="vocab-card">
-    <div className="vocab-word">{phrase}</div>
-    {showFurigana && reading && <div className="note" style={{ margin: '0 0 4px 0' }}>{reading}</div>}
-    {pos && <span className="note" style={{ color: 'var(--primary)', fontWeight: 'bold' }}>[{pos}]</span>}
-    {meaning && (
-      <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
-        <button className="vocab-toggle" onClick={() => onToggle(wordId)}>訳を見る</button>
-        <p className="vocab-meaning-en">{meaning}</p>
-      </div>
-    )}
   </div>
 );
 
@@ -108,6 +94,23 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
     case 'heading_2':
     case 'heading_3': {
       if (!jp && !subBlocks) return null;
+      if (blockData.is_toggleable || subBlocks) {
+        return (
+          <details className="drill" style={{ margin: '8px 0' }} onContextMenu={handleContext}>
+            <summary>{jpContent}</summary>
+            <div className="drill-body">
+              {en && (
+                <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
+                  <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+                  <p className="en">{en}</p>
+                </div>
+              )}
+              {subBlocks}
+              {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
+            </div>
+          </details>
+        );
+      }
       return (
         <div onContextMenu={handleContext}>
           {jp && <h3 className="subhead">{jpContent}</h3>}
@@ -225,29 +228,12 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       );
     }
 
-    case 'child_database': {
-      const items = block.database_items;
-      if (!items || items.length === 0) return null;
+    case 'audio': {
+      const url = blockData.file?.url || blockData.external?.url;
+      if (!url) return null;
       return (
-        <div className="vocab-grid" style={{ marginTop: '16px' }}>
-          {items.map(item => {
-            const wordId = `inline_vocab_${item.id}`;
-            const v = item.vocab || {};
-            let eng = getTranslationOnly(v.en || '', translationLanguage);
-            return (
-              <VocabCard
-                key={item.id}
-                phrase={cleanText(v.jp || '')}
-                reading={cleanText(v.reading || '')}
-                pos={v.pos}
-                meaning={cleanText(eng)}
-                isTranslated={translateAll || !!individualTranslations[wordId]}
-                onToggle={onToggle}
-                wordId={wordId}
-                showFurigana={showFurigana}
-              />
-            );
-          })}
+        <div className="media-block" style={{ margin: '16px 0' }}>
+          <audio controls src={url} style={{ width: '100%' }} />
         </div>
       );
     }
@@ -290,6 +276,69 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
 
     case 'column_list':
       return <div className="ta-chart-grid" style={{ margin: '16px 0' }}>{subBlocks}</div>;
+
+    case 'child_database': {
+      const items = block.database_items || [];
+      if (items.length === 0) return null;
+      const pageItems = items.filter(item => Array.isArray(item.page_blocks) && item.page_blocks.length > 0);
+      if (pageItems.length > 0) {
+        return (
+          <div className="inline-page-db" style={{ marginTop: '16px' }} onContextMenu={handleContext}>
+            {pageItems.map((item, itemIdx) => (
+              <section key={item.id} className="inline-page-section">
+                {item.title && <h3 className="subhead inline-page-title">{splitTranslation(item.title).jp}</h3>}
+                {preprocessBlocks(item.page_blocks, true).map((pageItem, pageBlockIdx) => (
+                  <BlockRenderer
+                    key={`${blockId}_db${itemIdx}_b${pageBlockIdx}`}
+                    block={pageItem.block}
+                    enTranslation={pageItem.enTranslation}
+                    blockId={`${blockId}_db${itemIdx}_b${pageBlockIdx}`}
+                    translateAll={translateAll}
+                    individualTranslations={individualTranslations}
+                    onToggle={onToggle}
+                    annotations={annotations}
+                    onContextMenu={onContextMenu}
+                    onRemoveAnnotation={onRemoveAnnotation}
+                    translationLanguage={translationLanguage}
+                    showFurigana={showFurigana}
+                  />
+                ))}
+              </section>
+            ))}
+          </div>
+        );
+      }
+      return (
+        <div className="vocab-grid inline-vocab-grid" style={{ marginTop: '16px', gap: '16px' }}>
+          {items.map((item, idx) => {
+            const vocab = item.vocab;
+            // Fallbacks for generic database mapping
+            const title = vocab.jp || item.raw_props["名前"] || item.raw_props["Name"] || item.raw_props["Word"] || item.raw_props["単語"] || "";
+            const meaning = vocab.en || item.raw_props["Meaning"] || item.raw_props["English"] || item.raw_props["意味"] || "";
+            const reading = vocab.reading || item.raw_props["Reading"] || item.raw_props["Pronunciation"] || item.raw_props["読み方"] || item.raw_props["ひらがな"] || "";
+            
+            return (
+              <div key={item.id} className="vocab-card inline-card">
+                <h3 className="vocab-word" style={{fontSize: '1.2rem', marginBottom: '4px'}}>{title}</h3>
+                {reading && <p className="vocab-reading" style={{fontSize: '0.85rem', color: 'var(--text-muted)', margin: '0 0 8px'}}>{reading}</p>}
+                
+                {meaning && (
+                  <>
+                    <button className="vocab-toggle" style={{marginTop: 'auto'}} onClick={(e) => {
+                      const tgt = e.currentTarget.nextElementSibling;
+                      tgt.style.display = tgt.style.display === 'block' ? 'none' : 'block';
+                    }}>
+                      意味を見る
+                    </button>
+                    <p className="vocab-meaning-en" style={{display: 'none', marginTop: '8px', borderTop: '1px solid var(--line)', paddingTop: '8px'}}>{meaning}</p>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
 
     case 'column':
       return <div className="ta-group">{subBlocks}</div>;
@@ -346,10 +395,12 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
   }
 };
 
-const TravelLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
+const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
   const navigate = useNavigate();
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [translateAll, setTranslateAll] = useState(false);
   const [individualTranslations, setIndividualTranslations] = useState({});
+  const [viewMode, setViewMode] = useState(data?.learning_slides?.length > 0 ? 'learning' : (data?.vocabulary?.length > 0 ? 'vocabulary' : 'learning'));
   const [annotations, setAnnotations] = useState(data?.annotations || {});
   const [contextMenu, setContextMenu] = useState(null);
   const [showFurigana, setShowFurigana] = useState(false);
@@ -395,46 +446,81 @@ const TravelLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
 
   const slides = data?.learning_slides || [];
   const testSections = data?.test_sections || [];
-  const vocabularyList = data?.vocabulary || [];
+  const currentSlide = slides[currentSlideIndex] || {};
+  const isLastSlide = currentSlideIndex === slides.length - 1;
+
+  const goNext = () => {
+    if (viewMode === 'learning') {
+      if (!isLastSlide) {
+        setCurrentSlideIndex(i => i + 1);
+        setIndividualTranslations({});
+      } else {
+        if (testSections.length > 0) {
+          setViewMode('test');
+          setIndividualTranslations({});
+        } else {
+          navigate(-1);
+        }
+      }
+    }
+  };
+
+  const goPrev = () => {
+    if (viewMode === 'test') {
+      if (slides.length > 0) {
+        setViewMode('learning');
+        setCurrentSlideIndex(slides.length - 1);
+        setIndividualTranslations({});
+      }
+    } else if (currentSlideIndex > 0) {
+      setCurrentSlideIndex(i => i - 1);
+      setIndividualTranslations({});
+    }
+  };
 
   const renderVocabulary = () => {
-    if (!vocabularyList || vocabularyList.length === 0) {
-      return null;
+    if (!data?.vocabulary || data.vocabulary.length === 0) {
+      return <div className="empty-state" style={{padding: '24px'}}>単語が見つかりませんでした</div>;
     }
     return (
-      <section className="section">
-        <h2 className="section-title"><span className="num">📚</span>単語・フレーズ確認 / Vocabulary</h2>
-        <div className="vocab-grid">
-          {vocabularyList.map((vocab, idx) => (
-            <div key={idx} className={`vocab-card ${individualTranslations[`vocab_mean_${idx}`] ? 'show-meaning' : ''} ${individualTranslations[`vocab_ex_${idx}`] ? 'show-ex-en' : ''}`}>
-              <h3 className="vocab-word">{vocab.word}</h3>
-              {vocab.reading && <p className="vocab-reading" style={{fontSize: '0.85rem', color: 'var(--text-muted)', margin: '0 0 0.15rem'}}>{vocab.reading}</p>}
-              
-              <button className="vocab-toggle" onClick={() => toggleTranslation(`vocab_mean_${idx}`)}>
-                意味を見る
-              </button>
-              <p className="vocab-meaning-en">{vocab.meaning}</p>
-              
-              {vocab.example && (
-                <div style={{marginTop: '1rem'}}>
-                  <button className="vocab-toggle" onClick={() => toggleTranslation(`vocab_ex_${idx}`)}>
-                    例文を見る
-                  </button>
-                  <div className="vocab-example-section">
-                    <p className="vocab-example">{vocab.example}</p>
-                    {vocab.exampleMeaning && <p className="vocab-example-en">{vocab.exampleMeaning}</p>}
+      <div className="test-view-area">
+        <section className="section">
+          <h2 className="section-title"><span className="num">!</span>単語・フレーズ確認</h2>
+          <div className="vocab-grid">
+            {data.vocabulary.map((vocab, idx) => (
+              <div key={idx} className={`vocab-card ${individualTranslations[`vocab_mean_${idx}`] ? 'show-meaning' : ''} ${individualTranslations[`vocab_ex_${idx}`] ? 'show-ex-en' : ''}`}>
+                <h3 className="vocab-word">{vocab.word}</h3>
+                {vocab.reading && <p className="vocab-reading" style={{fontSize: '0.85rem', color: 'var(--text-muted)', margin: '0 0 0.15rem'}}>{vocab.reading}</p>}
+                
+                <button className="vocab-toggle" onClick={() => toggleTranslation(`vocab_mean_${idx}`)}>
+                  意味を見る
+                </button>
+                <p className="vocab-meaning-en">{vocab.meaning}</p>
+                
+                {vocab.example && (
+                  <div style={{marginTop: '1rem'}}>
+                    <button className="vocab-toggle" onClick={() => toggleTranslation(`vocab_ex_${idx}`)}>
+                      例文を見る
+                    </button>
+                    <div className="vocab-example-section">
+                      <p className="vocab-example">{vocab.example}</p>
+                      {vocab.exampleMeaning && <p className="vocab-example-en">{vocab.exampleMeaning}</p>}
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+        <div className="toolbar" style={{ justifyContent: 'center' }}>
+          <button onClick={() => navigate(-1)} type="button" className="active">Complete Lesson</button>
         </div>
-      </section>
+      </div>
     );
   };
 
   return (
-    <div className="travel-lesson-page">
+    <div className="grammar-lesson-page">
       <div className="page">
         <div className="toolbar">
           <button onClick={() => navigate(-1)} type="button">Back</button>
@@ -454,80 +540,99 @@ const TravelLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
           </div>
         </header>
 
-        {renderVocabulary()}
-
-        {slides.map((slide, slideIndex) => (
-          <section className="section" key={`slide_${slideIndex}`}>
-            {slide.title && (
-              <h2 className="section-title">
-                <span className="num">{slideIndex + 1}</span>
-                {splitTranslation(slide.title).jp}
-              </h2>
-            )}
-            {preprocessBlocks(slide.content || [], true).map((item, i) => {
-              const blockId = `slide_${slideIndex}_block_${i}`;
-              return (
-                <BlockRenderer
-                  key={blockId}
-                  block={item.block}
-                  enTranslation={item.enTranslation}
-                  blockId={blockId}
-                  translateAll={translateAll}
-                  individualTranslations={individualTranslations}
-                  onToggle={toggleTranslation}
-                  annotations={annotations}
-                  onContextMenu={handleContextMenu}
-                  onRemoveAnnotation={null}
-                  translationLanguage={translationLanguage}
-                  showFurigana={showFurigana}
-                />
-              );
-            })}
-          </section>
-        ))}
-
-        {testSections.map((section, secIdx) => (
-          <section key={`test_${secIdx}`} className="section">
-            {section.title && (
-              <h2 className="section-title">
-                <span className="num">✏️</span>
-                {splitTranslation(section.title).jp}
-              </h2>
-            )}
-            {preprocessBlocks(section.content || [], true).map((item, i) => {
-              const blockId = `test_${secIdx}_block_${i}`;
-              return (
-                <div key={blockId}>
-                  <BlockRenderer
-                    block={item.block}
-                    enTranslation={item.enTranslation}
-                    blockId={blockId}
-                    translateAll={translateAll}
-                    individualTranslations={individualTranslations}
-                    onToggle={toggleTranslation}
-                    annotations={annotations}
-                    onContextMenu={handleContextMenu}
-                    onRemoveAnnotation={null}
-                    translationLanguage={translationLanguage}
-                    showFurigana={showFurigana}
-                  />
-                  {shouldShowAnswerField(item.block, section.title) && (
-                    <textarea
-                      style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--line)', marginTop: '8px' }}
-                      placeholder="回答を書き込む"
-                      value={answerInputs[blockId] || ''}
-                      onChange={(e) => handleAnswerChange(blockId, e.target.value)}
+        {viewMode === 'vocabulary' ? renderVocabulary() : viewMode === 'learning' ? (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentSlideIndex}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.28 }}
+            >
+              <section className="section">
+                {currentSlide.title && (
+                  <h2 className="section-title">
+                    <span className="num">{currentSlideIndex + 1}</span>
+                    {splitTranslation(currentSlide.title).jp}
+                  </h2>
+                )}
+                {preprocessBlocks(currentSlide.content || [], true).map((item, i) => {
+                  const blockId = `slide_${currentSlideIndex}_block_${i}`;
+                  return (
+                    <BlockRenderer
+                      key={blockId}
+                      block={item.block}
+                      enTranslation={item.enTranslation}
+                      blockId={blockId}
+                      translateAll={translateAll}
+                      individualTranslations={individualTranslations}
+                      onToggle={toggleTranslation}
+                      annotations={annotations}
+                      onContextMenu={handleContextMenu}
+                      onRemoveAnnotation={null}
+                      translationLanguage={translationLanguage}
+                      showFurigana={showFurigana}
                     />
-                  )}
-                </div>
-              );
-            })}
-          </section>
-        ))}
+                  );
+                })}
+              </section>
 
-        <div className="toolbar" style={{ justifyContent: 'center', marginTop: '30px' }}>
-          <button onClick={() => navigate(-1)} type="button" className="active" style={{ fontSize: '1.1rem', padding: '12px 30px' }}>Complete Lesson</button>
-        </div>
+              <div className="toolbar" style={{ justifyContent: 'center' }}>
+                {currentSlideIndex > 0 && (
+                  <button onClick={goPrev} type="button">Back</button>
+                )}
+                <button onClick={goNext} type="button" className="active">
+                  {isLastSlide && testSections.length > 0 ? 'Test / Revision' : (isLastSlide ? 'Complete Lesson' : 'Next')}
+                </button>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        ) : (
+          <div className="test-view-area">
+            {testSections.map((section, secIdx) => (
+              <section key={secIdx} className="section">
+                {section.title && (
+                  <h2 className="section-title">
+                    <span className="num">{secIdx + 1}</span>
+                    {splitTranslation(section.title).jp}
+                  </h2>
+                )}
+                {preprocessBlocks(section.content || [], true).map((item, i) => {
+                  const blockId = `test_${secIdx}_block_${i}`;
+                  return (
+                    <div key={blockId}>
+                      <BlockRenderer
+                        block={item.block}
+                        enTranslation={item.enTranslation}
+                        blockId={blockId}
+                        translateAll={translateAll}
+                        individualTranslations={individualTranslations}
+                        onToggle={toggleTranslation}
+                        annotations={annotations}
+                        onContextMenu={handleContextMenu}
+                        onRemoveAnnotation={null}
+                        translationLanguage={translationLanguage}
+                        showFurigana={showFurigana}
+                      />
+                      {shouldShowAnswerField(item.block, section.title) && (
+                        <textarea
+                          style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--line)', marginTop: '8px' }}
+                          placeholder="回答を書き込む"
+                          value={answerInputs[blockId] || ''}
+                          onChange={(e) => handleAnswerChange(blockId, e.target.value)}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </section>
+            ))}
+            <div className="toolbar" style={{ justifyContent: 'center' }}>
+              <button onClick={goPrev} type="button">Back to Review</button>
+              <button onClick={() => navigate(-1)} type="button" className="active">Complete Lesson</button>
+            </div>
+          </div>
+        )}
 
         {/* Context Menu */}
         {contextMenu && (
@@ -546,4 +651,4 @@ const TravelLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
   );
 };
 
-export default TravelLessonLayout;
+export default GrammarLessonLayout;
