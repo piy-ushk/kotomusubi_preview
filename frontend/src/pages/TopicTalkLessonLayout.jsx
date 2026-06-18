@@ -222,11 +222,15 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
         return (
           <div className="dialogue" style={{ marginTop: '8px' }}>
             <div className={`bubble ${isKen ? 'ken' : 'ana'}`} onContextMenu={handleContext}>
-              <span className="speaker">{speaker}</span>
+              <span className="speaker">{speaker === 'ケン' || speaker === 'Ken' ? '👦🏻 ケン' : '🧒🏻 アナ'}</span>
               {bubbleContent}
-              {en && <p className="en" style={{display: isTranslated ? 'block' : 'none'}}>{en}</p>}
+              {en && (
+                <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
+                  <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+                  <p className="en">{en}</p>
+                </div>
+              )}
               {subBlocks}
-              {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
               {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
             </div>
           </div>
@@ -240,9 +244,13 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
              if (body) body.style.display = body.style.display === 'none' ? 'block' : 'none';
           }}>{jpContent}</button>
           <div className="sample-body" style={{ display: 'none' }}>
-            {isTranslated && en && <p className="en" style={{ display: 'block' }}>{en}</p>}
+            {en && (
+              <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
+                <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+                <p className="en">{en}</p>
+              </div>
+            )}
             {subBlocks}
-            {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
           </div>
         </div>
       );
@@ -265,11 +273,15 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       const isKen = speaker === 'ケン' || speaker === 'Ken' || speaker === 'A';
       return (
         <div className={`bubble ${isKen ? 'ken' : 'ana'}`} onContextMenu={handleContext}>
-          <span className="speaker">{speaker}</span>
+          <span className="speaker">{isKen ? '👦🏻 ケン' : '🧒🏻 アナ'}</span>
           {text}
-          {en && <p className="en" style={{display: isTranslated ? 'block' : 'none'}}>{en}</p>}
+          {en && (
+            <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
+              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+              <p className="en">{en}</p>
+            </div>
+          )}
           {subBlocks}
-          {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
           {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
         </div>
       );

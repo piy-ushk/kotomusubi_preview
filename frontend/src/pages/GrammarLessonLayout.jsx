@@ -301,11 +301,29 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
 
     case 'quote': {
       if (!jp && !subBlocks) return null;
-      const isKen = jpContent.toString().includes('ケン') || jpContent.toString().includes('Ken');
+      let speaker = '';
+      let text = jpContent.toString();
+      
+      const aMatch = text.match(/^(A|B|ケン|アナ|Ken|Ana|佐藤|Sato)[：:]\s*(.*)/);
+      if (aMatch) {
+        speaker = aMatch[1];
+        text = aMatch[2];
+      } else {
+        const isKenFallback = text.includes('ケン') || text.includes('Ken') || text.includes('A:');
+        speaker = isKenFallback ? 'ケン' : 'アナ';
+      }
+      
+      const isKen = speaker === 'ケン' || speaker === 'Ken' || speaker === 'A';
       return (
         <div className={`bubble ${isKen ? 'ken' : 'ana'}`} onContextMenu={handleContext}>
-          {jpContent}
-          {en && <p className="en">{en}</p>}
+          <span className="speaker">{isKen ? '👦🏻 ケン' : '🧒🏻 アナ'}</span>
+          {text}
+          {en && (
+            <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
+              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+              <p className="en">{en}</p>
+            </div>
+          )}
           {subBlocks}
           {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
         </div>
