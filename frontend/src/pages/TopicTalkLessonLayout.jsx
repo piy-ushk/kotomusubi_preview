@@ -156,12 +156,32 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           </ul>
         );
       }
+      
+      const renderArrowPair = (text) => {
+        if (text && text.includes('→')) {
+          const parts = text.split('→');
+          if (parts.length === 2) {
+             const isRevealed = individualTranslations[blockId + '_arrow'];
+             return (
+               <div className="conj-pair">
+                  {hasJapanese(parts[0]) ? renderFuriganaText(parts[0].trim(), showFurigana) : parts[0].trim()} 
+                  <span className="arrow" style={{ margin: '0 8px' }}>→</span> 
+                  <span className={`conj-answer ${isRevealed ? 'revealed' : ''}`} onClick={() => onToggle(blockId + '_arrow')}>
+                    {hasJapanese(parts[1]) ? renderFuriganaText(parts[1].trim(), showFurigana) : parts[1].trim()}
+                  </span>
+               </div>
+             );
+          }
+        }
+        return jpContent;
+      };
+
       return (
         <ul className="flow-list" style={{ marginTop: '0', marginBottom: '8px' }} onContextMenu={handleContext}>
           <li style={{ padding: '4px 0', border: 'none' }}>
             <span className="flow-num" style={{ width: '16px', height: '16px', fontSize: '10px' }}>•</span>
             <div className="flow-content" style={{ flex: 1 }}>
-              {jp && <span>{jpContent}</span>}
+              {jp && renderArrowPair(jp)}
               {en && (
                 <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
                   <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>

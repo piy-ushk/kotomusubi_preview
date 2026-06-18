@@ -125,9 +125,28 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
 
     case 'paragraph': {
       if (!jp && !subBlocks) return null;
+      const renderArrowPair = (text) => {
+        if (text && text.includes('→')) {
+          const parts = text.split('→');
+          if (parts.length === 2) {
+             const isRevealed = individualTranslations[blockId + '_arrow'];
+             return (
+               <div className="conj-pair">
+                  {hasJapanese(parts[0]) ? renderFuriganaText(parts[0].trim(), showFurigana) : parts[0].trim()} 
+                  <span className="arrow" style={{ margin: '0 8px' }}>→</span> 
+                  <span className={`conj-answer ${isRevealed ? 'revealed' : ''}`} onClick={() => onToggle(blockId + '_arrow')}>
+                    {hasJapanese(parts[1]) ? renderFuriganaText(parts[1].trim(), showFurigana) : parts[1].trim()}
+                  </span>
+               </div>
+             );
+          }
+        }
+        return jpContent;
+      };
+
       return (
         <div className="meaning" onContextMenu={handleContext}>
-          {jp && <p>{jpContent}</p>}
+          {jp && renderArrowPair(jp)}
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
               <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
@@ -144,24 +163,64 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       const rawEmoji = blockData.icon?.emoji || '';
       const emoji = rawEmoji;
       if (!jp && !emoji && !subBlocks) return null;
+      
+      const getConjToneClass = (color) => {
+         if (color === 'orange_background') return 'tone-a';
+         if (color === 'yellow_background') return 'tone-b';
+         if (color === 'blue_background' || color === 'green_background') return 'tone-c';
+         if (color === 'red_background') return 'tone-exception';
+         if (color === 'gray_background') return 'tone-note';
+         return 'tone-plain';
+      };
+      const toneClass = getConjToneClass(blockData.color);
+
       return (
-        <div className="conj-box tone-plain" style={{ marginTop: '10px' }} onContextMenu={handleContext}>
+        <div className={`conj-box ${toneClass}`} style={{ marginTop: '10px' }} onContextMenu={handleContext}>
           <div className="conj-header">
             <span className="conj-pattern">{emoji} {jpContent}</span>
           </div>
+          {en && <div className="en" style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{en}</div>}
+          {subBlocks && <div className="conj-pairs" style={{ marginTop: '6px' }}>{subBlocks}</div>}
+          {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
+        </div>
+      );
+    }
+
+    case 'bulleted_list_item': {
+      const renderArrowPair = (text) => {
+        if (text && text.includes('→')) {
+          const parts = text.split('→');
+          if (parts.length === 2) {
+             const isRevealed = individualTranslations[blockId + '_arrow'];
+             return (
+               <div className="conj-pair">
+                  {hasJapanese(parts[0]) ? renderFuriganaText(parts[0].trim(), showFurigana) : parts[0].trim()} 
+                  <span className="arrow" style={{ margin: '0 8px' }}>→</span> 
+                  <span className={`conj-answer ${isRevealed ? 'revealed' : ''}`} onClick={() => onToggle(blockId + '_arrow')}>
+                    {hasJapanese(parts[1]) ? renderFuriganaText(parts[1].trim(), showFurigana) : parts[1].trim()}
+                  </span>
+               </div>
+             );
+          }
+        }
+        return jpContent;
+      };
+
+      return (
+        <li onContextMenu={handleContext} style={getNotionColorStyle(blockData.color)}>
+          {renderArrowPair(jp)}
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
               <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
               <p className="en">{en}</p>
             </div>
           )}
-          {subBlocks}
+          {subBlocks && <ul>{subBlocks}</ul>}
           {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
-        </div>
+        </li>
       );
     }
-
-    case 'bulleted_list_item':
+    
     case 'numbered_list_item': {
       if (!jp && !subBlocks) return null;
       return (
@@ -293,6 +352,24 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
 
     case 'column':
       return <div className="ta-group">{subBlocks}</div>;
+
+    case 'heading_3': {
+      const parts = jpContent.split(/\s+/);
+      if (parts.length >= 2 && jpContent.includes('グループ')) {
+        const numPart = parts.find(p => p.includes('グループ'));
+        const restParts = parts.filter(p => p !== numPart);
+        const jpPart = restParts.find(p => hasJapanese(p)) || '';
+        const enPart = restParts.filter(p => !hasJapanese(p)).join(' ') || '';
+        return (
+          <h4 className="ta-group-title">
+            <span className="ta-group-num">{numPart}</span>
+            {jpPart && <span className="ta-group-jp">{jpPart}</span>}
+            {enPart && <span className="ta-group-en">{enPart}</span>}
+          </h4>
+        );
+      }
+      return <h4 className="ta-group-title">{jpContent}</h4>;
+    }
 
     case 'display_number': {
       const d = blockData;
