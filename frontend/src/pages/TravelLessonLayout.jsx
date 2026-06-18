@@ -490,43 +490,7 @@ const TravelLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
 
   const slides = data?.learning_slides || [];
   const testSections = data?.test_sections || [];
-  const vocabularyList = data?.vocabulary || [];
 
-  const renderVocabulary = () => {
-    if (!vocabularyList || vocabularyList.length === 0) {
-      return null;
-    }
-    return (
-      <section className="section">
-        <h2 className="section-title"><span className="num">📚</span>単語・フレーズ確認 / Vocabulary</h2>
-        <div className="vocab-grid">
-          {vocabularyList.map((vocab, idx) => (
-            <div key={idx} className={`vocab-card ${individualTranslations[`vocab_mean_${idx}`] ? 'show-meaning' : ''} ${individualTranslations[`vocab_ex_${idx}`] ? 'show-ex-en' : ''}`}>
-              <h3 className="vocab-word">{vocab.word}</h3>
-              {vocab.reading && <p className="vocab-reading" style={{fontSize: '0.85rem', color: 'var(--text-muted)', margin: '0 0 0.15rem'}}>{vocab.reading}</p>}
-              
-              <button className="vocab-toggle" onClick={() => toggleTranslation(`vocab_mean_${idx}`)}>
-                意味を見る
-              </button>
-              <p className="vocab-meaning-en">{vocab.meaning}</p>
-              
-              {vocab.example && (
-                <div style={{marginTop: '1rem'}}>
-                  <button className="vocab-toggle" onClick={() => toggleTranslation(`vocab_ex_${idx}`)}>
-                    例文を見る
-                  </button>
-                  <div className="vocab-example-section">
-                    <p className="vocab-example">{vocab.example}</p>
-                    {vocab.exampleMeaning && <p className="vocab-example-en">{vocab.exampleMeaning}</p>}
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
-    );
-  };
 
   return (
     <div className="travel-lesson-page">
@@ -548,8 +512,6 @@ const TravelLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
             <p className="subtitle">{data?.title ? splitTranslation(data.title).en : ''}</p>
           </div>
         </header>
-
-        {renderVocabulary()}
 
         {slides.map((slide, slideIndex) => (
           <section className="section" key={`slide_${slideIndex}`}>
