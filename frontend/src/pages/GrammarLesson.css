@@ -129,7 +129,7 @@
 .grammar-lesson-page .dialogue { display: flex; flex-direction: column; gap: 0.7rem; }
 .grammar-lesson-page .bubble { padding: 0.9rem 1.1rem; border-radius: 14px; max-width: 86%; font-family: var(--font-jp); line-height: 2; }
 .grammar-lesson-page .bubble.ken { background: var(--ken-bg); align-self: flex-start; border-bottom-left-radius: 4px; }
-.grammar-lesson-page .bubble.ana { background: var(--ana-bg); align-self: flex-end; border-bottom-right-radius: 4px; }
+.grammar-lesson-page .bubble.ana { background: var(--ana-bg); align-self: flex-start; border-bottom-left-radius: 4px; }
 .grammar-lesson-page .speaker { display: inline-block; font-size: var(--fs-small); font-weight: 700; margin-right: 0.55rem; color: var(--text-muted); vertical-align: 0.05em; }
 .grammar-lesson-page .bubble.ken .speaker { color: var(--ken-color); }
 .grammar-lesson-page .bubble.ana .speaker { color: var(--ana-color); }
@@ -188,4 +188,19 @@
   .hero::before, .hero::after { display: none; }
   .conj-answer { color: var(--accent-dark) !important; background: transparent !important; border-color: transparent !important; }
   .conj-answer::before { display: none !important; }
+}
+
+
+@media (max-width: 640px) {
+  .grammar-lesson-page .form-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .grammar-lesson-page .drill summary {
+    align-items: flex-start;
+  }
+  .grammar-lesson-page .drill summary .en-wrap {
+    margin-top: 0;
+  }
 }
