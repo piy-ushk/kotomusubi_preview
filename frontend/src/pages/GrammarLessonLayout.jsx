@@ -9,6 +9,7 @@ import {
   preprocessBlocks, shouldShowAnswerField, renderAnnotations
 } from '../utils/lessonHelpers';
 import './GrammarLesson.css';
+import Lesson6_1 from './Lesson6_1';
 
 /* ---- Block Components ---- */
 const TranslationControls = ({ id, rawText, isTranslated, onToggle }) => (
@@ -248,7 +249,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
       return (
         <ul className="point-list" onContextMenu={handleContext}>
           <li>
-            <input type="checkbox" readOnly checked={checked} style={{ marginRight: '8px' }}/>
+            <input type="checkbox" readOnly checked={checked} style={{ marginRight: '8px' }} />
             {jp && <span>{jpContent}</span>}
             {en && (
               <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
@@ -262,15 +263,29 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
         </ul>
       );
     }
-    
+
     case 'toggle': {
+      if (!jp && !subBlocks) return null;
       return (
-        <details className="drill" style={{ margin: '8px 0' }}>
-          <summary>{jpContent}</summary>
+        <details className="drill" style={{ margin: '8px 0' }} onContextMenu={handleContext}>
+          <summary>
+            {jpContent}
+            {en && !subBlocks && (
+              <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`} style={{ display: 'inline-block', marginLeft: '10px' }}>
+                <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+                <span className="en">{en}</span>
+              </div>
+            )}
+          </summary>
           <div className="drill-body">
-            {isTranslated && en && <p className="en">{en}</p>}
+            {en && subBlocks && (
+              <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`} style={{ marginBottom: '8px' }}>
+                <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+                <p className="en">{en}</p>
+              </div>
+            )}
             {subBlocks}
-            {hasJpChars && <TranslationControls id={blockId} rawText={rawText} isTranslated={isTranslated} onToggle={onToggle} />}
+            {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
           </div>
         </details>
       );
@@ -627,6 +642,25 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
     }
     return elements;
   };
+
+  if (data?.title?.includes('てください')) {
+    return (
+      <div className={`grammar-lesson-page ${translateAll ? 'show-en' : ''}`}>
+        <div className="page">
+          <div className="toolbar">
+            <button onClick={() => navigate(-1)} type="button">Back</button>
+            <button className={translateAll ? 'active' : ''} onClick={() => setTranslateAll(v => !v)} type="button">
+              {translateAll ? 'Hide Translations' : 'Translate All'}
+            </button>
+            <button onClick={() => setShowFurigana(v => !v)} type="button">
+              Furigana
+            </button>
+          </div>
+          <Lesson6_1 translateAll={translateAll} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`grammar-lesson-page ${translateAll ? 'show-en' : ''}`}>
