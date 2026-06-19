@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -9,6 +10,13 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ text: '', type: '' });
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/', { replace: true });
+    }
+  }, [user, navigate]);
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -23,9 +31,7 @@ const Login = () => {
         });
         if (error) throw error;
         
-        if (data.session) {
-          navigate('/');
-        } else {
+        if (!data.session) {
           setMessage({ 
             text: 'Registration successful! You can now sign in.', 
             type: 'success' 
@@ -38,7 +44,6 @@ const Login = () => {
           password,
         });
         if (error) throw error;
-        navigate('/');
       }
     } catch (error) {
       setMessage({ text: error.message, type: 'error' });
