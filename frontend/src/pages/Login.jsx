@@ -31,7 +31,9 @@ const Login = () => {
         });
         if (error) throw error;
         
-        if (!data.session) {
+        if (data.session) {
+          navigate('/', { replace: true });
+        } else {
           setMessage({ 
             text: 'Registration successful! You can now sign in.', 
             type: 'success' 
@@ -44,6 +46,7 @@ const Login = () => {
           password,
         });
         if (error) throw error;
+        navigate('/', { replace: true });
       }
     } catch (error) {
       setMessage({ text: error.message, type: 'error' });
