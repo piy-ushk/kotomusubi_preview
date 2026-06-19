@@ -69,8 +69,8 @@ const Home = ({ onGoToMaterials }) => {
       {/* Welcome Banner Card */}
       <motion.div
         className="welcome-banner"
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
         <div className="emoji">📚</div>
