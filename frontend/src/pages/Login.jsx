@@ -22,10 +22,16 @@ const Login = () => {
           password,
         });
         if (error) throw error;
-        setMessage({ 
-          text: 'Registration successful! Check your email to confirm your account.', 
-          type: 'success' 
-        });
+        
+        if (data.session) {
+          navigate('/');
+        } else {
+          setMessage({ 
+            text: 'Registration successful! You can now sign in.', 
+            type: 'success' 
+          });
+          setIsSignUp(false);
+        }
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
