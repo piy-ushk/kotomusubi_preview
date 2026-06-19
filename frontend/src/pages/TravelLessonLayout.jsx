@@ -627,33 +627,43 @@ const TravelLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
               isTest
             };
             
+            const hasMeaningfulContent = (contentArr) => {
+              return contentArr.some(cItem => {
+                const t = cItem.block.type;
+                if (t === 'divider') return false;
+                if (t === 'paragraph') {
+                  const text = cItem.block.paragraph.rich_text?.map(rt => rt.plain_text).join('') || '';
+                  if (!text.trim()) return false;
+                }
+                return true;
+              });
+            };
+
             blocks.forEach(item => {
               const b = item.block;
               if (b.type === 'heading_1' || b.type === 'heading_2' || b.type === 'heading_3') {
-                if (currentSection.title || currentSection.content.length > 0) {
+                if (currentSection.title || hasMeaningfulContent(currentSection.content)) {
                   allSections.push(currentSection);
+                  currentSection = { title: '', content: [], isTest };
                 }
                 
                 let headingText = '';
                 if (b[b.type].rich_text) headingText = b[b.type].rich_text.map(rt => rt.plain_text).join('');
                 else if (b[b.type].text) headingText = b[b.type].text;
                 
-                currentSection = {
-                  title: headingText,
-                  content: [],
-                  isTest
-                };
+                currentSection.title = headingText;
+                
               } else if (b.type === 'child_database') {
                 const pageItems = b.database_items?.filter(dbItem => dbItem.page_blocks?.length > 0) || [];
                 if (pageItems.length > 0) {
-                  if (currentSection.title || currentSection.content.length > 0) {
+                  if (currentSection.title || hasMeaningfulContent(currentSection.content)) {
                     allSections.push(currentSection);
                   }
                   
                   b.database_items.forEach(dbItem => {
                     if (dbItem.page_blocks?.length > 0) {
                       const dbBlocks = preprocessBlocks(dbItem.page_blocks, true);
-                      chunkBlocks(dbBlocks, dbItem.title || '', isTest);
+                      chunkBlocks(dbBlocks, '', isTest); 
                     }
                   });
                   
@@ -666,22 +676,35 @@ const TravelLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
               }
             });
             
-            if (currentSection.title || currentSection.content.length > 0) {
+            if (currentSection.title || hasMeaningfulContent(currentSection.content)) {
               allSections.push(currentSection);
             }
           };
 
           slides.forEach(slide => {
             const pb = preprocessBlocks(slide.content || [], true);
-            chunkBlocks(pb, slide.title, false);
+            chunkBlocks(pb, '', false);
           });
           
           testSections.forEach(section => {
             const pb = preprocessBlocks(section.content || [], true);
-            chunkBlocks(pb, section.title, true);
+            chunkBlocks(pb, '', true);
           });
 
-          return allSections.map((section, secIdx) => (
+          const validSections = allSections.filter(sec => {
+            const hasContent = sec.content.some(item => {
+              const t = item.block.type;
+              if (t === 'divider' || t === 'image') return false; 
+              if (t === 'paragraph') {
+                const text = item.block.paragraph.rich_text?.map(rt => rt.plain_text).join('') || '';
+                if (!text.trim()) return false;
+              }
+              return true;
+            });
+            return hasContent || sec.title;
+          });
+
+          return validSections.map((section, secIdx) => (
             <section className={`section ${section.isTest ? 'quiz-section' : ''}`} key={`sec_${secIdx}`}>
               {section.title && (
                 <h2 className="section-title">
