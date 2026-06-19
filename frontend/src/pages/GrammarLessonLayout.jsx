@@ -650,114 +650,76 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
         </header>
 
         {(() => {
-          // Flatten and chunk slides by headings
           const allSections = [];
           
-          slides.forEach(slide => {
-            let currentSection = {
-              title: slide.title,
-              content: []
-            };
-            
-            const processedBlocks = preprocessBlocks(slide.content || [], true);
-            
-            processedBlocks.forEach(item => {
-              const b = item.block;
-              if (b.type === 'heading_1' || b.type === 'heading_2') {
-                // If the current section has content or a title, push it and start a new one
-                if (currentSection.title || currentSection.content.length > 0) {
-                  allSections.push(currentSection);
+          const processSlides = (slideList, isTest) => {
+            slideList.forEach(slide => {
+              let currentSection = {
+                title: slide.title,
+                content: [],
+                isTest
+              };
+              
+              const processedBlocks = preprocessBlocks(slide.content || [], true);
+              
+              processedBlocks.forEach(item => {
+                const b = item.block;
+                if (b.type === 'heading_1' || b.type === 'heading_2') {
+                  if (currentSection.title || currentSection.content.length > 0) {
+                    allSections.push(currentSection);
+                  }
+                  
+                  let headingText = '';
+                  if (b[b.type].rich_text) headingText = b[b.type].rich_text.map(rt => rt.plain_text).join('');
+                  else if (b[b.type].text) headingText = b[b.type].text;
+                  
+                  currentSection = {
+                    title: headingText,
+                    content: [],
+                    isTest
+                  };
+                } else if (b.type === 'child_database') {
+                  const pageItems = b.database_items?.filter(dbItem => dbItem.page_blocks?.length > 0) || [];
+                  if (pageItems.length > 0) {
+                    if (currentSection.title || currentSection.content.length > 0) {
+                      allSections.push(currentSection);
+                    }
+                    b.database_items.forEach(dbItem => {
+                      if (dbItem.page_blocks?.length > 0) {
+                        allSections.push({
+                          title: dbItem.title || '',
+                          content: preprocessBlocks(dbItem.page_blocks, true),
+                          isTest
+                        });
+                      }
+                    });
+                    currentSection = { title: '', content: [], isTest };
+                  } else {
+                    currentSection.content.push(item);
+                  }
+                } else {
+                  currentSection.content.push(item);
                 }
-                
-                // Get raw text from heading for the section title
-                let headingText = '';
-                if (b[b.type].rich_text) headingText = b[b.type].rich_text.map(rt => rt.plain_text).join('');
-                else if (b[b.type].text) headingText = b[b.type].text;
-                
-                currentSection = {
-                  title: headingText,
-                  content: []
-                };
-              } else {
-                currentSection.content.push(item);
+              });
+              
+              if (currentSection.title || currentSection.content.length > 0) {
+                allSections.push(currentSection);
               }
             });
-            
-            if (currentSection.title || currentSection.content.length > 0) {
-              allSections.push(currentSection);
-            }
-          });
+          };
+
+          processSlides(slides, false);
+          processSlides(testSections, true);
 
           return allSections.map((section, secIdx) => (
-            <section className="section" key={`slide_sec_${secIdx}`}>
+            <section className={`section ${section.isTest ? 'quiz-section' : ''}`} key={`sec_${secIdx}`}>
               {section.title && (
                 <h2 className="section-title">
                   <span className="num">{secIdx + 1}</span>
                   {splitTranslation(section.title).jp}
                 </h2>
               )}
-              {renderGroupedBlocks(section.content, `slide_sec_${secIdx}`)}
-            </section>
-          ));
-        })()}
-
-        {(() => {
-          // Also chunk test sections by headings
-          const allTestSections = [];
-          
-          testSections.forEach(section => {
-            let currentSection = {
-              title: section.title,
-              content: []
-            };
-            
-            const processedBlocks = preprocessBlocks(section.content || [], true);
-            
-            processedBlocks.forEach(item => {
-              const b = item.block;
-              if (b.type === 'heading_1' || b.type === 'heading_2') {
-                if (currentSection.title || currentSection.content.length > 0) {
-                  allTestSections.push(currentSection);
-                }
-                
-                let headingText = '';
-                if (b[b.type].rich_text) headingText = b[b.type].rich_text.map(rt => rt.plain_text).join('');
-                else if (b[b.type].text) headingText = b[b.type].text;
-                
-                currentSection = {
-                  title: headingText,
-                  content: []
-                };
-              } else {
-                currentSection.content.push(item);
-              }
-            });
-            
-            if (currentSection.title || currentSection.content.length > 0) {
-              allTestSections.push(currentSection);
-            }
-          });
-
-          // We need the number of slide sections to continue numbering
-          let totalSlideSections = 0;
-          slides.forEach(slide => {
-             const pb = preprocessBlocks(slide.content || [], true);
-             let count = 1;
-             pb.forEach(item => {
-                if (item.block.type === 'heading_1' || item.block.type === 'heading_2') count++;
-             });
-             totalSlideSections += count;
-          });
-
-          return allTestSections.map((section, secIdx) => (
-            <section key={`test_sec_${secIdx}`} className="section">
-              {section.title && (
-                <h2 className="section-title">
-                  <span className="num">{totalSlideSections + secIdx + 1}</span>
-                  {splitTranslation(section.title).jp}
-                </h2>
-              )}
-              {renderGroupedBlocks(section.content, `test_sec_${secIdx}`)}
+              {renderGroupedBlocks(section.content, `sec_${secIdx}`)}
             </section>
           ));
         })()}
