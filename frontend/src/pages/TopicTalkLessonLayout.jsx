@@ -578,64 +578,66 @@ const TopicTalkLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) =>
         {(() => {
           const allSections = [];
           
-          const processSlides = (slideList, isTest) => {
-            slideList.forEach(slide => {
-              let currentSection = {
-                title: slide.title,
-                content: [],
-                isTest
-              };
-              
-              const processedBlocks = preprocessBlocks(slide.content || [], true);
-              
-              processedBlocks.forEach(item => {
-                const b = item.block;
-                if (b.type === 'heading_1' || b.type === 'heading_2') {
+          const chunkBlocks = (blocks, initialTitle, isTest) => {
+            let currentSection = {
+              title: initialTitle,
+              content: [],
+              isTest
+            };
+            
+            blocks.forEach(item => {
+              const b = item.block;
+              if (b.type === 'heading_1' || b.type === 'heading_2' || b.type === 'heading_3') {
+                if (currentSection.title || currentSection.content.length > 0) {
+                  allSections.push(currentSection);
+                }
+                
+                let headingText = '';
+                if (b[b.type].rich_text) headingText = b[b.type].rich_text.map(rt => rt.plain_text).join('');
+                else if (b[b.type].text) headingText = b[b.type].text;
+                
+                currentSection = {
+                  title: headingText,
+                  content: [],
+                  isTest
+                };
+              } else if (b.type === 'child_database') {
+                const pageItems = b.database_items?.filter(dbItem => dbItem.page_blocks?.length > 0) || [];
+                if (pageItems.length > 0) {
                   if (currentSection.title || currentSection.content.length > 0) {
                     allSections.push(currentSection);
                   }
                   
-                  let headingText = '';
-                  if (b[b.type].rich_text) headingText = b[b.type].rich_text.map(rt => rt.plain_text).join('');
-                  else if (b[b.type].text) headingText = b[b.type].text;
-                  
-                  currentSection = {
-                    title: headingText,
-                    content: [],
-                    isTest
-                  };
-                } else if (b.type === 'child_database') {
-                  const pageItems = b.database_items?.filter(dbItem => dbItem.page_blocks?.length > 0) || [];
-                  if (pageItems.length > 0) {
-                    if (currentSection.title || currentSection.content.length > 0) {
-                      allSections.push(currentSection);
+                  b.database_items.forEach(dbItem => {
+                    if (dbItem.page_blocks?.length > 0) {
+                      const dbBlocks = preprocessBlocks(dbItem.page_blocks, true);
+                      chunkBlocks(dbBlocks, dbItem.title || '', isTest);
                     }
-                    b.database_items.forEach(dbItem => {
-                      if (dbItem.page_blocks?.length > 0) {
-                        allSections.push({
-                          title: dbItem.title || '',
-                          content: preprocessBlocks(dbItem.page_blocks, true),
-                          isTest
-                        });
-                      }
-                    });
-                    currentSection = { title: '', content: [], isTest };
-                  } else {
-                    currentSection.content.push(item);
-                  }
+                  });
+                  
+                  currentSection = { title: '', content: [], isTest };
                 } else {
                   currentSection.content.push(item);
                 }
-              });
-              
-              if (currentSection.title || currentSection.content.length > 0) {
-                allSections.push(currentSection);
+              } else {
+                currentSection.content.push(item);
               }
             });
+            
+            if (currentSection.title || currentSection.content.length > 0) {
+              allSections.push(currentSection);
+            }
           };
 
-          processSlides(slides, false);
-          processSlides(testSections, true);
+          slides.forEach(slide => {
+            const pb = preprocessBlocks(slide.content || [], true);
+            chunkBlocks(pb, slide.title, false);
+          });
+          
+          testSections.forEach(section => {
+            const pb = preprocessBlocks(section.content || [], true);
+            chunkBlocks(pb, section.title, true);
+          });
 
           return allSections.map((section, secIdx) => (
             <section className={`section ${section.isTest ? 'quiz-section' : ''}`} key={`sec_${secIdx}`}>
