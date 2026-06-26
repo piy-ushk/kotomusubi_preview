@@ -12,6 +12,22 @@ export default function Lesson6_1({ translateAll }) {
           const parent = e.target.parentElement;
           if (parent) parent.classList.toggle('show-en');
         }
+      } else if (e.target.classList.contains('conj-answer')) {
+        e.target.classList.toggle('revealed');
+      } else if (e.target.classList.contains('sample-toggle')) {
+        const wrap = e.target.closest('.sample-wrap');
+        if (wrap) {
+          wrap.classList.toggle('show');
+          const on = wrap.classList.contains('show');
+          e.target.textContent = on ? '回答例を隠す' : '回答例を見る';
+        }
+      } else if (e.target.classList.contains('quiz-toggle')) {
+        const parent = e.target.parentElement;
+        if (parent) {
+          parent.classList.toggle('show');
+          const on = parent.classList.contains('show');
+          e.target.innerHTML = on ? 'こたえを隠す' : 'こたえを見る';
+        }
       }
     };
     document.addEventListener('click', handleToggle);
