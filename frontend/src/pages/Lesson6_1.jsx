@@ -255,9 +255,9 @@ export default function Lesson6_1({ translateAll }) {
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><p className="en">I'll copy this printout. Please show me how.</p></div>
       </div>
 
-      <div className="bubble ken" style="max-width: 100%;">
+      <div className="bubble ken" style={{maxWidth: "100%"}}>
         <span className="speaker">👦🏻 ケン</span>
-        <span style="white-space: nowrap; font-size: 0.92rem;">はい。まず、このボタンを押してください。それから、紙をここに入れてください。</span>
+        <span style={{whiteSpace: "nowrap", fontSize: "0.92rem"}}>はい。まず、このボタンを押してください。それから、紙をここに入れてください。</span>
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><p className="en">Sure. First, please press this button. Then, please put the paper in here.</p></div>
       </div>
 
