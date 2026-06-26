@@ -643,7 +643,7 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
     return elements;
   };
 
-  if (data?.title?.includes('てください')) {
+  if (data?.title?.includes('てください') || data?.title?.includes('Chapter6') || data?.title?.includes('Chapter 6') || lessonId === 'd59edc46-8f20-8354-8805-01959648e824') {
     return (
       <div className={`grammar-lesson-page ${translateAll ? 'show-en' : ''}`}>
         <div className="page">
