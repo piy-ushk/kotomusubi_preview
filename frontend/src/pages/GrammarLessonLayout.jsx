@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getLessonContent, addAnnotation, deleteAnnotation } from '../services/api';
+import { getLessonContent, addAnnotation, deleteAnnotation, getLessonNote, saveLessonNote } from '../services/api';
 import { vocabularyService } from '../services/vocabularyService';
 import {
   XIcon, Volume2, TranslateIcon, BookIcon, CheckIcon, ChevronLeft,
   speak, splitTranslation, getTranslationOnly, getTranslationsFromText,
   getRawText, hasJapanese, renderFuriganaText, getNotionColorStyle, renderRichText,
-  preprocessBlocks, shouldShowAnswerField, renderAnnotations
+  preprocessBlocks, shouldShowAnswerField, renderAnnotations, cleanText, getLanguageLabel, parseLanguageSegments, LANGUAGE_LABELS
 } from '../utils/lessonHelpers';
 import './GrammarLesson.css';
 import Lesson6_1 from './Lesson6_1';
+import Lesson1_1 from './Lesson1_1';
 
 /* ---- Block Components ---- */
 const TranslationControls = ({ id, rawText, isTranslated, onToggle }) => (
@@ -503,6 +504,28 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
   const [showFurigana, setShowFurigana] = useState(false);
   const [translationLanguage, setTranslationLanguage] = useState('en');
   const [answerInputs, setAnswerInputs] = useState({});
+  const [lessonNote, setLessonNote] = useState('');
+  const [isSavingNote, setIsSavingNote] = useState(false);
+
+  useEffect(() => {
+    if (lessonId) {
+      getLessonNote(lessonId).then(res => {
+        if (res.data?.content) setLessonNote(res.data.content);
+      }).catch(err => console.error(err));
+    }
+  }, [lessonId]);
+
+  const handleSaveNote = async () => {
+    setIsSavingNote(true);
+    try {
+      await saveLessonNote(lessonId, lessonNote);
+      alert('ノートを保存しました！');
+    } catch (err) {
+      console.error(err);
+      alert('保存に失敗しました。');
+    }
+    setIsSavingNote(false);
+  };
 
   const toggleTranslation = useCallback((id) => {
     setIndividualTranslations(prev => ({ ...prev, [id]: !prev[id] }));
@@ -649,6 +672,15 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
         <div className="page">
           <div className="toolbar">
             <button onClick={() => navigate(-1)} type="button">Back</button>
+            <select 
+              value={translationLanguage} 
+              onChange={(e) => setTranslationLanguage(e.target.value)}
+              style={{ padding: '0.45rem 1rem', borderRadius: '999px', border: '1px solid var(--line)', background: 'var(--card)', color: 'var(--accent-dark)', fontFamily: 'inherit', fontSize: 'var(--fs-small)', fontWeight: 500, cursor: 'pointer', outline: 'none', marginLeft: '0.5rem' }}
+            >
+              {Object.entries(LANGUAGE_LABELS).map(([code, label]) => (
+                <option key={code} value={code}>{label}</option>
+              ))}
+            </select>
             <button className={translateAll ? 'active' : ''} onClick={() => setTranslateAll(v => !v)} type="button">
               {translateAll ? 'Hide Translations' : 'Translate All'}
             </button>
@@ -656,7 +688,70 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
               Furigana
             </button>
           </div>
-          <Lesson6_1 translateAll={translateAll} />
+          <Lesson6_1 translateAll={translateAll} translationLanguage={translationLanguage} />
+          
+          <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'var(--card)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow)' }}>
+            <h3 style={{ fontSize: '1.1rem', marginBottom: '0.8rem', color: 'var(--accent-dark)' }}>My Note</h3>
+            <textarea 
+              value={lessonNote} 
+              onChange={e => setLessonNote(e.target.value)}
+              placeholder="ここにメモや英作文を自由に書いてください..."
+              style={{ width: '100%', minHeight: '120px', padding: '1rem', borderRadius: '8px', border: '1px solid var(--line)', fontFamily: 'inherit', resize: 'vertical' }}
+            />
+            <button 
+              onClick={handleSaveNote}
+              disabled={isSavingNote}
+              style={{ marginTop: '1rem', padding: '0.6rem 1.2rem', background: 'var(--primary)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+            >
+              {isSavingNote ? '保存中...' : '保存する (Save)'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Chapter 1 — render Lesson1_1 with same layout style
+  if (data?.title?.includes('Chapter1') || data?.title?.includes('Chapter 1') || lessonId === '3f3edc46-8f20-83b5-8b83-813292c5056f') {
+    return (
+      <div className={`grammar-lesson-page ${translateAll ? 'show-en' : ''}`}>
+        <div className="page">
+          <div className="toolbar">
+            <button onClick={() => navigate(-1)} type="button">Back</button>
+            <select 
+              value={translationLanguage} 
+              onChange={(e) => setTranslationLanguage(e.target.value)}
+              style={{ padding: '0.45rem 1rem', borderRadius: '999px', border: '1px solid var(--line)', background: 'var(--card)', color: 'var(--accent-dark)', fontFamily: 'inherit', fontSize: 'var(--fs-small)', fontWeight: 500, cursor: 'pointer', outline: 'none', marginLeft: '0.5rem' }}
+            >
+              {Object.entries(LANGUAGE_LABELS).map(([code, label]) => (
+                <option key={code} value={code}>{label}</option>
+              ))}
+            </select>
+            <button className={translateAll ? 'active' : ''} onClick={() => setTranslateAll(v => !v)} type="button">
+              {translateAll ? 'Hide Translations' : 'Translate All'}
+            </button>
+            <button onClick={() => setShowFurigana(v => !v)} type="button">
+              Furigana
+            </button>
+          </div>
+          <Lesson1_1 translateAll={translateAll} translationLanguage={translationLanguage} />
+          
+          <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'var(--card)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow)' }}>
+            <h3 style={{ fontSize: '1.1rem', marginBottom: '0.8rem', color: 'var(--accent-dark)' }}>My Note</h3>
+            <textarea 
+              value={lessonNote} 
+              onChange={e => setLessonNote(e.target.value)}
+              placeholder="ここにメモや英作文を自由に書いてください..."
+              style={{ width: '100%', minHeight: '120px', padding: '1rem', borderRadius: '8px', border: '1px solid var(--line)', fontFamily: 'inherit', resize: 'vertical' }}
+            />
+            <button 
+              onClick={handleSaveNote}
+              disabled={isSavingNote}
+              style={{ marginTop: '1rem', padding: '0.6rem 1.2rem', background: 'var(--primary)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+            >
+              {isSavingNote ? '保存中...' : '保存する (Save)'}
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -794,8 +889,25 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
               )}
               {renderGroupedBlocks(section.content, `sec_${secIdx}`)}
             </section>
-          ));
+          ))
         })()}
+
+        <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'var(--card)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow)' }}>
+          <h3 style={{ fontSize: '1.1rem', marginBottom: '0.8rem', color: 'var(--accent-dark)' }}>My Note</h3>
+          <textarea 
+            value={lessonNote} 
+            onChange={e => setLessonNote(e.target.value)}
+            placeholder="ここにメモや英作文を自由に書いてください..."
+            style={{ width: '100%', minHeight: '120px', padding: '1rem', borderRadius: '8px', border: '1px solid var(--line)', fontFamily: 'inherit', resize: 'vertical' }}
+          />
+          <button 
+            onClick={handleSaveNote}
+            disabled={isSavingNote}
+            style={{ marginTop: '1rem', padding: '0.6rem 1.2rem', background: 'var(--primary)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+          >
+            {isSavingNote ? '保存中...' : '保存する (Save)'}
+          </button>
+        </div>
 
         <div className="toolbar" style={{ justifyContent: 'center', marginTop: '30px' }}>
           <button onClick={() => navigate(-1)} type="button" className="active" style={{ fontSize: '1.1rem', padding: '12px 30px' }}>Complete Lesson</button>

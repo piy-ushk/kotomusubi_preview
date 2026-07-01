@@ -204,3 +204,28 @@
     margin-top: 0;
   }
 }
+
+/* === Lesson1_1 (and shared lesson HTML-style components) === */
+.grammar-lesson-page .section-intro { color: var(--text-muted); font-size: 0.95rem; margin: 0 0 1rem; line-height: 1.8; }
+.grammar-lesson-page .pattern-box { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: var(--radius); padding: 1.2rem 1.4rem; margin-bottom: 1.5rem; }
+.grammar-lesson-page .pattern { font-family: var(--font-jp); font-size: 1.4rem; font-weight: 700; color: var(--accent-dark); margin: 0 0 0.8rem; letter-spacing: 0.05em; }
+.grammar-lesson-page .pattern .part { display: inline-block; background: var(--accent); color: #fff; padding: 0.1rem 0.5rem; border-radius: 4px; font-size: 1.1rem; margin: 0 0.15rem; }
+.grammar-lesson-page .examples { display: flex; flex-direction: column; gap: 0.8rem; }
+.grammar-lesson-page .reading { font-size: 0.85rem; color: var(--text-muted); margin: 0.2rem 0; font-family: var(--font-jp); }
+.grammar-lesson-page .particle { font-weight: 900; color: var(--accent); }
+.grammar-lesson-page .points { display: flex; flex-direction: column; gap: 1rem; }
+.grammar-lesson-page .point-item { display: flex; gap: 1rem; align-items: flex-start; background: #FBF7EE; border-radius: var(--radius); padding: 1rem 1.2rem; }
+.grammar-lesson-page .point-num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; flex-shrink: 0; background: var(--accent-soft); color: var(--accent-dark); border-radius: 50%; font-size: 1rem; font-weight: 700; }
+.grammar-lesson-page .point-body { flex: 1; }
+.grammar-lesson-page .point-title { font-weight: 700; color: var(--accent-dark); margin: 0 0 0.4rem; font-family: var(--font-jp); }
+.grammar-lesson-page .point-body p { margin: 0 0 0.5rem; line-height: 1.9; }
+.grammar-lesson-page .vocab-table-wrap { overflow-x: auto; }
+.grammar-lesson-page .vocab-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: var(--radius); overflow: hidden; font-size: 0.97rem; }
+.grammar-lesson-page .vocab-table th { background: var(--accent-soft); color: var(--accent-dark); padding: 0.7rem 1rem; text-align: left; font-weight: 700; border-bottom: 2px solid var(--accent); }
+.grammar-lesson-page .vocab-table td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--line); font-family: var(--font-jp); vertical-align: middle; }
+.grammar-lesson-page .vocab-table tr:last-child td { border-bottom: none; }
+.grammar-lesson-page .vocab-table tbody tr:hover td { background: var(--accent-soft); }
+.grammar-lesson-page .quiz-answer { font-family: var(--font-jp); font-weight: 700; color: var(--accent-dark); font-size: 1.05rem; margin: 0 0 0.3rem; }
+.grammar-lesson-page .quiz-note { color: var(--text-muted); font-size: 0.88rem; margin: 0; }
+.grammar-lesson-page .sample-content { display: none; margin-top: 0.7rem; padding: 0.85rem 1rem; background: #fff; border-radius: 8px; border-left: 3px solid var(--accent); line-height: 1.9; font-family: var(--font-jp); }
+.grammar-lesson-page .sample-wrap.show .sample-content { display: block; }

@@ -108,5 +108,57 @@ export const deleteAnnotation = async (annotationId) => {
   return { data: { success: true } };
 };
 
-// We don't export default api anymore because we don't use axios.
-// Any components expecting `api.get()` would fail, but we only imported the named exports.
+// Notes functions for lesson-level note-taking
+
+export const getLessonNote = async (lessonId) => {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return { data: null };
+  const { data, error } = await supabase.from('annotations')
+    .select('content')
+    .eq('user_id', session.user.id)
+    .eq('lesson_id', lessonId)
+    .eq('block_id', 'lesson_note')
+    .maybeSingle();
+  if (error) throw error;
+  return { data };
+};
+
+export const saveLessonNote = async (lessonId, content) => {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error("No session");
+  
+  const { data: existing } = await supabase.from('annotations')
+    .select('id')
+    .eq('user_id', session.user.id)
+    .eq('lesson_id', lessonId)
+    .eq('block_id', 'lesson_note')
+    .maybeSingle();
+    
+  if (existing) {
+    const { error } = await supabase.from('annotations')
+      .update({ content })
+      .eq('id', existing.id);
+    if (error) throw error;
+  } else {
+    const { error } = await supabase.from('annotations').insert({
+      user_id: session.user.id,
+      lesson_id: lessonId,
+      block_id: 'lesson_note',
+      action: 'note',
+      content: content
+    });
+    if (error) throw error;
+  }
+  return { success: true };
+};
+
+export const getAllNotes = async () => {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return { data: [] };
+  const { data, error } = await supabase.from('annotations')
+    .select('lesson_id, content')
+    .eq('user_id', session.user.id)
+    .eq('block_id', 'lesson_note');
+  if (error) throw error;
+  return { data };
+};
