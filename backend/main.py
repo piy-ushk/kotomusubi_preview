@@ -216,8 +216,30 @@ async def debug_supabase():
             return {"success": True, "url": url}
         else:
             return {"success": False, "error": "Upload returned None"}
-    except Exception as e:
         return {"success": False, "error": str(e)}
+
+class NoteRequest(BaseModel):
+    content: str
+
+@app.post("/api/lessons/{lesson_id}/note")
+def save_note(lesson_id: str, req: NoteRequest, current_user = Depends(get_current_user)):
+    user_id = current_user.get("sub")
+    success = db.save_lesson_note(user_id, lesson_id, req.content)
+    if not success:
+        raise HTTPException(status_code=500, detail="Failed to save note")
+    return {"success": True}
+
+@app.get("/api/lessons/{lesson_id}/note")
+def get_note(lesson_id: str, current_user = Depends(get_current_user)):
+    user_id = current_user.get("sub")
+    note = db.get_lesson_note(user_id, lesson_id)
+    return {"content": note}
+
+@app.get("/api/notes")
+def get_all_notes(current_user = Depends(get_current_user)):
+    user_id = current_user.get("sub")
+    notes = db.get_all_notes(user_id)
+    return {"notes": notes}
 
 @app.get("/api/textbooks")
 async def get_textbooks():
