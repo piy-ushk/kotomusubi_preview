@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AutoTranslate from '../components/AutoTranslate';
 
-export default function Lesson1_1({ translateAll }) {
+export default function Lesson1_1({ translateAll, translationLanguage }) {
   useEffect(() => {
     const handleToggle = (e) => {
       if (e.target.classList.contains('local-en-toggle')) {
