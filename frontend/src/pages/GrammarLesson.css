@@ -37,7 +37,7 @@
 .grammar-lesson-page { margin: 0; padding: 0; }
 .grammar-lesson-page { padding: 2rem 1rem; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: var(--fs-body); line-height: 1.7; -webkit-font-smoothing: antialiased; }
 .grammar-lesson-page .page { max-width: var(--max-width); margin: 0 auto; }
-.grammar-lesson-page .toolbar { position: sticky; top: 0.6rem; z-index: 10; display: flex; gap: 0.5rem; justify-content: flex-end; margin-bottom: 1rem; flex-wrap: wrap; }
+.grammar-lesson-page .toolbar { position: sticky; top: 0.6rem; z-index: 10; display: flex; gap: 0.5rem; align-items: center; justify-content: flex-end; margin-bottom: 1rem; flex-wrap: wrap; }
 .grammar-lesson-page .toolbar button { background: var(--card); border: 1px solid var(--line); color: var(--accent-dark); padding: 0.45rem 1rem; border-radius: 999px; font-size: var(--fs-small); font-family: inherit; font-weight: 500; cursor: pointer; box-shadow: var(--shadow); transition: all .15s ease; }
 .grammar-lesson-page .toolbar button:hover { background: var(--accent-soft); }
 .grammar-lesson-page .toolbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }

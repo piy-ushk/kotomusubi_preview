@@ -676,7 +676,7 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
             <select 
               value={translationLanguage} 
               onChange={(e) => setTranslationLanguage(e.target.value)}
-              style={{ padding: '0.45rem 1rem', borderRadius: '999px', border: '1px solid var(--line)', background: 'var(--card)', color: 'var(--accent-dark)', fontFamily: 'inherit', fontSize: 'var(--fs-small)', fontWeight: 500, cursor: 'pointer', outline: 'none', marginLeft: '0.5rem' }}
+              style={{ padding: '0.4rem 1.5rem 0.4rem 1rem', borderRadius: '999px', border: '1px solid var(--line)', background: 'var(--card)', color: 'var(--accent-dark)', fontFamily: 'inherit', fontSize: 'var(--fs-small)', fontWeight: 500, cursor: 'pointer', outline: 'none', boxShadow: 'var(--shadow)' }}
             >
               {Object.entries(LANGUAGE_LABELS).map(([code, label]) => (
                 <option key={code} value={code}>{label}</option>
@@ -722,7 +722,7 @@ const GrammarLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
             <select 
               value={translationLanguage} 
               onChange={(e) => setTranslationLanguage(e.target.value)}
-              style={{ padding: '0.45rem 1rem', borderRadius: '999px', border: '1px solid var(--line)', background: 'var(--card)', color: 'var(--accent-dark)', fontFamily: 'inherit', fontSize: 'var(--fs-small)', fontWeight: 500, cursor: 'pointer', outline: 'none', marginLeft: '0.5rem' }}
+              style={{ padding: '0.4rem 1.5rem 0.4rem 1rem', borderRadius: '999px', border: '1px solid var(--line)', background: 'var(--card)', color: 'var(--accent-dark)', fontFamily: 'inherit', fontSize: 'var(--fs-small)', fontWeight: 500, cursor: 'pointer', outline: 'none', boxShadow: 'var(--shadow)' }}
             >
               {Object.entries(LANGUAGE_LABELS).map(([code, label]) => (
                 <option key={code} value={code}>{label}</option>
