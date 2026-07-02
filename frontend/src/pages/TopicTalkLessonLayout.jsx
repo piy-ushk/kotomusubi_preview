@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import AutoTranslate from '../components/AutoTranslate';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getLessonContent, addAnnotation, deleteAnnotation, getLessonNote, saveLessonNote } from '../services/api';
 import { vocabularyService } from '../services/vocabularyService';
@@ -88,7 +89,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
               <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-              <p className="en">{en}</p>
+              <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
             </div>
           )}
           {subBlocks}
@@ -112,7 +113,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
                 {en && (
                   <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
                     <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-                    <p className="en">{en}</p>
+                    <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
                   </div>
                 )}
                 {subBlocks}
@@ -128,7 +129,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
               <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-              <p className="en">{en}</p>
+              <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
             </div>
           )}
           {subBlocks}
@@ -185,7 +186,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
               {en && (
                 <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
                   <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-                  <p className="en">{en}</p>
+                  <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
                 </div>
               )}
               {subBlocks}
@@ -227,7 +228,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
               {en && (
                 <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
                   <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-                  <p className="en">{en}</p>
+                  <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
                 </div>
               )}
               {subBlocks}
@@ -247,7 +248,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
             {en && (
               <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
                 <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-                <p className="en">{en}</p>
+                <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
               </div>
             )}
             {subBlocks}
@@ -287,7 +288,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
               <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-              <p className="en">{en}</p>
+              <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
             </div>
           )}
           {subBlocks}
@@ -379,7 +380,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
               <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-              <p className="en">{en}</p>
+              <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
             </div>
           )}
           {subBlocks}
