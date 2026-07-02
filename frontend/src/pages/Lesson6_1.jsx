@@ -62,7 +62,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
   <section className="section">
     <h2 className="section-title"><span className="num">2</span>文型</h2>
     <table className="form-table">
-      <tr>
+        <tbody>
+        <tr>
         <th>お願い・依頼<span className="label-en">request</span></th>
         <td>
           <div className="form-line">
@@ -77,7 +78,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
           </div>
         </td>
       </tr>
-    </table>
+        </tbody>
+        </table>
 
     <div className="ta-chart">
       <div className="ta-chart-head">
