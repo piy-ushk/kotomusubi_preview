@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import AutoTranslate from '../components/AutoTranslate';
 
 export default function Lesson1_1({ translateAll }) {
   useEffect(() => {
@@ -49,7 +50,7 @@ export default function Lesson1_1({ translateAll }) {
       <p>「〇〇は▼▼です」は、人や物について「<strong>〇〇は〇〇です</strong>」と<strong>説明する</strong>言い方です。<br />英語の "A is B" に当たる基本の文型です。<br />「は」は話題を表し、「です」は丁寧な言い方です。</p>
       <div className="en-wrap">
         <button className="local-en-toggle" type="button">訳を見る</button>
-        <p className="en">「〇〇は▼▼です」is the basic sentence pattern meaning "X is Y".<br /><br />「は」 (wa) marks the topic of the sentence.<br />「です」 (desu) is a polite word meaning "is/am/are".<br /><br />Use this pattern to introduce yourself or describe people and things!</p>
+        <AutoTranslate text={`「〇〇は▼▼です」is the basic sentence pattern meaning "X is Y".<br /><br />「は」 (wa) marks the topic of the sentence.<br />「です」 (desu) is a polite word meaning "is/am/are".<br /><br />Use this pattern to introduce yourself or describe people and things!`} targetLang={translationLanguage} className="en" />
       </div>
     </div>
   </section>
@@ -60,7 +61,7 @@ export default function Lesson1_1({ translateAll }) {
       <p className="pattern">〇〇 <span className="part">は</span> ▼▼ <span className="part">です</span>。</p>
       <div className="en-wrap">
         <button className="local-en-toggle" type="button">訳を見る</button>
-        <p className="en">〇〇 = Topic (subject) ／ ▼▼ = Predicate (noun/adjective)<br />"〇〇 is ▼▼."</p>
+        <AutoTranslate text={`〇〇 = Topic (subject) ／ ▼▼ = Predicate (noun/adjective)<br />"〇〇 is ▼▼."`} targetLang={translationLanguage} className="en" />
       </div>
     </div>
     <div className="examples">
@@ -69,7 +70,7 @@ export default function Lesson1_1({ translateAll }) {
         <div className="reading">私は田中です。</div>
         <div className="en-wrap">
           <button className="local-en-toggle" type="button">訳を見る</button>
-          <p className="en">I am Tanaka.</p>
+          <AutoTranslate text={`I am Tanaka.`} targetLang={translationLanguage} className="en" />
         </div>
       </div>
       <div className="example">
@@ -77,7 +78,7 @@ export default function Lesson1_1({ translateAll }) {
         <div className="reading">これは本です。</div>
         <div className="en-wrap">
           <button className="local-en-toggle" type="button">訳を見る</button>
-          <p className="en">This is a book.</p>
+          <AutoTranslate text={`This is a book.`} targetLang={translationLanguage} className="en" />
         </div>
       </div>
       <div className="example">
@@ -85,7 +86,7 @@ export default function Lesson1_1({ translateAll }) {
         <div className="reading">彼は先生です。</div>
         <div className="en-wrap">
           <button className="local-en-toggle" type="button">訳を見る</button>
-          <p className="en">He is a teacher.</p>
+          <AutoTranslate text={`He is a teacher.`} targetLang={translationLanguage} className="en" />
         </div>
       </div>
       <div className="example">
@@ -93,7 +94,7 @@ export default function Lesson1_1({ translateAll }) {
         <div className="reading">あれは学校です。</div>
         <div className="en-wrap">
           <button className="local-en-toggle" type="button">訳を見る</button>
-          <p className="en">That (over there) is a school.</p>
+          <AutoTranslate text={`That (over there) is a school.`} targetLang={translationLanguage} className="en" />
         </div>
       </div>
     </div>
@@ -107,35 +108,35 @@ export default function Lesson1_1({ translateAll }) {
         <div className="jp">はじめまして。わたしはケンです。どうぞよろしく。</div>
         <div className="en-wrap">
           <button className="local-en-toggle" type="button">訳を見る</button>
-          <p className="en">Nice to meet you. I'm Ken. Pleased to meet you.</p>
+          <AutoTranslate text={`Nice to meet you. I'm Ken. Pleased to meet you.`} targetLang={translationLanguage} className="en" />
         </div>
       </div>
       <div className="bubble b">
         <div className="jp">はじめまして。わたしはアナです。こちらこそ よろしく。</div>
         <div className="en-wrap">
           <button className="local-en-toggle" type="button">訳を見る</button>
-          <p className="en">Nice to meet you too. I'm Ana. Likewise, pleased to meet you.</p>
+          <AutoTranslate text={`Nice to meet you too. I'm Ana. Likewise, pleased to meet you.`} targetLang={translationLanguage} className="en" />
         </div>
       </div>
       <div className="bubble a">
         <div className="jp">アナさんは がくせい ですか？</div>
         <div className="en-wrap">
           <button className="local-en-toggle" type="button">訳を見る</button>
-          <p className="en">Are you a student, Ana?</p>
+          <AutoTranslate text={`Are you a student, Ana?`} targetLang={translationLanguage} className="en" />
         </div>
       </div>
       <div className="bubble b">
         <div className="jp">はい、がくせいです。ケンさんは？</div>
         <div className="en-wrap">
           <button className="local-en-toggle" type="button">訳を見る</button>
-          <p className="en">Yes, I'm a student. How about you, Ken?</p>
+          <AutoTranslate text={`Yes, I'm a student. How about you, Ken?`} targetLang={translationLanguage} className="en" />
         </div>
       </div>
       <div className="bubble a">
         <div className="jp">わたしは かいしゃいん です。</div>
         <div className="en-wrap">
           <button className="local-en-toggle" type="button">訳を見る</button>
-          <p className="en">I'm a company employee (office worker).</p>
+          <AutoTranslate text={`I'm a company employee (office worker).`} targetLang={translationLanguage} className="en" />
         </div>
       </div>
     </div>
@@ -151,7 +152,7 @@ export default function Lesson1_1({ translateAll }) {
           <p>助詞（じょし）の「は」は「<strong>わ (wa)</strong>」と読みます。ひらがなは「は」ですが、発音は「wa」です。</p>
           <div className="en-wrap">
             <button className="local-en-toggle" type="button">訳を見る</button>
-            <p className="en">When 「は」 is used as a particle (topic marker), it is pronounced "wa," not "ha."</p>
+            <AutoTranslate text={`When 「は」 is used as a particle (topic marker), it is pronounced "wa," not "ha."`} targetLang={translationLanguage} className="en" />
           </div>
         </div>
       </div>
@@ -162,7 +163,7 @@ export default function Lesson1_1({ translateAll }) {
           <p>「です」は丁寧さ（ていねいさ）を表す言葉です。英語の "is / am / are" に当たります。</p>
           <div className="en-wrap">
             <button className="local-en-toggle" type="button">訳を見る</button>
-            <p className="en">「です」 is a polite copula that corresponds to "is/am/are" in English. It makes your speech sound formal and respectful.</p>
+            <AutoTranslate text={`「です」 is a polite copula that corresponds to "is/am/are" in English. It makes your speech sound formal and respectful.`} targetLang={translationLanguage} className="en" />
           </div>
         </div>
       </div>
@@ -173,7 +174,7 @@ export default function Lesson1_1({ translateAll }) {
           <p>日本語では、相手の名前の後ろに「<strong>さん</strong>」をつけます（例：たなかさん）。自分の名前には使いません。</p>
           <div className="en-wrap">
             <button className="local-en-toggle" type="button">訳を見る</button>
-            <p className="en">「さん」 (san) is a polite title added after someone else's name (like Mr./Ms.). Never use it with your own name.</p>
+            <AutoTranslate text={`「さん」 (san) is a polite title added after someone else's name (like Mr./Ms.). Never use it with your own name.`} targetLang={translationLanguage} className="en" />
           </div>
         </div>
       </div>

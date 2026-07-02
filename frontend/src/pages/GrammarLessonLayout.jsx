@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import AutoTranslate from '../components/AutoTranslate';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getLessonContent, addAnnotation, deleteAnnotation, getLessonNote, saveLessonNote } from '../services/api';
 import { vocabularyService } from '../services/vocabularyService';
@@ -31,7 +32,7 @@ const NumberCard = ({ digit, hiragana, kanji, english, isTranslated, onToggle, w
     {english && (
       <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
         <button className="local-en-toggle" onClick={() => onToggle(wordId)}>訳を見る</button>
-        <p className="en">{english}</p>
+        <AutoTranslate text={english} targetLang={translationLanguage} className="en" />
       </div>
     )}
   </div>
@@ -44,7 +45,7 @@ const GreetingCard = ({ phrase, reading, meaning, isTranslated, onToggle, wordId
     {meaning && (
       <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
         <button className="local-en-toggle" onClick={() => onToggle(wordId)}>訳を見る</button>
-        <p className="en">{meaning}</p>
+        <AutoTranslate text={meaning} targetLang={translationLanguage} className="en" />
       </div>
     )}
   </div>
@@ -103,7 +104,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
               {en && (
                 <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
                   <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-                  <p className="en">{en}</p>
+                  <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
                 </div>
               )}
               {subBlocks}
@@ -118,7 +119,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
               <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-              <p className="en">{en}</p>
+              <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
             </div>
           )}
           {subBlocks}
@@ -154,7 +155,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
               <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-              <p className="en">{en}</p>
+              <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
             </div>
           )}
           {subBlocks}
@@ -183,7 +184,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           <div className="conj-header">
             <span className="conj-pattern">{emoji} {jpContent}</span>
           </div>
-          {en && <div className="en" style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{en}</div>}
+          {en && <AutoTranslate text={en} targetLang={translationLanguage} className="en" as="div" style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }} />}
           {subBlocks && <div className="conj-pairs" style={{ marginTop: '6px' }}>{subBlocks}</div>}
           {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
         </div>
@@ -216,7 +217,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
               <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-              <p className="en">{en}</p>
+              <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
             </div>
           )}
           {subBlocks && <ul>{subBlocks}</ul>}
@@ -234,7 +235,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
             {en && (
               <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
                 <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-                <p className="en">{en}</p>
+                <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
               </div>
             )}
             {subBlocks}
@@ -255,7 +256,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
             {en && (
               <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
                 <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-                <p className="en">{en}</p>
+                <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
               </div>
             )}
             {subBlocks}
@@ -282,7 +283,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
             {en && subBlocks && (
               <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`} style={{ marginBottom: '8px' }}>
                 <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-                <p className="en">{en}</p>
+                <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
               </div>
             )}
             {subBlocks}
@@ -346,7 +347,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
               <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
-              <p className="en">{en}</p>
+              <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
             </div>
           )}
           {subBlocks}
