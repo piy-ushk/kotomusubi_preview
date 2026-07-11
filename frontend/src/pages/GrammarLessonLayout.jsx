@@ -345,7 +345,10 @@ const InnerBlockRenderer = ({ block, blockId, translateAll, individualTranslatio
       if (!url) return null;
       return (
         <div style={{ margin: '16px 0', textAlign: 'center' }}>
-          <img src={url} alt="Content" className="vocab-img" style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain' }} />
+          <img src={url} alt="Content" className="vocab-img" style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain' }} onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = 'https://placehold.co/600x300/f8f9fa/adb5bd?text=Image+Unavailable';
+          }} />
         </div>
       );
     }

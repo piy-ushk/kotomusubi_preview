@@ -14,4 +14,12 @@ __pycache__/
 # Media Caching
 backend/static/images/
 backend/static/audio/
-/temp
+frontend/public/media/
+
+# Scratch/temp files
+temp/
+backend/scratch/
+backend/list_zips.txt
+backend/notion_text_dump.txt
+backend/pdf_text.txt
+topic-talk-tomodachi.html
