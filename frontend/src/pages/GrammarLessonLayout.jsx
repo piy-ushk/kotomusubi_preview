@@ -110,18 +110,20 @@ const InnerBlockRenderer = ({ block, blockId, translateAll, individualTranslatio
       if (blockData.is_toggleable || subBlocks) {
         return (
           <details className="drill" style={{ margin: '8px 0' }} onContextMenu={handleContext}>
-            <summary>{jpContent}</summary>
-            <div className="drill-body">
+            <summary>
+              {jpContent}
               {en && (
                 <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
                   {!translateAll && (
-              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>
-                {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
-              </button>
-            )}
+                    <button className="local-en-toggle" onClick={(e) => { e.preventDefault(); onToggle(blockId); }}>
+                      {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
+                    </button>
+                  )}
                   <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
                 </div>
               )}
+            </summary>
+            <div className="drill-body">
               {subBlocks}
               {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
             </div>
