@@ -8,6 +8,8 @@ import json
 import hashlib
 import urllib.parse
 import httpx
+import io
+from PIL import Image
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from supabase_service import supabase_client
@@ -86,7 +88,9 @@ async def ensure_local_cover(level_id: str, url: str, notion_service: NotionServ
         base_name = os.path.basename(parsed_url.path)
         ext = os.path.splitext(base_name)[1]
         if not ext or len(ext) > 10:
-            ext = ".png"
+            ext = ".webp"
+        else:
+            ext = ".webp"
             
         url_hash = hashlib.md5(url.encode('utf-8')).hexdigest()[:12]
         bucket_path = f"media/cover_{level_id}_{url_hash}{ext}"
@@ -105,9 +109,23 @@ async def ensure_local_cover(level_id: str, url: str, notion_service: NotionServ
             else:
                 resp.raise_for_status()
                 
+            upload_bytes = resp.content
+            content_type = "image/webp"
+            try:
+                img = Image.open(io.BytesIO(upload_bytes))
+                if img.mode in ("RGBA", "P"):
+                    img = img.convert("RGBA")
+                else:
+                    img = img.convert("RGB")
+                out_io = io.BytesIO()
+                img.save(out_io, format="WEBP", quality=80)
+                upload_bytes = out_io.getvalue()
+            except Exception as e:
+                print(f"Failed to convert cover to webp: {e}")
+                
             from supabase_service import SupabaseService
             sb_service = SupabaseService()
-            public_url = sb_service.upload_file_bytes(bucket_path, resp.content, content_type="image/png")
+            public_url = sb_service.upload_file_bytes(bucket_path, upload_bytes, content_type=content_type)
             return public_url if public_url else url
     except Exception as e:
         print(f"Failed to download cover for level {level_id}: {e}")
