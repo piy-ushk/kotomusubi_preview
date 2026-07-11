@@ -389,17 +389,19 @@ const InnerBlockRenderer = ({ block, blockId, translateAll, individualTranslatio
         <div className={`bubble ${isKen ? 'ken' : 'ana'}`} onContextMenu={handleContext}>
           <span className="speaker">{isKen ? '👦🏻 ケン' : '🧒🏻 アナ'}</span>
           {bubbleContent}
-          {en && (
-            <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
+          {(en || subBlocks) && (
+            <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`} style={{ display: 'block', marginTop: '4px' }}>
               {!translateAll && (
-              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>
-                {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
-              </button>
-            )}
-              <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
+                <button className="local-en-toggle" onClick={(e) => { e.preventDefault(); onToggle(blockId); }}>
+                  {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
+                </button>
+              )}
+              <div className="en" style={{ display: isTranslated || individualTranslations[blockId] ? 'block' : 'none' }}>
+                {en && <AutoTranslate text={en} targetLang={translationLanguage} as="div" />}
+                {subBlocks && <div style={{ marginTop: '4px' }}>{subBlocks}</div>}
+              </div>
             </div>
           )}
-          {subBlocks}
           {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
         </div>
       );
