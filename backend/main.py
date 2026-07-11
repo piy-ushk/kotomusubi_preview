@@ -80,7 +80,10 @@ async def ensure_local_audio(block_id: str, block_data: dict, notion_service: No
     return await cache_all_media.ensure_supabase_media(block_id, block_data[aud_type]["url"], "audio/mpeg", notion_service)
 
 async def ensure_local_cover(level_id: str, url: str, notion_service: NotionService) -> str:
-    if not url or "supabase.co" in url:
+    if not url:
+        return url
+        
+    if "supabase.co" in url and url.endswith(".webp"):
         return url
         
     try:

@@ -26,7 +26,11 @@ os.makedirs(STATIC_AUD_DIR, exist_ok=True)
 SEMAPHORE = asyncio.Semaphore(4)
 
 async def ensure_supabase_media(block_id: str, url: str, content_type: str, notion_service: NotionService) -> str:
-    if not url or "supabase.co" in url:
+    if not url:
+        return url
+        
+    # Skip if it's already a WebP or MP3 on Supabase
+    if "supabase.co" in url and (url.endswith(".webp") or url.endswith(".mp3") or "audio" in content_type):
         return url
         
     parsed_url = urllib.parse.urlparse(url)
