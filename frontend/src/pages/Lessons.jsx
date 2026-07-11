@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import { getLessons } from '../services/api';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ArrowLeft = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -23,6 +23,23 @@ const ChevronRight = () => (
   </svg>
 );
 
+const Modal = ({ show, onClose, children }) => {
+  if (!show) return null;
+  return (
+    <AnimatePresence>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
+        onClick={onClose}>
+        <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
+          style={{ background: 'white', width: '100%', maxWidth: '400px', borderRadius: '24px', padding: '28px', boxShadow: '0 20px 40px rgba(0,0,0,0.18)' }}
+          onClick={e => e.stopPropagation()}>
+          {children}
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
 /* Tab Bar for Super Beginner with Hiragana/Katakana + Elementary split */
 const HIRAKATA_KEYWORDS = ['ひらがな', 'カタカナ', 'Hiragana', 'Katakana', '拗音', 'Youon'];
 
@@ -34,6 +51,9 @@ const Lessons = () => {
   const [loading, setLoading] = useState(true);
   const [isSuperBeginner, setIsSuperBeginner] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
+  const [showSelectionModal, setShowSelectionModal] = useState(false);
+  const [selectedLessonId, setSelectedLessonId] = useState(null);
+  const [selectedLessonTitle, setSelectedLessonTitle] = useState('');
   const [levelTitle, setLevelTitle] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
@@ -79,6 +99,12 @@ const Lessons = () => {
     ? (activeTab === 0 ? hirakataLessons : elementaryLessons)
     : lessons;
 
+  const handleLessonAction = (lesson) => {
+    setSelectedLessonId(lesson.id);
+    setSelectedLessonTitle(lesson.title);
+    setShowSelectionModal(true);
+  };
+
   const renderLessonCard = (lesson, index) => (
     <motion.div
       key={lesson.id}
@@ -86,11 +112,10 @@ const Lessons = () => {
       style={{ animationDelay: `${index * 50}ms` }}
       whileTap={{ scale: 0.98 }}
     >
-      <Link
-        to={`/lesson/${lesson.id}`}
-        state={{ textbookTitle: textbookTitleState }}
+      <div
+        onClick={() => handleLessonAction(lesson)}
         className={`lesson-card ${lesson.completed ? 'completed' : ''}`}
-        style={{ display: 'flex' }}
+        style={{ display: 'flex', cursor: 'pointer' }}
       >
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="lesson-title">
@@ -100,7 +125,7 @@ const Lessons = () => {
         <span style={{ color: lesson.completed ? 'var(--primary)' : 'var(--text-sub)', flexShrink: 0 }}>
           {lesson.completed ? <CheckCircle /> : <ChevronRight />}
         </span>
-      </Link>
+      </div>
     </motion.div>
   );
 
@@ -179,7 +204,7 @@ const Lessons = () => {
         {loading ? (
           <div className="loading-container" key="loading">
             <div className="spinner" />
-            読み込み中...
+            読込中...
           </div>
         ) : (
           <div key="lesson-list">
@@ -187,6 +212,46 @@ const Lessons = () => {
           </div>
         )}
       </div>
+
+      {/* Selection Modal */}
+      <Modal show={showSelectionModal} onClose={() => setShowSelectionModal(false)}>
+        <h3 style={{ fontSize: '1.2rem', color: 'var(--accent-dark)', marginBottom: '1.2rem', textAlign: 'center', fontWeight: 'bold' }}>
+          どちらを開きますか？
+        </h3>
+        <p style={{ textAlign: 'center', color: 'var(--text-muted)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+          What would you like to study?
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+          <button
+            onClick={() => {
+              navigate('/', { state: { targetTab: 2, lessonFilter: selectedLessonId, lessonTitle: selectedLessonTitle } });
+            }}
+            style={{
+              padding: '1rem', background: 'var(--accent-soft)', color: 'var(--accent-dark)',
+              border: '2px solid var(--accent)', borderRadius: '12px', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer'
+            }}
+          >
+            単語帳 (Wordbook)
+          </button>
+          <button
+            onClick={() => {
+              navigate(`/lesson/${selectedLessonId}`, { state: { textbookTitle: textbookTitleState, levelTitle: levelTitleState } });
+            }}
+            style={{
+              padding: '1rem', background: 'var(--primary)', color: 'white',
+              border: 'none', borderRadius: '12px', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer'
+            }}
+          >
+            テキストブック (Textbook)
+          </button>
+        </div>
+        <button
+          onClick={() => setShowSelectionModal(false)}
+          style={{ marginTop: '1.2rem', width: '100%', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.9rem' }}
+        >
+          キャンセル (Cancel)
+        </button>
+      </Modal>
     </div>
   );
 };

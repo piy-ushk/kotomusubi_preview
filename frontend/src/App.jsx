@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './index.css';
 
@@ -103,12 +103,24 @@ function SideNav({ currentTab, onTabChange }) {
 
 /* ---- Dashboard Shell (Responsive) ---- */
 function DashboardShell() {
-  const [currentTab, setCurrentTab] = useState(0);
+  const location = useLocation();
+  const [currentTab, setCurrentTab] = useState(() => {
+    if (location.state && typeof location.state.targetTab === 'number') {
+      return location.state.targetTab;
+    }
+    return 0;
+  });
+
+  useEffect(() => {
+    if (location.state && typeof location.state.targetTab === 'number') {
+      setCurrentTab(location.state.targetTab);
+    }
+  }, [location.state]);
 
   const tabs = [
     <Home key="home" onGoToMaterials={() => setCurrentTab(1)} />,
     <TextbooksList key="materials" />,
-    <FlashcardPage key="flashcards" />,
+    <FlashcardPage key="flashcards" lessonFilter={location.state?.lessonFilter} lessonTitle={location.state?.lessonTitle} />,
   ];
 
   return (

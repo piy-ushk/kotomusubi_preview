@@ -5,6 +5,8 @@ import sqlite3
 import hashlib
 import urllib.parse
 import httpx
+import io
+from PIL import Image
 from dotenv import load_dotenv
 
 # Reconfigure stdout for utf-8
@@ -24,14 +26,22 @@ os.makedirs(STATIC_AUD_DIR, exist_ok=True)
 SEMAPHORE = asyncio.Semaphore(4)
 
 async def ensure_supabase_media(block_id: str, url: str, content_type: str, notion_service: NotionService) -> str:
-    if not url or "supabase.co" in url:
+    if not url:
+        return url
+        
+    # Skip if it's already a WebP or MP3 on Supabase
+    if "supabase.co" in url and (url.endswith(".webp") or url.endswith(".mp3") or "audio" in content_type):
         return url
         
     parsed_url = urllib.parse.urlparse(url)
     base_name = os.path.basename(parsed_url.path)
     ext = os.path.splitext(base_name)[1]
     if not ext or len(ext) > 10:
-        ext = ".png" if "image" in content_type else ".mp3"
+        ext = ".webp" if "image" in content_type else ".mp3"
+        
+    # Always force webp extension for images
+    if "image" in content_type:
+        ext = ".webp"
         
     url_hash = hashlib.md5(url.encode('utf-8')).hexdigest()[:12]
     # Path in bucket: e.g. media/block_123_abc.png
@@ -65,11 +75,27 @@ async def ensure_supabase_media(block_id: str, url: str, content_type: str, noti
                         resp.raise_for_status()
                 else:
                     resp.raise_for_status()
+                
+                upload_bytes = resp.content
+                # Convert image to WEBP to save space and load faster
+                if "image" in content_type:
+                    try:
+                        img = Image.open(io.BytesIO(upload_bytes))
+                        if img.mode in ("RGBA", "P"):
+                            img = img.convert("RGBA")
+                        else:
+                            img = img.convert("RGB")
+                        out_io = io.BytesIO()
+                        img.save(out_io, format="WEBP", quality=80)
+                        upload_bytes = out_io.getvalue()
+                        content_type = "image/webp"
+                    except Exception as e:
+                        print(f"  [WebP Conversion Failed] {e}")
                     
                 # Upload to Supabase
                 from supabase_service import SupabaseService
                 sb_service = SupabaseService()
-                public_url = sb_service.upload_file_bytes(bucket_path, resp.content, content_type=content_type)
+                public_url = sb_service.upload_file_bytes(bucket_path, upload_bytes, content_type=content_type)
                 
                 if public_url:
                     print(f"  [Cached Media Supabase] {public_url}")

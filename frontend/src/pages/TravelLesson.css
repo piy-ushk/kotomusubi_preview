@@ -104,7 +104,7 @@
   .travel-lesson-page .ta-chart-grid { grid-template-columns: 1fr; }
   .travel-lesson-page .ta-group-1 { grid-template-columns: 1fr; }
 }
-.travel-lesson-page .en-wrap { margin-top: 0.5rem; }
+.travel-lesson-page .en-wrap { display: inline-block; vertical-align: middle; margin-left: 0.5rem; }
 .travel-lesson-page .en-wrap .en { display: none; font-size: var(--fs-en); color: var(--text-muted); margin: 0.4rem 0 0; line-height: 1.6; }
 .travel-lesson-page .en-wrap.show-en .en, .travel-lesson-page.show-en .en-wrap .en { display: block; }
 .travel-lesson-page .examples { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
@@ -115,8 +115,8 @@
 .travel-lesson-page .example .jp { font-family: var(--font-jp); font-size: var(--fs-example); font-weight: 500; line-height: 2.1; margin: 0; }
 .travel-lesson-page .example .en, .bubble > .en { display: none; font-size: var(--fs-en); color: var(--text-muted); margin: 0.4rem 0 0; line-height: 1.6; }
 .travel-lesson-page.show-en .example .en, .travel-lesson-page.show-en .bubble > .en, .example.show-en .en, .bubble.show-en > .en { display: block; }
-.travel-lesson-page .local-en-toggle { margin-top: 0.6rem; background: transparent; border: 1px solid var(--line); color: var(--accent-dark); padding: 0.2rem 0.75rem; border-radius: 999px; font-size: 0.78rem; font-family: inherit; cursor: pointer; font-weight: 600; }
-.travel-lesson-page .local-en-toggle:hover { background: var(--accent-soft); border-color: var(--accent); }
+.travel-lesson-page .local-en-toggle { background: var(--accent-soft); border: 1px solid var(--line); color: var(--accent-dark); padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.72rem; font-family: inherit; cursor: pointer; font-weight: 600; vertical-align: middle; line-height: 1.2; transition: all 0.15s ease; }
+.travel-lesson-page .local-en-toggle:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 .travel-lesson-page .point-list { padding: 0; margin: 0; list-style: none; }
 .travel-lesson-page .point-list li { padding: 0.9rem 0 0.9rem 2rem; position: relative; border-bottom: 1px dashed var(--line); line-height: 1.8; }
 .travel-lesson-page .point-list li:last-child { border-bottom: none; }

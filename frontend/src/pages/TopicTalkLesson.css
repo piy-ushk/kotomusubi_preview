@@ -1,516 +1,110 @@
 
-.topic-talk-lesson-page {
-  --bg:           #FAF6EE;
-  --card:         #FFFFFF;
-  --accent:       #C9A876;
-  --accent-dark:  #8B6F47;
-  --accent-soft:  #EFE4D0;
-  --line:         #D9C9AC;
-  --text:         #2E2418;
-  --text-muted:   #7A6A55;
-  --highlight:    #FFF4E0;
-  --ok:           #6B9B7F;
-  --orange:       #D98E3A;
-  --orange-soft:  #FFF1DC;
-
-  --ken-bg:       #E8F0F7;
-  --ken-color:    #3D7BAF;
-  --ana-bg:       #FBE7EE;
-  --ana-color:    #C44A75;
-
-  --fs-eyebrow:   0.85rem;
-  --fs-title:     2.6rem;
-  --fs-subtitle:  1.1rem;
-  --fs-section:   1.25rem;
-  --fs-example:   1.5rem;
-  --fs-body:      1rem;
-  --fs-en:        0.95rem;
-  --fs-furigana:  0.5em;
-  --fs-small:     0.85rem;
-
-  --radius-lg:    20px;
-  --radius:       12px;
-  --pad-section:  1.75rem;
-  --gap:          1.25rem;
-  --max-width:    860px;
-
-  --font-jp:      'Zen Maru Gothic', 'Noto Sans JP', sans-serif;
-  --font-body:    'Noto Sans JP', sans-serif;
-
-  --shadow:       0 4px 24px rgba(139, 111, 71, 0.08);
+:root {
+  --bg:#FAF6EE;--card:#FFFFFF;--accent:#C9A876;--accent-dark:#8B6F47;
+  --accent-soft:#EFE4D0;--line:#D9C9AC;--text:#2E2418;--text-muted:#7A6A55;
+  --highlight:#FFF4E0;--ken-bg:#E8F0F7;--ken-color:#3D7BAF;
+  --ana-bg:#FBE7EE;--ana-color:#C44A75;
+  --ok: #6B9B7F; --orange: #D98E3A; --orange-soft: #FFF1DC;
+  --fs-eyebrow:0.85rem;--fs-title:2.6rem;--fs-subtitle:1.1rem;
+  --fs-section:1.25rem;--fs-body:1rem;--fs-en:0.95rem;
+  --fs-furigana:0.5em;--fs-small:0.85rem;
+  --radius-lg:20px;--radius:12px;--pad-section:1.75rem;--gap:1.25rem;
+  --max-width:860px;
+  --font-jp:'Zen Maru Gothic','Noto Sans JP',sans-serif;
+  --font-body:'Noto Sans JP',sans-serif;
+  --shadow:0 4px 24px rgba(139,111,71,0.08);
 }
-
-.topic-talk-lesson-page * { box-sizing: border-box; }
-.topic-talk-lesson-page { margin: 0; padding: 0; }
-.topic-talk-lesson-page {
-  padding: 2rem 1rem;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: var(--fs-body);
-  line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
+*{box-sizing:border-box;}html,body{margin:0;padding:0;}
+body{padding:2rem 1rem;background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:var(--fs-body);line-height:1.7;-webkit-font-smoothing:antialiased;}
+.page{max-width:var(--max-width);margin:0 auto;}
+.toolbar{position:sticky;top:0.6rem;z-index:10;display:flex;gap:0.5rem;align-items:center;justify-content:flex-end;margin-bottom:1rem;flex-wrap:wrap;}
+.toolbar button{background:var(--card);border:1px solid var(--line);color:var(--accent-dark);padding:0.45rem 1rem;border-radius:999px;font-size:var(--fs-small);font-family:inherit;font-weight:500;cursor:pointer;box-shadow:var(--shadow);transition:all .15s ease;}
+.toolbar button:hover{background:var(--accent-soft);}
+.toolbar button.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.hero{position:relative;background:var(--card);border-radius:var(--radius-lg);padding:2.5rem var(--pad-section);box-shadow:var(--shadow);margin-bottom:var(--gap);overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:var(--accent-soft);border-radius:50%;opacity:0.6;}
+.hero::after{content:'';position:absolute;bottom:-50px;left:-30px;width:130px;height:130px;background:var(--accent-soft);border-radius:50%;opacity:0.4;}
+.hero-inner{position:relative;z-index:1;}
+.eyebrow{display:inline-block;font-size:var(--fs-eyebrow);letter-spacing:0.15em;color:var(--accent-dark);background:var(--accent-soft);padding:0.3rem 0.9rem;border-radius:999px;font-weight:700;margin-bottom:1rem;}
+.title{font-family:var(--font-jp);font-size:var(--fs-title);font-weight:900;color:var(--accent-dark);margin:0 0 0.5rem;line-height:1.2;}
+.subtitle{font-size:var(--fs-subtitle);color:var(--text-muted);margin:0;font-weight:500;}
+.section{background:var(--card);border-radius:var(--radius-lg);padding:var(--pad-section);box-shadow:var(--shadow);margin-bottom:var(--gap);}
+.section-title{display:flex;align-items:center;gap:0.7rem;font-family:var(--font-jp);font-size:var(--fs-section);font-weight:700;color:var(--accent-dark);margin:0 0 1.2rem;padding-bottom:0.7rem;border-bottom:2px dashed var(--line);}
+.section-title .num,.flow-toggle-title .num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0;background:var(--accent);color:#fff;border-radius:50%;font-size:1rem;font-weight:700;font-family:var(--font-body);}
+.subhead{font-family:var(--font-jp);color:var(--accent-dark);margin:1.5rem 0 0.8rem;font-size:1.05rem;font-weight:700;}
+.subhead:first-child{margin-top:0;}
+.note{display:inline-block;margin-top:0.3rem;color:var(--text-muted);font-size:var(--fs-small);margin-left:0.6rem;}
+.en-wrap { display: inline-block; vertical-align: middle; margin-left: 0.5rem; }
+.en-wrap .en{display:none;font-size:var(--fs-en);color:var(--text-muted);margin:0.4rem 0 0;line-height:1.6;}
+.en-wrap.show-en .en,body.show-en .en-wrap .en{display:block;}
+.local-en-toggle { background: var(--accent-soft); border: 1px solid var(--line); color: var(--accent-dark); padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.72rem; font-family: inherit; cursor: pointer; font-weight: 600; vertical-align: middle; line-height: 1.2; transition: all 0.15s ease; }
+.local-en-toggle:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+ruby rt{font-size:var(--fs-furigana);color:var(--accent-dark);font-weight:400;letter-spacing:0;}
+.flow-toggle{width:100%;background:none;border:none;padding:0;cursor:pointer;font-family:inherit;text-align:left;}
+.flow-toggle-inner{display:flex;align-items:center;justify-content:flex-start;gap:0.5rem;padding-bottom:0.7rem;border-bottom:2px dashed var(--line);margin-bottom:0;}
+.flow-toggle-title{display:flex;align-items:center;gap:0.7rem;font-family:var(--font-jp);font-size:var(--fs-section);font-weight:700;color:var(--accent-dark);}
+.flow-toggle-arrow{font-size:0.85rem;color:var(--accent);transition:transform .2s ease;}
+.flow-toggle[aria-expanded="true"] .flow-toggle-arrow{transform:rotate(180deg);}
+.flow-list.flow-hidden{display:none;}
+.flow-list{padding:0;margin:0.8rem 0 0;list-style:none;}
+.flow-list li{display:flex;gap:1rem;padding:0.85rem 0;border-bottom:1px dashed var(--line);align-items:flex-start;line-height:1.8;}
+.flow-list li:last-child{border-bottom:none;}
+.flow-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;background:var(--accent-soft);color:var(--accent-dark);border-radius:50%;font-size:0.9rem;font-weight:700;font-family:var(--font-body);margin-top:0.1rem;}
+.flow-content strong{color:var(--accent-dark);display:block;}
+.flow-content span{font-size:var(--fs-small);color:var(--text-muted);}
+.vocab-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.7rem;}
+.vocab-card{background:#FBF7EE;border-radius:var(--radius);padding:0.85rem 1.1rem;border-left:4px solid var(--accent);}
+.vocab-word{font-family:var(--font-jp);font-size:1.2rem;font-weight:700;color:var(--text);margin:0 0 0.15rem;}
+.vocab-toggle{display:block;width:fit-content;margin-top:0.45rem;background:transparent;border:1px solid var(--line);color:var(--accent-dark);padding:0.15rem 0.65rem;border-radius:999px;font-size:0.75rem;font-family:inherit;cursor:pointer;font-weight:600;}
+.vocab-toggle:hover{background:var(--accent-soft);border-color:var(--accent);}
+.vocab-meaning-en{display:none;font-size:0.88rem;color:var(--accent-dark);font-weight:600;margin:0.3rem 0 0;}
+body.show-en .vocab-meaning-en,.vocab-card.show-meaning .vocab-meaning-en{display:block;}
+.vocab-example-section{display:none;margin-top:0.6rem;padding-top:0.55rem;border-top:1px dashed var(--line);}
+body.show-en .vocab-example-section,.vocab-card.show-example .vocab-example-section{display:block;}
+.vocab-example{font-family:var(--font-jp);font-size:0.95rem;line-height:1.85;color:var(--text);margin:0;}
+.vocab-example-en{display:none;font-size:0.82rem;color:var(--text-muted);margin:0.25rem 0 0;line-height:1.5;}
+body.show-en .vocab-example-en,.vocab-card.show-ex-en .vocab-example-en{display:block;}
+.dialogue{display:flex;flex-direction:column;gap:0.7rem;}
+.bubble{padding:0.9rem 1.1rem;border-radius:14px;max-width:86%;font-family:var(--font-jp);line-height:2;}
+.bubble.ken{background:var(--ken-bg);align-self:flex-start;border-bottom-left-radius:4px;}
+.bubble.ana{background:var(--ana-bg);align-self:flex-end;border-bottom-right-radius:4px;}
+.speaker{display:inline-block;font-size:var(--fs-small);font-weight:700;margin-right:0.55rem;color:var(--text-muted);vertical-align:0.05em;}
+.bubble.ken .speaker{color:var(--ken-color);}
+.bubble.ana .speaker{color:var(--ana-color);}
+.bubble > .en{display:none;font-size:var(--fs-en);color:var(--text-muted);margin:0.4rem 0 0;line-height:1.6;}
+body.show-en .bubble > .en,.bubble.show-en > .en{display:block;}
+.bubble .key{background:var(--highlight);padding:0.05em 0.4em;border-radius:5px;font-weight:700;color:var(--accent-dark);}
+.pair-card{background:#FBF7EE;border-radius:var(--radius);padding:1.1rem 1.2rem;margin-bottom:0.7rem;}
+.pair-card:last-child{margin-bottom:0;}
+.pair-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--accent);color:#fff;border-radius:50%;font-size:0.8rem;font-weight:700;margin-right:0.5rem;flex-shrink:0;vertical-align:middle;}
+.pair-q{font-family:var(--font-jp);font-weight:500;line-height:1.9;color:var(--text);margin:0;}
+.practice{background:#FBF7EE;padding:1.1rem 1.2rem;border-radius:var(--radius);margin-bottom:0.7rem;}
+.practice:last-child{margin-bottom:0;}
+.practice-q{font-family:var(--font-jp);font-weight:500;line-height:1.9;color:var(--text);margin:0;}
+.sample-wrap{margin-top:0.6rem;}
+.sample-toggle{background:transparent;border:1px solid var(--line);color:var(--accent-dark);padding:0.2rem 0.75rem;border-radius:999px;font-size:0.78rem;font-family:inherit;cursor:pointer;font-weight:600;}
+.sample-toggle:hover{background:var(--accent-soft);border-color:var(--accent);}
+.sample-body{display:none;margin-top:0.7rem;padding:0.85rem 1rem;background:#fff;border-radius:8px;border-left:3px solid var(--accent);}
+.sample-wrap.show .sample-body{display:block;}
+.sample-jp{margin:0;font-family:var(--font-jp);line-height:1.95;color:var(--text);}
+.level-head{display:flex;align-items:center;gap:0.6rem;margin:1.4rem 0 0.8rem;font-family:var(--font-jp);font-size:1rem;font-weight:700;color:var(--accent-dark);}
+.level-head:first-child{margin-top:0;}
+.level-badge{display:inline-flex;align-items:center;padding:0.2rem 0.75rem;border-radius:999px;font-size:0.8rem;font-weight:700;letter-spacing:0.05em;}
+.level-badge.beginner{background:#E6F4EA;color:#2E7D32;}
+.level-badge.intermediate{background:#FFF3E0;color:#E65100;}
+.level-badge.advanced{background:#EDE7F6;color:#5E35B1;}
+.level-divider{flex:1;height:1px;background:var(--line);}
+@media(max-width:640px){
+  :root{--fs-title:1.9rem;--fs-section:1.1rem;--pad-section:1.25rem;}
+  body{padding:1rem 0.6rem;}.hero{padding:2rem 1.25rem;}
+  .vocab-grid{grid-template-columns:1fr;}.bubble{max-width:96%;}
 }
-.topic-talk-lesson-page .page { max-width: var(--max-width); margin: 0 auto; }
-
-/* ===== ツールバー ===== */
-.topic-talk-lesson-page .toolbar {
-  position: sticky;
-  top: 0.6rem;
-  z-index: 10;
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-.topic-talk-lesson-page .toolbar button {
-  background: var(--card);
-  border: 1px solid var(--line);
-  color: var(--accent-dark);
-  padding: 0.45rem 1rem;
-  border-radius: 999px;
-  font-size: var(--fs-small);
-  font-family: inherit;
-  font-weight: 500;
-  cursor: pointer;
-  box-shadow: var(--shadow);
-  transition: all .15s ease;
-}
-.topic-talk-lesson-page .toolbar button:hover { background: var(--accent-soft); }
-.topic-talk-lesson-page .toolbar button.active {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
-}
-
-/* ===== ヘッダー ===== */
-.topic-talk-lesson-page .hero {
-  position: relative;
-  background: var(--card);
-  border-radius: var(--radius-lg);
-  padding: 2.5rem var(--pad-section);
-  box-shadow: var(--shadow);
-  margin-bottom: var(--gap);
-  overflow: hidden;
-}
-.topic-talk-lesson-page .hero::before {
-  content: '';
-  position: absolute;
-  top: -40px; right: -40px;
-  width: 180px; height: 180px;
-  background: var(--accent-soft);
-  border-radius: 50%;
-  opacity: 0.6;
-}
-.topic-talk-lesson-page .hero::after {
-  content: '';
-  position: absolute;
-  bottom: -50px; left: -30px;
-  width: 130px; height: 130px;
-  background: var(--accent-soft);
-  border-radius: 50%;
-  opacity: 0.4;
-}
-.topic-talk-lesson-page .hero-inner { position: relative; z-index: 1; }
-.topic-talk-lesson-page .eyebrow {
-  display: inline-block;
-  font-size: var(--fs-eyebrow);
-  letter-spacing: 0.15em;
-  color: var(--accent-dark);
-  background: var(--accent-soft);
-  padding: 0.3rem 0.9rem;
-  border-radius: 999px;
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-.topic-talk-lesson-page .title {
-  font-family: var(--font-jp);
-  font-size: var(--fs-title);
-  font-weight: 900;
-  color: var(--accent-dark);
-  margin: 0 0 0.5rem;
-  line-height: 1.2;
-}
-.topic-talk-lesson-page .subtitle {
-  font-size: var(--fs-subtitle);
-  color: var(--text-muted);
-  margin: 0;
-  font-weight: 500;
-}
-
-/* ===== セクション共通 ===== */
-.topic-talk-lesson-page .section {
-  background: var(--card);
-  border-radius: var(--radius-lg);
-  padding: var(--pad-section);
-  box-shadow: var(--shadow);
-  margin-bottom: var(--gap);
-}
-.topic-talk-lesson-page .slide-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.topic-talk-lesson-page .section-title {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  font-family: var(--font-jp);
-  font-size: var(--fs-section);
-  font-weight: 700;
-  color: var(--accent-dark);
-  margin: 0 0 1.2rem;
-  padding-bottom: 0.7rem;
-  border-bottom: 2px dashed var(--line);
-}
-.topic-talk-lesson-page .section-title .num,
-.topic-talk-lesson-page .flow-toggle-title .num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px; height: 32px;
-  flex-shrink: 0;
-  background: var(--accent);
-  color: #fff;
-  border-radius: 50%;
-  font-size: 1rem;
-  font-weight: 700;
-  font-family: var(--font-body);
-}
-.topic-talk-lesson-page .subhead {
-  font-family: var(--font-jp);
-  color: var(--accent-dark);
-  margin: 1.5rem 0 0.8rem;
-  font-size: 1.05rem;
-  font-weight: 700;
-}
-.topic-talk-lesson-page .subhead:first-child { margin-top: 0; }
-.topic-talk-lesson-page .note { display: inline-block; margin-top: 0.3rem; color: var(--text-muted); font-size: var(--fs-small); margin-left: 0.6rem; }
-
-/* ===== 共通：訳トグル ===== */
-.topic-talk-lesson-page .en-wrap { margin-top: 0.5rem; }
-.topic-talk-lesson-page .en-wrap .en {
-  display: none;
-  font-size: var(--fs-en);
-  color: var(--text-muted);
-  margin: 0.4rem 0 0;
-  line-height: 1.6;
-}
-.topic-talk-lesson-page .en-wrap.show-en .en,
-.topic-talk-lesson-page.show-en .en-wrap .en { display: block; }
-.topic-talk-lesson-page .local-en-toggle {
-  margin-top: 0.6rem;
-  background: transparent;
-  border: 1px solid var(--line);
-  color: var(--accent-dark);
-  padding: 0.2rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-family: inherit;
-  cursor: pointer;
-  font-weight: 600;
-}
-.topic-talk-lesson-page .local-en-toggle:hover { background: var(--accent-soft); border-color: var(--accent); }
-
-.topic-talk-lesson-page ruby rt {
-  font-size: var(--fs-furigana);
-  color: var(--accent-dark);
-  font-weight: 400;
-  letter-spacing: 0;
-}
-
-/* ===== 学習の流れ ===== */
-.topic-talk-lesson-page .flow-toggle {
-  width: 100%; background: none; border: none;
-  padding: 0; cursor: pointer; font-family: inherit;
-  text-align: left;
-}
-.topic-talk-lesson-page .flow-toggle-inner {
-  display: flex; align-items: center; justify-content: flex-start;
-  gap: 0.5rem; padding-bottom: 0.7rem;
-  border-bottom: 2px dashed var(--line);
-  margin-bottom: 0;
-}
-.topic-talk-lesson-page .flow-toggle-title {
-  display: flex; align-items: center; gap: 0.7rem;
-  font-family: var(--font-jp); font-size: var(--fs-section);
-  font-weight: 700; color: var(--accent-dark);
-}
-.topic-talk-lesson-page .flow-toggle-arrow {
-  font-size: 0.85rem; color: var(--accent);
-  transition: transform .2s ease;
-}
-.topic-talk-lesson-page .flow-toggle[aria-expanded="true"] .flow-toggle-arrow { transform: rotate(180deg); }
-.topic-talk-lesson-page .flow-list.flow-hidden { display: none; }
-.topic-talk-lesson-page .flow-list { padding: 0; margin: 0.8rem 0 0; list-style: none; }
-.topic-talk-lesson-page .flow-list li {
-  display: flex;
-  gap: 1rem;
-  padding: 0.85rem 0;
-  border-bottom: 1px dashed var(--line);
-  align-items: flex-start;
-  line-height: 1.8;
-}
-.topic-talk-lesson-page .flow-list li:last-child { border-bottom: none; }
-.topic-talk-lesson-page .flow-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px; height: 28px;
-  flex-shrink: 0;
-  background: var(--accent-soft);
-  color: var(--accent-dark);
-  border-radius: 50%;
-  font-size: 0.9rem;
-  font-weight: 700;
-  font-family: var(--font-body);
-  margin-top: 0.1rem;
-}
-.topic-talk-lesson-page .flow-content strong { color: var(--accent-dark); display: block; }
-.topic-talk-lesson-page .flow-content span { font-size: var(--fs-small); color: var(--text-muted); }
-
-/* ===== 単語カード ===== */
-.topic-talk-lesson-page .vocab-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.7rem;
-}
-.topic-talk-lesson-page .vocab-card {
-  background: #FBF7EE;
-  border-radius: var(--radius);
-  padding: 0.85rem 1.1rem;
-  border-left: 4px solid var(--accent);
-}
-.topic-talk-lesson-page .vocab-word {
-  font-family: var(--font-jp);
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0 0 0.15rem;
-}
-.topic-talk-lesson-page .vocab-toggle {
-  display: block;
-  width: fit-content;
-  margin-top: 0.45rem;
-  background: transparent;
-  border: 1px solid var(--line);
-  color: var(--accent-dark);
-  padding: 0.15rem 0.65rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-family: inherit;
-  cursor: pointer;
-  font-weight: 600;
-}
-.topic-talk-lesson-page .vocab-toggle:hover { background: var(--accent-soft); border-color: var(--accent); }
-
-.topic-talk-lesson-page .vocab-meaning-en {
-  display: none; font-size: 0.88rem; color: var(--accent-dark);
-  font-weight: 600; margin: 0.3rem 0 0;
-}
-.topic-talk-lesson-page.show-en .vocab-meaning-en,
-.topic-talk-lesson-page .vocab-card.show-meaning .vocab-meaning-en { display: block; }
-
-.topic-talk-lesson-page .vocab-example-section {
-  display: none;
-  margin-top: 0.6rem; padding-top: 0.55rem;
-  border-top: 1px dashed var(--line);
-}
-.topic-talk-lesson-page.show-en .vocab-example-section,
-.topic-talk-lesson-page .vocab-card.show-example .vocab-example-section { display: block; }
-
-.topic-talk-lesson-page .vocab-example {
-  font-family: var(--font-jp); font-size: 0.95rem;
-  line-height: 1.85; color: var(--text); margin: 0;
-}
-.topic-talk-lesson-page .vocab-example-en {
-  display: none; font-size: 0.82rem; color: var(--text-muted);
-  margin: 0.25rem 0 0; line-height: 1.5;
-}
-.topic-talk-lesson-page.show-en .vocab-example-en,
-.topic-talk-lesson-page .vocab-card.show-ex-en .vocab-example-en { display: block; }
-
-/* ===== 会話 ===== */
-.topic-talk-lesson-page .dialogue { 
-  position: relative;
-  display: flex; 
-  flex-direction: column; 
-  gap: 1rem; 
-  margin: 1rem 0;
-}
-.topic-talk-lesson-page .dialogue::before {
-  content: "";
-  position: absolute;
-  top: -10px; 
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 3px;
-  background: var(--line);
-  z-index: 0;
-  border-radius: 3px;
-}
-.topic-talk-lesson-page .bubble {
-  position: relative;
-  z-index: 1;
-  padding: 0.9rem 1.1rem;
-  border-radius: 14px;
-  max-width: 86%;
-  font-family: var(--font-jp);
-  line-height: 2;
-  box-shadow: var(--shadow);
-}
-.topic-talk-lesson-page .bubble.ken {
-  background: var(--ken-bg);
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
-}
-.topic-talk-lesson-page .bubble.ana {
-  background: var(--ana-bg);
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
-}
-.topic-talk-lesson-page .speaker {
-  display: inline-block;
-  font-size: var(--fs-small);
-  font-weight: 700;
-  margin-right: 0.55rem;
-  color: var(--text-muted);
-  vertical-align: 0.05em;
-}
-.topic-talk-lesson-page .bubble.ken .speaker { color: var(--ken-color); }
-.topic-talk-lesson-page .bubble.ana .speaker { color: var(--ana-color); }
-.topic-talk-lesson-page .bubble > .en {
-  display: none;
-  font-size: var(--fs-en);
-  color: var(--text-muted);
-  margin: 0.4rem 0 0;
-  line-height: 1.6;
-}
-.topic-talk-lesson-page.show-en .bubble > .en,
-.topic-talk-lesson-page .bubble.show-en > .en { display: block; }
-.topic-talk-lesson-page .bubble .key {
-  background: var(--highlight);
-  padding: 0.05em 0.4em;
-  border-radius: 5px;
-  font-weight: 700;
-  color: var(--accent-dark);
-}
-
-/* ===== ペアワーク ===== */
-.topic-talk-lesson-page .pair-card {
-  background: #FBF7EE;
-  border-radius: var(--radius);
-  padding: 1.1rem 1.2rem;
-  margin-bottom: 0.7rem;
-}
-.topic-talk-lesson-page .pair-card:last-child { margin-bottom: 0; }
-.topic-talk-lesson-page .pair-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px; height: 24px;
-  background: var(--accent);
-  color: #fff;
-  border-radius: 50%;
-  font-size: 0.8rem;
-  font-weight: 700;
-  margin-right: 0.5rem;
-  flex-shrink: 0;
-  vertical-align: middle;
-}
-.topic-talk-lesson-page .pair-q {
-  font-family: var(--font-jp);
-  font-weight: 500;
-  line-height: 1.9;
-  color: var(--text);
-  margin: 0;
-}
-
-/* ===== Q&A練習 ===== */
-.topic-talk-lesson-page .practice {
-  background: #FBF7EE;
-  padding: 1.1rem 1.2rem;
-  border-radius: var(--radius);
-  margin-bottom: 0.7rem;
-}
-.topic-talk-lesson-page .practice:last-child { margin-bottom: 0; }
-.topic-talk-lesson-page .practice-q {
-  font-family: var(--font-jp);
-  font-weight: 500;
-  line-height: 1.9;
-  color: var(--text);
-  margin: 0;
-}
-.topic-talk-lesson-page .sample-wrap { 
-  margin-top: 0.6rem; 
-  background: var(--highlight); 
-  border-radius: 8px; 
-  padding: 0.7rem 1rem; 
-}
-.topic-talk-lesson-page .sample-toggle {
-  background: transparent;
-  border: 1px solid var(--line);
-  color: var(--accent-dark);
-  padding: 0.2rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-family: inherit;
-  cursor: pointer;
-  font-weight: 600;
-  background: var(--card);
-}
-.topic-talk-lesson-page .sample-toggle:hover { background: var(--accent-soft); border-color: var(--accent); }
-.topic-talk-lesson-page .sample-body {
-  display: none;
-  margin-top: 0.7rem;
-  padding-top: 0.7rem;
-  border-top: 1px dashed var(--line);
-}
-.topic-talk-lesson-page .sample-wrap.show .sample-body { display: block; }
-.topic-talk-lesson-page .sample-jp {
-  margin: 0;
-  font-family: var(--font-jp);
-  line-height: 1.95;
-  color: var(--text);
-}
-
-/* ===== 単語カード画像 ===== */
-.topic-talk-lesson-page .vocab-img {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 0.55rem;
-  object-fit: cover;
-  display: block;
-}
-
-/* ===== レスポンシブ ===== */
-@media (max-width: 640px) {
-  .topic-talk-lesson-page {
-    --fs-title:    1.9rem;
-    --fs-example:  1.2rem;
-    --fs-section:  1.1rem;
-    --pad-section: 1.25rem;
-  }
-  body { padding: 1rem 0.6rem; }
-  .topic-talk-lesson-page .hero { padding: 2rem 1.25rem; }
-  .topic-talk-lesson-page .vocab-grid { grid-template-columns: 1fr; }
-  .topic-talk-lesson-page .bubble { max-width: 96%; }
-}
-
-/* ===== 印刷／PDF ===== */
-@media print {
-  .topic-talk-lesson-page { background: #fff; padding: 0; }
-  .toolbar, .local-en-toggle, .vocab-toggle, .sample-toggle { display: none; }
-  .section, .hero {
-    box-shadow: none;
-    border: 1px solid var(--line);
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-  .bubble > .en, .en-wrap .en, .vocab-meaning-en, .vocab-example-en { display: block !important; }
-  .vocab-example-section { display: block !important; }
-  .sample-wrap .sample-body { display: block !important; }
-  .hero::before, .hero::after { display: none; }
+@media print{
+  body{background:#fff;padding:0;}
+  .toolbar,.local-en-toggle,.vocab-toggle,.sample-toggle{display:none;}
+  .section,.hero{box-shadow:none;border:1px solid var(--line);break-inside:avoid;page-break-inside:avoid;}
+  .bubble > .en,.en-wrap .en,.vocab-meaning-en,.vocab-example-en{display:block!important;}
+  .vocab-example-section{display:block!important;}
+  .sample-wrap .sample-body{display:block!important;}
+  .hero::before,.hero::after{display:none;}
 }

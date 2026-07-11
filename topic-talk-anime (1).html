@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>テーマ：アニメ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#FAF6EE;--card:#FFFFFF;--accent:#C9A876;--accent-dark:#8B6F47;
+  --accent-soft:#EFE4D0;--line:#D9C9AC;--text:#2E2418;--text-muted:#7A6A55;
+  --highlight:#FFF4E0;--ken-bg:#E8F0F7;--ken-color:#3D7BAF;
+  --ana-bg:#FBE7EE;--ana-color:#C44A75;
+  --fs-eyebrow:0.85rem;--fs-title:2.6rem;--fs-subtitle:1.1rem;
+  --fs-section:1.25rem;--fs-body:1rem;--fs-en:0.95rem;
+  --fs-furigana:0.5em;--fs-small:0.85rem;
+  --radius-lg:20px;--radius:12px;--pad-section:1.75rem;--gap:1.25rem;
+  --max-width:860px;
+  --font-jp:'Zen Maru Gothic','Noto Sans JP',sans-serif;
+  --font-body:'Noto Sans JP',sans-serif;
+  --shadow:0 4px 24px rgba(139,111,71,0.08);
+}
+*{box-sizing:border-box;}html,body{margin:0;padding:0;}
+body{padding:2rem 1rem;background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:var(--fs-body);line-height:1.7;-webkit-font-smoothing:antialiased;}
+.page{max-width:var(--max-width);margin:0 auto;}
+.toolbar{position:sticky;top:0.6rem;z-index:10;display:flex;gap:0.5rem;justify-content:flex-end;margin-bottom:1rem;flex-wrap:wrap;}
+.toolbar button{background:var(--card);border:1px solid var(--line);color:var(--accent-dark);padding:0.45rem 1rem;border-radius:999px;font-size:var(--fs-small);font-family:inherit;font-weight:500;cursor:pointer;box-shadow:var(--shadow);transition:all .15s ease;}
+.toolbar button:hover{background:var(--accent-soft);}
+.toolbar button.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.hero{position:relative;background:var(--card);border-radius:var(--radius-lg);padding:2.5rem var(--pad-section);box-shadow:var(--shadow);margin-bottom:var(--gap);overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:var(--accent-soft);border-radius:50%;opacity:0.6;}
+.hero::after{content:'';position:absolute;bottom:-50px;left:-30px;width:130px;height:130px;background:var(--accent-soft);border-radius:50%;opacity:0.4;}
+.hero-inner{position:relative;z-index:1;}
+.eyebrow{display:inline-block;font-size:var(--fs-eyebrow);letter-spacing:0.15em;color:var(--accent-dark);background:var(--accent-soft);padding:0.3rem 0.9rem;border-radius:999px;font-weight:700;margin-bottom:1rem;}
+.title{font-family:var(--font-jp);font-size:var(--fs-title);font-weight:900;color:var(--accent-dark);margin:0 0 0.5rem;line-height:1.2;}
+.subtitle{font-size:var(--fs-subtitle);color:var(--text-muted);margin:0;font-weight:500;}
+.section{background:var(--card);border-radius:var(--radius-lg);padding:var(--pad-section);box-shadow:var(--shadow);margin-bottom:var(--gap);}
+.section-title{display:flex;align-items:center;gap:0.7rem;font-family:var(--font-jp);font-size:var(--fs-section);font-weight:700;color:var(--accent-dark);margin:0 0 1.2rem;padding-bottom:0.7rem;border-bottom:2px dashed var(--line);}
+.section-title .num,.flow-toggle-title .num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0;background:var(--accent);color:#fff;border-radius:50%;font-size:1rem;font-weight:700;font-family:var(--font-body);}
+.subhead{font-family:var(--font-jp);color:var(--accent-dark);margin:1.5rem 0 0.8rem;font-size:1.05rem;font-weight:700;}
+.subhead:first-child{margin-top:0;}
+.note{display:inline-block;margin-top:0.3rem;color:var(--text-muted);font-size:var(--fs-small);margin-left:0.6rem;}
+.en-wrap{margin-top:0.5rem;}
+.en-wrap .en{display:none;font-size:var(--fs-en);color:var(--text-muted);margin:0.4rem 0 0;line-height:1.6;}
+.en-wrap.show-en .en,body.show-en .en-wrap .en{display:block;}
+.local-en-toggle{margin-top:0.6rem;background:transparent;border:1px solid var(--line);color:var(--accent-dark);padding:0.2rem 0.75rem;border-radius:999px;font-size:0.78rem;font-family:inherit;cursor:pointer;font-weight:600;}
+.local-en-toggle:hover{background:var(--accent-soft);border-color:var(--accent);}
+ruby rt{font-size:var(--fs-furigana);color:var(--accent-dark);font-weight:400;letter-spacing:0;}
+.flow-toggle{width:100%;background:none;border:none;padding:0;cursor:pointer;font-family:inherit;text-align:left;}
+.flow-toggle-inner{display:flex;align-items:center;justify-content:flex-start;gap:0.5rem;padding-bottom:0.7rem;border-bottom:2px dashed var(--line);margin-bottom:0;}
+.flow-toggle-title{display:flex;align-items:center;gap:0.7rem;font-family:var(--font-jp);font-size:var(--fs-section);font-weight:700;color:var(--accent-dark);}
+.flow-toggle-arrow{font-size:0.85rem;color:var(--accent);transition:transform .2s ease;}
+.flow-toggle[aria-expanded="true"] .flow-toggle-arrow{transform:rotate(180deg);}
+.flow-list.flow-hidden{display:none;}
+.flow-list{padding:0;margin:0.8rem 0 0;list-style:none;}
+.flow-list li{display:flex;gap:1rem;padding:0.85rem 0;border-bottom:1px dashed var(--line);align-items:flex-start;line-height:1.8;}
+.flow-list li:last-child{border-bottom:none;}
+.flow-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;background:var(--accent-soft);color:var(--accent-dark);border-radius:50%;font-size:0.9rem;font-weight:700;font-family:var(--font-body);margin-top:0.1rem;}
+.flow-content strong{color:var(--accent-dark);display:block;}
+.flow-content span{font-size:var(--fs-small);color:var(--text-muted);}
+.vocab-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.7rem;}
+.vocab-card{background:#FBF7EE;border-radius:var(--radius);padding:0.85rem 1.1rem;border-left:4px solid var(--accent);}
+.vocab-word{font-family:var(--font-jp);font-size:1.2rem;font-weight:700;color:var(--text);margin:0 0 0.15rem;}
+.vocab-toggle{display:block;width:fit-content;margin-top:0.45rem;background:transparent;border:1px solid var(--line);color:var(--accent-dark);padding:0.15rem 0.65rem;border-radius:999px;font-size:0.75rem;font-family:inherit;cursor:pointer;font-weight:600;}
+.vocab-toggle:hover{background:var(--accent-soft);border-color:var(--accent);}
+.vocab-meaning-en{display:none;font-size:0.88rem;color:var(--accent-dark);font-weight:600;margin:0.3rem 0 0;}
+body.show-en .vocab-meaning-en,.vocab-card.show-meaning .vocab-meaning-en{display:block;}
+.vocab-example-section{display:none;margin-top:0.6rem;padding-top:0.55rem;border-top:1px dashed var(--line);}
+body.show-en .vocab-example-section,.vocab-card.show-example .vocab-example-section{display:block;}
+.vocab-example{font-family:var(--font-jp);font-size:0.95rem;line-height:1.85;color:var(--text);margin:0;}
+.vocab-example-en{display:none;font-size:0.82rem;color:var(--text-muted);margin:0.25rem 0 0;line-height:1.5;}
+body.show-en .vocab-example-en,.vocab-card.show-ex-en .vocab-example-en{display:block;}
+.dialogue{display:flex;flex-direction:column;gap:0.7rem;}
+.bubble{padding:0.9rem 1.1rem;border-radius:14px;max-width:86%;font-family:var(--font-jp);line-height:2;}
+.bubble.ken{background:var(--ken-bg);align-self:flex-start;border-bottom-left-radius:4px;}
+.bubble.ana{background:var(--ana-bg);align-self:flex-end;border-bottom-right-radius:4px;}
+.speaker{display:inline-block;font-size:var(--fs-small);font-weight:700;margin-right:0.55rem;color:var(--text-muted);vertical-align:0.05em;}
+.bubble.ken .speaker{color:var(--ken-color);}
+.bubble.ana .speaker{color:var(--ana-color);}
+.bubble > .en{display:none;font-size:var(--fs-en);color:var(--text-muted);margin:0.4rem 0 0;line-height:1.6;}
+body.show-en .bubble > .en,.bubble.show-en > .en{display:block;}
+.bubble .key{background:var(--highlight);padding:0.05em 0.4em;border-radius:5px;font-weight:700;color:var(--accent-dark);}
+.pair-card{background:#FBF7EE;border-radius:var(--radius);padding:1.1rem 1.2rem;margin-bottom:0.7rem;}
+.pair-card:last-child{margin-bottom:0;}
+.pair-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--accent);color:#fff;border-radius:50%;font-size:0.8rem;font-weight:700;margin-right:0.5rem;flex-shrink:0;vertical-align:middle;}
+.pair-q{font-family:var(--font-jp);font-weight:500;line-height:1.9;color:var(--text);margin:0;}
+.practice{background:#FBF7EE;padding:1.1rem 1.2rem;border-radius:var(--radius);margin-bottom:0.7rem;}
+.practice:last-child{margin-bottom:0;}
+.practice-q{font-family:var(--font-jp);font-weight:500;line-height:1.9;color:var(--text);margin:0;}
+.sample-wrap{margin-top:0.6rem;}
+.sample-toggle{background:transparent;border:1.5px solid var(--accent);color:var(--accent-dark);padding:0.28rem 1rem;border-radius:999px;font-size:0.82rem;font-family:inherit;cursor:pointer;font-weight:700;transition:all .15s ease;}
+.sample-toggle:hover{background:var(--accent-soft);}
+.sample-body{display:none;margin-top:0.75rem;padding:1rem 1.1rem;background:var(--accent-soft);border-radius:10px;border-left:4px solid var(--accent);}
+.sample-wrap.show .sample-body{display:block;}
+.sample-jp{margin:0;font-family:var(--font-jp);line-height:1.95;color:var(--text);}
+.level-head{display:flex;align-items:center;gap:0.6rem;margin:1.4rem 0 0.8rem;font-family:var(--font-jp);font-size:1rem;font-weight:700;color:var(--accent-dark);}
+.level-head:first-child{margin-top:0;}
+.level-badge{display:inline-flex;align-items:center;padding:0.2rem 0.75rem;border-radius:999px;font-size:0.8rem;font-weight:700;letter-spacing:0.05em;}
+.level-badge.beginner{background:#E6F4EA;color:#2E7D32;}
+.level-badge.intermediate{background:#FFF3E0;color:#E65100;}
+.level-badge.advanced{background:#EDE7F6;color:#5E35B1;}
+.level-divider{flex:1;height:1px;background:var(--line);}
+@media(max-width:640px){
+  :root{--fs-title:1.9rem;--fs-section:1.1rem;--pad-section:1.25rem;}
+  body{padding:1rem 0.6rem;}.hero{padding:2rem 1.25rem;}
+  .vocab-grid{grid-template-columns:1fr;}.bubble{max-width:96%;}
+}
+@media print{
+  body{background:#fff;padding:0;}
+  .toolbar,.local-en-toggle,.vocab-toggle,.sample-toggle{display:none;}
+  .section,.hero{box-shadow:none;border:1px solid var(--line);break-inside:avoid;page-break-inside:avoid;}
+  .bubble > .en,.en-wrap .en,.vocab-meaning-en,.vocab-example-en{display:block!important;}
+  .vocab-example-section{display:block!important;}
+  .sample-wrap .sample-body{display:block!important;}
+  .hero::before,.hero::after{display:none;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="toolbar">
+    <button id="toggle-en" type="button">英訳を表示</button>
+    <button onclick="window.print()" type="button">印刷／PDF</button>
+  </div>
+  <header class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Topic Talk ・ 中級〜中上級</span>
+      <h1 class="title">テーマ：アニメ</h1>
+      <p class="subtitle">Anime — talking about your favorite shows, characters &amp; stories</p>
+    </div>
+  </header>
+  <section class="section">
+    <h2 class="section-title"><span class="num">1</span>単語・フレーズ確認</h2>
+    <div class="vocab-grid">
+      <div class="vocab-card">
+        <p class="vocab-word">話題になる</p>
+        <button class="vocab-toggle meaning-btn" type="button">訳を見る</button>
+        <p class="vocab-meaning-en">▶ To become a hot topic / To get a lot of buzz / To trend</p>
+        <button class="vocab-toggle example-show-btn" type="button">例文を見る</button>
+        <div class="vocab-example-section">
+          <p class="vocab-example">その映画は公開されてすぐ話題になりました。</p>
+          <button class="vocab-toggle ex-en-btn" type="button">訳を見る</button>
+          <p class="vocab-example-en">The movie became a hot topic as soon as it was released.</p>
+        </div>
+      </div>
+      <div class="vocab-card">
+        <p class="vocab-word">世界観</p>
+        <button class="vocab-toggle meaning-btn" type="button">訳を見る</button>
+        <p class="vocab-meaning-en">▶ Worldview / World setting / The world of a story</p>
+        <button class="vocab-toggle example-show-btn" type="button">例文を見る</button>
+        <div class="vocab-example-section">
+          <p class="vocab-example">このアニメは独特な世界観が魅力です。</p>
+          <button class="vocab-toggle ex-en-btn" type="button">訳を見る</button>
+          <p class="vocab-example-en">The appeal of this anime is its unique world setting.</p>
+        </div>
+      </div>
+      <div class="vocab-card">
+        <p class="vocab-word">登場人物</p>
+        <button class="vocab-toggle meaning-btn" type="button">訳を見る</button>
+        <p class="vocab-meaning-en">▶ Characters / Cast of characters</p>
+        <button class="vocab-toggle example-show-btn" type="button">例文を見る</button>
+        <div class="vocab-example-section">
+          <p class="vocab-example">登場人物がみんな個性的で、飽きません。</p>
+          <button class="vocab-toggle ex-en-btn" type="button">訳を見る</button>
+          <p class="vocab-example-en">The characters are all so distinctive that I never get bored.</p>
+        </div>
+      </div>
+      <div class="vocab-card">
+        <p class="vocab-word">個性的（な）</p>
+        <button class="vocab-toggle meaning-btn" type="button">訳を見る</button>
+        <p class="vocab-meaning-en">▶ Distinctive / One-of-a-kind / Having a strong personality</p>
+        <button class="vocab-toggle example-show-btn" type="button">例文を見る</button>
+        <div class="vocab-example-section">
+          <p class="vocab-example">個性的なキャラクターが多く、誰かしら好きになれます。</p>
+          <button class="vocab-toggle ex-en-btn" type="button">訳を見る</button>
+          <p class="vocab-example-en">There are so many distinctive characters that you are sure to like at least one of them.</p>
+        </div>
+      </div>
+      <div class="vocab-card">
+        <p class="vocab-word">主題歌</p>
+        <button class="vocab-toggle meaning-btn" type="button">訳を見る</button>
+        <p class="vocab-meaning-en">▶ Theme song / Opening / Ending song</p>
+        <button class="vocab-toggle example-show-btn" type="button">例文を見る</button>
+        <div class="vocab-example-section">
+          <p class="vocab-example">アニメの主題歌を聴くと、物語の世界観に入れます。</p>
+          <button class="vocab-toggle ex-en-btn" type="button">訳を見る</button>
+          <p class="vocab-example-en">When I listen to an anime's theme song, I can enter the world of the story.</p>
+        </div>
+      </div>
+      <div class="vocab-card">
+        <p class="vocab-word">感動する</p>
+        <button class="vocab-toggle meaning-btn" type="button">訳を見る</button>
+        <p class="vocab-meaning-en">▶ To be moved / To be touched / To feel deeply impressed</p>
+        <button class="vocab-toggle example-show-btn" type="button">例文を見る</button>
+        <div class="vocab-example-section">
+          <p class="vocab-example">そのシーンを見て、思わず泣いてしまうほど感動しました。</p>
+          <button class="vocab-toggle ex-en-btn" type="button">訳を見る</button>
+          <p class="vocab-example-en">I was so moved by that scene that I burst into tears without thinking.</p>
+        </div>
+      </div>
+      <div class="vocab-card">
+        <p class="vocab-word">続編</p>
+        <button class="vocab-toggle meaning-btn" type="button">訳を見る</button>
+        <p class="vocab-meaning-en">▶ Sequel / Continuation / Next installment</p>
+        <button class="vocab-toggle example-show-btn" type="button">例文を見る</button>
+        <div class="vocab-example-section">
+          <p class="vocab-example">あのアニメの続編が来年公開されるらしい。</p>
+          <button class="vocab-toggle ex-en-btn" type="button">訳を見る</button>
+          <p class="vocab-example-en">I heard that the sequel to that anime will be released next year.</p>
+        </div>
+      </div>
+      <div class="vocab-card">
+        <p class="vocab-word">飽きない</p>
+        <button class="vocab-toggle meaning-btn" type="button">訳を見る</button>
+        <p class="vocab-meaning-en">▶ Never gets boring / Can't get enough of / Endlessly engaging</p>
+        <button class="vocab-toggle example-show-btn" type="button">例文を見る</button>
+        <div class="vocab-example-section">
+          <p class="vocab-example">何度見ても飽きない名作です。</p>
+          <button class="vocab-toggle ex-en-btn" type="button">訳を見る</button>
+          <p class="vocab-example-en">It's a masterpiece that I never get tired of no matter how many times I watch it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <h2 class="section-title"><span class="num">2</span>会話練習</h2>
+    <p class="subhead">話題のアニメについて話そう ／ Talking about trending anime　<span class="note">アナとケンの会話</span></p>
+    <div class="dialogue">
+      <div class="bubble ana">
+        <span class="speaker">🧒🏻 アナ</span>
+        最近、「ブルースカイヒーロー」っていうアニメ見た？
+        <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Have you seen that anime called "Blue Sky Hero" recently?</p></div>
+      </div>
+      <div class="bubble ken">
+        <span class="speaker">👦🏻 ケン</span>
+        うん！今すごく<span class="key">話題になってる</span>よね。
+        <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yeah! It's super popular right now.</p></div>
+      </div>
+      <div class="bubble ana">
+        <span class="speaker">🧒🏻 アナ</span>
+        <span class="key">世界観</span>がしっかりしてて、見てて全然<span class="key">飽きない</span>。
+        <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">The worldbuilding is solid, and it never gets boring.</p></div>
+      </div>
+      <div class="bubble ken">
+        <span class="speaker">👦🏻 ケン</span>
+        わかる。<span class="key">登場人物</span>もみんな<span class="key">個性的</span>だしね。
+        <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I know! All the characters are so distinctive.</p></div>
+      </div>
+      <div class="bubble ana">
+        <span class="speaker">🧒🏻 アナ</span>
+        あと、<span class="key">主題歌</span>が最高！聞くだけで泣きそうになる。
+        <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">And the theme song is amazing! I almost cry just hearing it.</p></div>
+      </div>
+      <div class="bubble ken">
+        <span class="speaker">👦🏻 ケン</span>
+        ほんとに。さいごのシーンは<span class="key">感動した</span>よ。
+        <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Seriously. The last scene was so touching.</p></div>
+      </div>
+      <div class="bubble ana">
+        <span class="speaker">🧒🏻 アナ</span>
+        <span class="key">続編</span>が出るって聞いたけど、ほんとかな？
+        <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I heard there's going to be a sequel — is that true?</p></div>
+      </div>
+      <div class="bubble ken">
+        <span class="speaker">👦🏻 ケン</span>
+        うん、来年だって！楽しみだね。
+        <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yeah, it's coming out next year! I can't wait.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <h2 class="section-title"><span class="num">3</span>質問に答える練習</h2>
+
+    <!-- Beginner -->
+    <div class="level-head">
+      <span class="level-badge beginner">Beginner　初級</span>
+      <span class="level-divider"></span>
+    </div>
+    <div class="practice">
+      <p class="practice-q">①　好きなアニメは何ですか？</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">What is your favorite anime?</p></div>
+      <div class="sample-wrap">
+        <button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">私は「〇〇」が好きです。アクションがかっこよくて、毎週楽しみにしていました。</p>
+          <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">My favorite anime is [title]. The action scenes are so cool, and I used to look forward to it every week.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="practice">
+      <p class="practice-q">②　アニメをよく見ますか？いつ・どこで見ますか？</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Do you often watch anime? When and where do you watch it?</p></div>
+      <div class="sample-wrap">
+        <button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">主に週末の夜に見ます。スマホやテレビでNetflixや配信サービスを使って見ることが多いです。</p>
+          <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I mainly watch on weekend evenings. I usually use Netflix or other streaming services on my phone or TV.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="practice">
+      <p class="practice-q">③　好きな登場人物はだれですか？どんなキャラクターですか？</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Who is your favorite character? What kind of character are they?</p></div>
+      <div class="sample-wrap">
+        <button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">〇〇というキャラクターが好きです。明るくて元気で、みんなを励ます性格がとても好きです。</p>
+          <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">My favorite is [name]. They're cheerful and energetic, and I really love how they encourage everyone around them.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="practice">
+      <p class="practice-q">④　アニメのジャンル（アクション・ロマンス・ファンタジーなど）は何が好きですか？</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">What genre of anime do you like? (e.g. action, romance, fantasy)</p></div>
+      <div class="sample-wrap">
+        <button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">私はファンタジーが一番好きです。現実とは違う世界に入り込める感覚が好きで、見ているだけでわくわくします。</p>
+          <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I love fantasy the most. I enjoy the feeling of being transported into a world completely different from reality — it gets me excited just watching.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intermediate -->
+    <div class="level-head">
+      <span class="level-badge intermediate">Intermediate　中級</span>
+      <span class="level-divider"></span>
+    </div>
+    <div class="practice">
+      <p class="practice-q">⑤　そのアニメの世界観やストーリーについて教えてください。</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Tell me about the world setting and story of that anime.</p></div>
+      <div class="sample-wrap">
+        <button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">魔法と現代社会が混ざった独特な世界観で、主人公が成長していくストーリーです。登場人物がみんな個性的で、飽きません。</p>
+          <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">It has a unique world where magic and modern society are blended together, and the story follows the main character growing up. All the characters are so distinctive that it never gets boring.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="practice">
+      <p class="practice-q">⑥　アニメを見て感動したシーンはありますか？</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Is there a scene from an anime that really moved you?</p></div>
+      <div class="sample-wrap">
+        <button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">はい、あります。仲間がピンチのときに主人公が助けに来るシーンで、思わず泣いてしまいました。感動するシーンが多い作品です。</p>
+          <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yes! I burst into tears at the scene where the main character rushes in to save their friends from a crisis. It's a series with so many deeply moving moments.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="practice">
+      <p class="practice-q">⑦　アニメを見て日本語の勉強になったことはありますか？</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Has watching anime ever helped your Japanese study?</p></div>
+      <div class="sample-wrap">
+        <button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">はい、たくさんあります。アニメを見ることで自然な日本語の表現や話し方のリズムが身につきました。スラングや感情表現も自然に覚えられてよかったです。</p>
+          <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yes, a lot! Watching anime helped me pick up natural Japanese expressions and the rhythm of speech. I was also happy to naturally learn slang and emotional expressions.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="practice">
+      <p class="practice-q">⑧　好きなアニメの主題歌について教えてください。</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Tell me about the theme song of your favorite anime.</p></div>
+      <div class="sample-wrap">
+        <button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">「〇〇」の主題歌がとても好きです。曲を聴くだけで物語の世界観に引き込まれます。歌詞もストーリーとリンクしていて、何度聴いても飽きません。</p>
+          <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I love the theme song from [title]. Just hearing it draws me straight into the world of the story. The lyrics connect to the plot too, and I never get tired of it no matter how many times I listen.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Advanced -->
+    <div class="level-head">
+      <span class="level-badge advanced">Advanced　上級</span>
+      <span class="level-divider"></span>
+    </div>
+    <div class="practice">
+      <p class="practice-q">⑨　続編が見たいアニメはありますか？その理由を教えてください。</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Is there any anime you would like to see a sequel for? Please tell me why.</p></div>
+      <div class="sample-wrap">
+        <button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">はい、〇〇の続編をずっと待っています。独特な世界観と登場人物の物語がまだ途中だと感じるので、最後まで見届けたいです。また感動できるシーンを期待しています。</p>
+          <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yes, I've been waiting for a sequel to [title] for a long time. The world setting is so unique, and I feel like the characters' stories are still unfinished, so I want to see them through to the end. I'm also hoping for more deeply moving scenes.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="practice">
+      <p class="practice-q">⑩　日本のアニメと外国のアニメを比べると、どんな違いがあると思いますか？</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">When you compare Japanese anime to animation from other countries, what differences do you notice?</p></div>
+      <div class="sample-wrap">
+        <button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">日本のアニメはストーリーが複雑で感情的な深さがあることが多いと思います。キャラクターの成長や人間関係が丁寧に描かれていて、感情移入しやすいのが特徴だと感じます。</p>
+          <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I think Japanese anime often has complex stories with great emotional depth. A notable feature is that character growth and relationships are portrayed in such careful detail that it's easy to become emotionally invested.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="practice">
+      <p class="practice-q">⑪　アニメは日本文化を理解するのに役立つと思いますか？具体的に教えてください。</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Do you think anime is useful for understanding Japanese culture? Please give a specific example.</p></div>
+      <div class="sample-wrap">
+        <button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">はい、とても役立つと思います。アニメを通じて、日本の学校文化や家族のあり方、季節の行事などを自然に学べます。言葉だけでなく、価値観や習慣も伝わってくるのがいいと思います。</p>
+          <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yes, I think it's very useful. Through anime, you can naturally learn about Japanese school culture, family dynamics, and seasonal events. I love that it conveys not just language but also values and customs.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="practice">
+      <p class="practice-q">⑫　日本のアニメが世界中で人気な理由は何だと思いますか？</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Why do you think Japanese anime is so popular around the world?</p></div>
+      <div class="sample-wrap">
+        <button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">独特な世界観と個性的なキャラクター、そして感情を動かすストーリーが理由だと思います。実写では表現しにくいことをアニメで表現できる点も大きいと思います。年齢や文化を超えて楽しめる作品が多いのも強みだと感じます。</p>
+          <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I think it's the unique worldbuilding, distinctive characters, and emotionally moving stories. The ability to express things through animation that would be difficult in live-action is also a big factor. Another strength is that there are so many works that can be enjoyed across different ages and cultures.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+  document.getElementById('toggle-en').addEventListener('click',function(e){
+    document.body.classList.toggle('show-en');
+    var on=document.body.classList.contains('show-en');
+    e.currentTarget.classList.toggle('active',on);
+    e.currentTarget.textContent=on?'英訳を隠す':'英訳を表示';
+    document.querySelectorAll('.vocab-card .meaning-btn').forEach(function(b){b.textContent=on?'訳を隠す':'訳を見る';});
+    document.querySelectorAll('.vocab-card .ex-en-btn').forEach(function(b){b.textContent=on?'訳を隠す':'訳を見る';});
+  });
+  document.querySelectorAll('.vocab-card .meaning-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      if(document.body.classList.contains('show-en'))return;
+      var c=btn.closest('.vocab-card');c.classList.toggle('show-meaning');
+      btn.textContent=c.classList.contains('show-meaning')?'訳を隠す':'訳を見る';
+    });
+  });
+  document.querySelectorAll('.vocab-card .example-show-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      if(document.body.classList.contains('show-en'))return;
+      var c=btn.closest('.vocab-card');c.classList.toggle('show-example');
+      btn.textContent=c.classList.contains('show-example')?'例文を隠す':'例文を見る';
+    });
+  });
+  document.querySelectorAll('.vocab-card .ex-en-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      if(document.body.classList.contains('show-en'))return;
+      var c=btn.closest('.vocab-card');c.classList.toggle('show-ex-en');
+      btn.textContent=c.classList.contains('show-ex-en')?'訳を隠す':'訳を見る';
+    });
+  });
+  document.querySelectorAll('.local-en-toggle').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var c=btn.closest('.en-wrap,.bubble');if(!c)return;
+      c.classList.toggle('show-en');var on=c.classList.contains('show-en');
+      btn.textContent=on?'訳を隠す':'訳を見る';
+    });
+  });
+  document.querySelectorAll('.sample-toggle').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var w=btn.closest('.sample-wrap');if(!w)return;
+      w.classList.toggle('show');btn.textContent=w.classList.contains('show')?'回答例を隠す':'回答例を見る';
+    });
+  });
+  var fb=document.querySelector('.flow-toggle'),fl=document.querySelector('.flow-list');
+  if(fb&&fl){fb.addEventListener('click',function(){
+    var ex=fb.getAttribute('aria-expanded')==='true';
+    fb.setAttribute('aria-expanded',String(!ex));fl.classList.toggle('flow-hidden',ex);
+  });}
+</script>
+</body>
+</html>
