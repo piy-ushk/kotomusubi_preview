@@ -237,21 +237,23 @@ const InnerBlockRenderer = ({ block, blockId, translateAll, individualTranslatio
       };
 
       return (
-        <li onContextMenu={handleContext} style={getNotionColorStyle(blockData.color)}>
-          {renderArrowPair(jp)}
-          {en && (
-            <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
-              {!translateAll && (
-              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>
-                {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
-              </button>
+        <ul className="point-list" onContextMenu={handleContext} style={{ ...getNotionColorStyle(blockData.color), margin: '4px 0' }}>
+          <li>
+            {renderArrowPair(jp)}
+            {en && (
+              <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
+                {!translateAll && (
+                  <button className="local-en-toggle" onClick={(e) => { e.preventDefault(); onToggle(blockId); }}>
+                    {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
+                  </button>
+                )}
+                <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
+              </div>
             )}
-              <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
-            </div>
-          )}
-          {subBlocks && <ul>{subBlocks}</ul>}
-          {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
-        </li>
+            {subBlocks}
+            {renderAnnotations(blockId, annotations, onRemoveAnnotation)}
+          </li>
+        </ul>
       );
     }
     
