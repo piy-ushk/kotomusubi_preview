@@ -45,7 +45,7 @@ const VocabCard = ({ phrase, reading, meaning, example, example_en, isTranslated
       {example && (
         <React.Fragment>
           <button className="vocab-toggle example-show-btn" onClick={(e) => {
-            const el = e.target.nextElementSibling;
+            const el = e.currentTarget.nextElementSibling;
             if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
           }}>例文を見る</button>
           <div className={`vocab-example-section ${isExTranslated ? 'show-ex-en' : ''}`} style={{ display: 'none' }}>
@@ -294,7 +294,7 @@ const InnerBlockRenderer = ({ block, blockId, translateAll, individualTranslatio
       return (
         <div className="sample-wrap show" style={{ margin: '8px 0' }}>
           <button className="sample-toggle" onClick={(e) => {
-             const body = e.target.nextElementSibling;
+             const body = e.currentTarget.nextElementSibling;
              if (body) body.style.display = body.style.display === 'none' ? 'block' : 'none';
           }}>{jpContent}</button>
           <div className="sample-body" style={{ display: 'none' }}>
