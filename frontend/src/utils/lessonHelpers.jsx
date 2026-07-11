@@ -190,6 +190,10 @@ export const getRawText = (block) => {
 export const hasJapanese = (str) => /[\u3040-\u309f\u30a0-\u30ff\u4e00-\u9faf]/.test(str);
 export const isEnglishTarget = (str) => {
   if (!str.trim()) return false;
+  // If it starts with English letters (ignoring punctuation/spaces), it's highly likely to be an English translation
+  const startsWithEng = /^[^\w]*[a-zA-Z]/.test(str.trim());
+  if (startsWithEng) return true;
+  
   const hasEng = /[a-zA-Z]/.test(str);
   const noJp = !hasJapanese(str);
   return hasEng && noJp;
@@ -306,7 +310,7 @@ export const renderRichText = (richText, showFurigana) => {
       style.borderRadius = '4px';
     }
     
-    const content = renderFuriganaText(cleanText(plainText), showFurigana);
+    const content = renderFuriganaText(plainText.replace(/💡|✍️|✅|📝|✨/g, ''), showFurigana);
     
     if (rt.href) {
       result.push(

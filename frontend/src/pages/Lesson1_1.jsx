@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AutoTranslate from '../components/AutoTranslate';
-import { AnswerField } from '../utils/lessonHelpers';
+import { AnswerField, SelfGradingButtons } from '../utils/lessonHelpers';
 
 export default function Lesson1_1({ translateAll, translationLanguage, annotations, onSaveAnswer }) {
   useEffect(() => {
