@@ -23,23 +23,49 @@ const TranslationControls = ({ id, rawText, isTranslated, onToggle }) => (
   </div>
 );
 
-const VocabCard = ({ phrase, reading, meaning, isTranslated, onToggle, wordId, showFurigana, pos, translateAll }) => (
-  <div className="vocab-card">
-    <div className="vocab-word">{phrase}</div>
-    {showFurigana && reading && <div className="note" style={{ margin: '0 0 4px 0' }}>{reading}</div>}
-    {pos && <span className="note" style={{ color: 'var(--primary)', fontWeight: 'bold' }}>[{pos}]</span>}
-    {meaning && (
-      <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
-        {!translateAll && (
-          <button className="vocab-toggle" onClick={() => onToggle(wordId)}>
-            {isTranslated ? '訳を隠す' : '訳を見る'}
-          </button>
-        )}
-        <p className="vocab-meaning-en">{meaning}</p>
-      </div>
-    )}
-  </div>
-);
+const VocabCard = ({ phrase, reading, meaning, example, example_en, isTranslated, onToggle, individualTranslations, wordId, showFurigana, pos, translateAll }) => {
+  const isExTranslated = translateAll || !!individualTranslations[`${wordId}_ex`];
+  return (
+    <div className={`vocab-card ${isTranslated ? 'show-meaning' : ''}`}>
+      <div className="vocab-word">{phrase}</div>
+      {showFurigana && reading && <div className="note" style={{ margin: '0 0 4px 0' }}>{reading}</div>}
+      {pos && <span className="note" style={{ color: 'var(--primary)', fontWeight: 'bold' }}>[{pos}]</span>}
+      
+      {meaning && (
+        <React.Fragment>
+          {!translateAll && (
+            <button className="vocab-toggle meaning-btn" onClick={() => onToggle(wordId)}>
+              {isTranslated ? '訳を隠す' : '訳を見る'}
+            </button>
+          )}
+          <p className="vocab-meaning-en">▶ {meaning}</p>
+        </React.Fragment>
+      )}
+
+      {example && (
+        <React.Fragment>
+          <button className="vocab-toggle example-show-btn" onClick={(e) => {
+            const el = e.target.nextElementSibling;
+            if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+          }}>例文を見る</button>
+          <div className={`vocab-example-section ${isExTranslated ? 'show-ex-en' : ''}`} style={{ display: 'none' }}>
+            <p className="vocab-example">{example}</p>
+            {example_en && (
+              <React.Fragment>
+                {!translateAll && (
+                  <button className="vocab-toggle ex-en-btn" onClick={() => onToggle(`${wordId}_ex`)}>
+                    {isExTranslated ? '訳を隠す' : '訳を見る'}
+                  </button>
+                )}
+                <p className="vocab-example-en">{example_en}</p>
+              </React.Fragment>
+            )}
+          </div>
+        </React.Fragment>
+      )}
+    </div>
+  );
+};
 
 const InnerBlockRenderer = ({ block, blockId, translateAll, individualTranslations, onToggle, enTranslation, annotations, onContextMenu, onRemoveAnnotation, translationLanguage, showFurigana, sectionTitle, onSaveAnswer }) => {
   const type = block.type;
@@ -343,8 +369,11 @@ const InnerBlockRenderer = ({ block, blockId, translateAll, individualTranslatio
             reading={cleanText(d.reading || d.hiragana || '')}
             pos={d.pos}
             meaning={cleanText(eng)}
+            example={cleanText(d.example || '')}
+            example_en={cleanText(d.example_en || '')}
             isTranslated={translateAll || !!individualTranslations[wordId]}
             onToggle={onToggle}
+            individualTranslations={individualTranslations}
             wordId={wordId}
             showFurigana={showFurigana}
             translateAll={translateAll}
@@ -373,8 +402,11 @@ const InnerBlockRenderer = ({ block, blockId, translateAll, individualTranslatio
                 reading={cleanText(v.reading || '')}
                 pos={v.pos}
                 meaning={cleanText(eng)}
+                example={cleanText(v.example || '')}
+                example_en={cleanText(v.example_en || '')}
                 isTranslated={translateAll || !!individualTranslations[wordId]}
                 onToggle={onToggle}
+                individualTranslations={individualTranslations}
                 wordId={wordId}
                 showFurigana={showFurigana}
                 translateAll={translateAll}
