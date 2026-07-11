@@ -56,7 +56,7 @@
 .grammar-lesson-page .inline-page-db { display: flex; flex-direction: column; gap: 1.25rem; }
 .grammar-lesson-page .inline-page-section { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem; background: #fffdf8; }
 .grammar-lesson-page .inline-page-title { margin-top: 0; padding-bottom: 0.55rem; border-bottom: 1px dashed var(--line); font-size: 1.15rem; }
-.grammar-lesson-page .vocab-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
+.grammar-lesson-page .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.7rem; }
 .grammar-lesson-page .vocab-card { background: #FBF7EE; border-radius: var(--radius); padding: 0.85rem 1.1rem; border-left: 4px solid var(--accent); }
 .grammar-lesson-page .vocab-word { font-family: var(--font-jp); font-size: 1.2rem; font-weight: 700; color: var(--text); margin: 0 0 0.15rem; }
 .grammar-lesson-page .vocab-toggle { display: block; width: fit-content; margin-top: 0.45rem; background: transparent; border: 1px solid var(--line); color: var(--accent-dark); padding: 0.15rem 0.65rem; border-radius: 999px; font-size: 0.75rem; font-family: inherit; cursor: pointer; font-weight: 600; }
