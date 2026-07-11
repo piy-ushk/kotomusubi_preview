@@ -62,8 +62,10 @@ export default function AutoTranslate({ text, targetLang, className, as: Compone
   }, [text, targetLang]);
 
   return (
-    <Component className={className} style={{ opacity: loading ? 0.6 : 1, transition: 'opacity 0.2s' }}>
-      {translatedText}
-    </Component>
+    <Component 
+      className={className} 
+      style={{ opacity: loading ? 0.6 : 1, transition: 'opacity 0.2s' }}
+      dangerouslySetInnerHTML={{ __html: translatedText }}
+    />
   );
 }

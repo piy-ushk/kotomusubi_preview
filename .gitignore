@@ -14,3 +14,4 @@ __pycache__/
 # Media Caching
 backend/static/images/
 backend/static/audio/
+/temp
