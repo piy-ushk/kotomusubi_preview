@@ -288,6 +288,30 @@ class SyncService:
             if pn in props:
                 if props[pn].get("type") == "rich_text": vocab["example"] = "".join([rt.get("plain_text", "") for rt in props[pn].get("rich_text", [])])
                 if vocab["example"]: break
+                
+        # Apply word screening rules
+        jp = vocab["jp"]
+        # Delete sentences and phrases (heuristics: contains punctuation or particles like 〜)
+        if any(char in jp for char in ["〜", "？", "！", "。", "、", "「", "」"]):
+            return None # signals to filter this out
+        
+        # Na-adjective stem only
+        pos_lower = vocab["pos"].lower()
+        if ("な形容詞" in pos_lower or "na-adj" in pos_lower) and jp.endswith("な"):
+            vocab["jp"] = jp[:-1]
+            if vocab["reading"].endswith("な"):
+                vocab["reading"] = vocab["reading"][:-1]
+                
+        # Fix katakana interpunct
+        vocab["jp"] = vocab["jp"].replace("・", " ")
+        
+        # Verb english translation should start with "to "
+        if ("動詞" in pos_lower or "verb" in pos_lower) and vocab["en"]:
+            en = vocab["en"].strip()
+            if not en.lower().startswith("to "):
+                # If there are multiple meanings separated by '/', add 'to' to the first one
+                vocab["en"] = f"to {en}"
+                
         return vocab
 
     async def _fetch_inline_databases(self, blocks_list):
@@ -326,6 +350,20 @@ class SyncService:
                 
                 if db_pages:
                     items = await asyncio.gather(*(process_page(p) for p in db_pages))
+                    
+                    # Filter out dropped vocab (sentences/phrases) and sort
+                    valid_items = [i for i in items if i["vocab"]]
+                    
+                    def sort_key(item):
+                        pos = item["vocab"].get("pos", "").lower()
+                        if "名詞" in pos or "noun" in pos: return 1
+                        if "動詞" in pos or "verb" in pos: return 2
+                        if "い形容詞" in pos or "i-adj" in pos: return 3
+                        if "な形容詞" in pos or "na-adj" in pos: return 4
+                        if "副詞" in pos or "adv" in pos: return 5
+                        return 6
+                        
+                    items = sorted(valid_items, key=sort_key)
                 else:
                     items = []
                 b["database_items"] = items
