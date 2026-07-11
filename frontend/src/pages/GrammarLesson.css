@@ -56,6 +56,13 @@
 .grammar-lesson-page .inline-page-db { display: flex; flex-direction: column; gap: 1.25rem; }
 .grammar-lesson-page .inline-page-section { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem; background: #fffdf8; }
 .grammar-lesson-page .inline-page-title { margin-top: 0; padding-bottom: 0.55rem; border-bottom: 1px dashed var(--line); font-size: 1.15rem; }
+.grammar-lesson-page .vocab-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
+.grammar-lesson-page .vocab-card { background: #FBF7EE; border-radius: var(--radius); padding: 0.85rem 1.1rem; border-left: 4px solid var(--accent); }
+.grammar-lesson-page .vocab-word { font-family: var(--font-jp); font-size: 1.2rem; font-weight: 700; color: var(--text); margin: 0 0 0.15rem; }
+.grammar-lesson-page .vocab-toggle { display: block; width: fit-content; margin-top: 0.45rem; background: transparent; border: 1px solid var(--line); color: var(--accent-dark); padding: 0.15rem 0.65rem; border-radius: 999px; font-size: 0.75rem; font-family: inherit; cursor: pointer; font-weight: 600; }
+.grammar-lesson-page .vocab-toggle:hover { background: var(--accent-soft); border-color: var(--accent); }
+.grammar-lesson-page .vocab-meaning-en { display: none; font-size: 0.88rem; color: var(--accent-dark); font-weight: 600; margin: 0.3rem 0 0; }
+.grammar-lesson-page .vocab-reading { font-size: 0.85rem; color: var(--text-muted); margin: 0 0 8px; }
 .grammar-lesson-page .meaning { line-height: 1.9; margin: 0; }
 .grammar-lesson-page .meaning p { margin: 0 0 0.5rem; }
 .grammar-lesson-page .form-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: var(--radius); font-size: var(--fs-body); }
@@ -106,6 +113,7 @@
 @media (max-width: 720px) {
   .grammar-lesson-page .ta-chart-grid { grid-template-columns: 1fr; }
   .grammar-lesson-page .ta-group-1 { grid-template-columns: 1fr; }
+  .grammar-lesson-page .vocab-grid { grid-template-columns: 1fr; }
 }
 
 .grammar-lesson-page .example { padding: 1.2rem 1.3rem; background: #FBF7EE; border-left: 4px solid var(--accent); border-radius: 8px; display: flex; flex-direction: column; gap: 0.9rem; align-items: stretch; }
