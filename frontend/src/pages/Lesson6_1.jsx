@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AutoTranslate from '../components/AutoTranslate';
+import { AnswerField } from '../utils/lessonHelpers';
 
-export default function Lesson6_1({ translateAll, translationLanguage }) {
+export default function Lesson6_1({ translateAll, translationLanguage, annotations, onSaveAnswer }) {
   useEffect(() => {
     const handleToggle = (e) => {
       if (e.target.classList.contains('local-en-toggle')) {
@@ -462,6 +463,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         窓を（ <strong>開けてください</strong> ）。
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please open the window.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_0" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_0"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -471,6 +474,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         おちゃを（ <strong>飲んでください</strong> ）。
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please drink the tea.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_1" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_1"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -480,6 +485,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         もう一度（ <strong>言ってください</strong> ）。
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please say it one more time.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_2" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_2"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -489,6 +496,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         メールを（ <strong>送ってください</strong> ）。
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please send the email.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_3" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_3"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -498,6 +507,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         ゆっくり（ <strong>話してください</strong> ）。
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please speak slowly.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_4" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_4"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -507,6 +518,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         パソコンを（ <strong>使ってください</strong> ）。
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please use the computer.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_5" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_5"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
     
@@ -552,6 +565,7 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
     <div className="practice">
       <p className="practice-q">写真を撮ってほしいとき、何と言いますか？</p>
       <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`How would you say when you want someone to take a picture?`} targetLang={translationLanguage} className="en" /></div>
+      <AnswerField blockId="lesson61_practice_0" initialValue={annotations?.['lesson61_practice_0']?.find(ann => ann.action === 'answer')?.content || ''} onSave={onSaveAnswer} />
       <div className="sample-wrap">
         <button className="sample-toggle" type="button">回答例を見る</button>
         <div className="sample-body">
@@ -564,6 +578,7 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
     <div className="practice">
       <p className="practice-q">レストランで、メニューを見たいとき、何と言いますか？</p>
       <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`At a restaurant, what would you say when you want to see the menu?`} targetLang={translationLanguage} className="en" /></div>
+      <AnswerField blockId="lesson61_practice_1" initialValue={annotations?.['lesson61_practice_1']?.find(ann => ann.action === 'answer')?.content || ''} onSave={onSaveAnswer} />
       <div className="sample-wrap">
         <button className="sample-toggle" type="button">回答例を見る</button>
         <div className="sample-body">
@@ -576,6 +591,7 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
     <div className="practice">
       <p className="practice-q">先生に質問の答えをわかりやすく説明してほしいとき、何と言いますか？</p>
       <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`What would you say if you want your teacher to explain the answer clearly?`} targetLang={translationLanguage} className="en" /></div>
+      <AnswerField blockId="lesson61_practice_2" initialValue={annotations?.['lesson61_practice_2']?.find(ann => ann.action === 'answer')?.content || ''} onSave={onSaveAnswer} />
       <div className="sample-wrap">
         <button className="sample-toggle" type="button">回答例を見る</button>
         <div className="sample-body">
@@ -588,6 +604,7 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
     <div className="practice">
       <p className="practice-q">道に迷ったとき、駅までの行き方を聞きたい。何と言いますか？</p>
       <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`When you're lost and want to ask the way to the station — what do you say?`} targetLang={translationLanguage} className="en" /></div>
+      <AnswerField blockId="lesson61_practice_3" initialValue={annotations?.['lesson61_practice_3']?.find(ann => ann.action === 'answer')?.content || ''} onSave={onSaveAnswer} />
       <div className="sample-wrap">
         <button className="sample-toggle" type="button">回答例を見る</button>
         <div className="sample-body">
@@ -612,6 +629,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         教科書を（ <strong>開けてください</strong> ）。
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please open the textbook.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_6" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_6"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -621,6 +640,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         写真を（ <strong>見せてください</strong> ）。
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please show me the photo.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_7" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_7"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -630,6 +651,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         この漢字を（ <strong>読んでください</strong> ）。
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please read this kanji.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_8" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_8"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -639,6 +662,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         ここに（ <strong>来てください</strong> ）。
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please come here.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_9" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_9"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -648,6 +673,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         明日の宿題を（ <strong>してください</strong> ）。
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please do tomorrow's homework.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_10" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_10"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
     
@@ -691,6 +718,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         <strong>ドアを開けてください。</strong>
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please open the door.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_11" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_11"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -704,6 +733,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         <strong>かばんを持ってください。</strong>
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please hold the bag.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_12" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_12"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -717,6 +748,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         <strong>写真を撮ってください。</strong>
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please take a picture.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_13" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_13"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -729,6 +762,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         <strong>水を飲んでください。</strong>
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please drink water.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_14" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_14"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -741,6 +776,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         <strong>本を読んでください。</strong>
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please read the book.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_15" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_15"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 
@@ -755,6 +792,8 @@ export default function Lesson6_1({ translateAll, translationLanguage }) {
       <div className="quiz-a">
         <strong>明日、学校に来てください。</strong>
         <div className="en-wrap"><button className="local-en-toggle" type="button">訳を見る</button><AutoTranslate text={`Please come to school tomorrow.`} targetLang={translationLanguage} className="en" /></div>
+      
+        <SelfGradingButtons blockId="lesson61_quiz_16" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson61_quiz_16"]?.find(ann => ann.action === "quiz_result")?.content || null} />
       </div>
     </div>
 

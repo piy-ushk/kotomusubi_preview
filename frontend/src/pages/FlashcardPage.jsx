@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { vocabularyService } from '../services/vocabularyService';
+import { getLessonContent } from '../services/api';
 
 const speak = (text) => {
   if (!window.speechSynthesis) return;
@@ -39,7 +40,7 @@ const Modal = ({ show, onClose, children }) => {
 
 const VIEWS = { GROUPS: 'groups', GROUP_DETAIL: 'group_detail', FLASHCARD: 'flashcard' };
 
-const FlashcardPage = () => {
+const FlashcardPage = ({ lessonFilter, lessonTitle }) => {
   const [view, setView] = useState(VIEWS.GROUPS);
   const [groups, setGroups] = useState([]);
   const [activeGroup, setActiveGroup] = useState(null); // null = all words / ungrouped
@@ -58,7 +59,31 @@ const FlashcardPage = () => {
     setGroups(vocabularyService.getGroups());
   };
 
-  useEffect(() => { refresh(); }, []);
+  useEffect(() => {
+    refresh();
+    if (lessonFilter) {
+      getLessonContent(lessonFilter)
+        .then(res => {
+          const vocab = res.data?.vocabulary || [];
+          const formatted = vocab.map(vr => ({
+            id: vr.id,
+            jp: vr.word || vr.jp || '',
+            reading: vr.reading || '',
+            en: vr.meaning || vr.en || '',
+            kanji: vr.kanji || '',
+            pos: vr.pos || '',
+            example: vr.example || '',
+            status: 'not yet'
+          }));
+          setActiveGroup({ id: 'lesson_' + lessonFilter, title: lessonTitle || 'Lesson Words', isLesson: true });
+          setWords(formatted);
+          setCurrentIndex(0);
+          setFlipped(false);
+          setView(VIEWS.GROUP_DETAIL);
+        })
+        .catch(err => console.error("Failed to fetch lesson vocabulary:", err));
+    }
+  }, [lessonFilter, lessonTitle]);
 
   const openGroup = (group) => {
     setActiveGroup(group);
@@ -208,13 +233,15 @@ const FlashcardPage = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
             <button onClick={() => setView(VIEWS.GROUPS)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-primary)', display: 'flex', padding: '4px' }}><BackIcon /></button>
             <div style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-primary)', flex: 1 }}>{activeGroup ? activeGroup.title : 'All Words'}</div>
-            {activeGroup && (
+            {activeGroup && !activeGroup.isLesson && (
               <button onClick={() => { setGroupInput(activeGroup.title); setShowRenameGroup(true); }}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-sub)', display: 'flex', padding: '4px' }}><EditIcon /></button>
             )}
-            <button onClick={() => setShowAddWord(true)} style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '8px 14px', borderRadius: '10px', border: 'none', background: 'var(--primary)', color: 'white', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>
-              <PlusIcon /> Add
-            </button>
+            {!activeGroup?.isLesson && (
+              <button onClick={() => setShowAddWord(true)} style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '8px 14px', borderRadius: '10px', border: 'none', background: 'var(--primary)', color: 'white', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>
+                <PlusIcon /> Add
+              </button>
+            )}
           </div>
           <div style={{ fontSize: '13px', color: 'var(--text-sub)', paddingLeft: '40px' }}>{words.length} words</div>
         </div>

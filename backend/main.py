@@ -216,6 +216,7 @@ async def debug_supabase():
             return {"success": True, "url": url}
         else:
             return {"success": False, "error": "Upload returned None"}
+    except Exception as e:
         return {"success": False, "error": str(e)}
 
 class NoteRequest(BaseModel):

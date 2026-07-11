@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AutoTranslate from '../components/AutoTranslate';
+import { AnswerField } from '../utils/lessonHelpers';
 
-export default function Lesson1_1({ translateAll, translationLanguage }) {
+export default function Lesson1_1({ translateAll, translationLanguage, annotations, onSaveAnswer }) {
   useEffect(() => {
     const handleToggle = (e) => {
       if (e.target.classList.contains('local-en-toggle')) {
@@ -215,6 +216,8 @@ export default function Lesson1_1({ translateAll, translationLanguage }) {
           <button className="quiz-toggle" type="button">こたえを見る</button>
           <p className="quiz-answer">は</p>
           <p className="quiz-note">I am a student.</p>
+        
+          <SelfGradingButtons blockId="lesson11_quiz_0" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson11_quiz_0"]?.find(ann => ann.action === "quiz_result")?.content || null} />
         </div>
       </div>
       <div className="quiz">
@@ -223,6 +226,8 @@ export default function Lesson1_1({ translateAll, translationLanguage }) {
           <button className="quiz-toggle" type="button">こたえを見る</button>
           <p className="quiz-answer">は</p>
           <p className="quiz-note">This is a book.</p>
+        
+          <SelfGradingButtons blockId="lesson11_quiz_1" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson11_quiz_1"]?.find(ann => ann.action === "quiz_result")?.content || null} />
         </div>
       </div>
       <div className="quiz">
@@ -231,6 +236,8 @@ export default function Lesson1_1({ translateAll, translationLanguage }) {
           <button className="quiz-toggle" type="button">こたえを見る</button>
           <p className="quiz-answer">は / です</p>
           <p className="quiz-note">He is a teacher.</p>
+        
+          <SelfGradingButtons blockId="lesson11_quiz_2" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson11_quiz_2"]?.find(ann => ann.action === "quiz_result")?.content || null} />
         </div>
       </div>
     </div>
@@ -245,6 +252,8 @@ export default function Lesson1_1({ translateAll, translationLanguage }) {
         <div className="quiz-a">
           <button className="quiz-toggle" type="button">こたえを見る</button>
           <p className="quiz-answer">I am a doctor.</p>
+        
+          <SelfGradingButtons blockId="lesson11_quiz_3" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson11_quiz_3"]?.find(ann => ann.action === "quiz_result")?.content || null} />
         </div>
       </div>
       <div className="quiz">
@@ -252,6 +261,8 @@ export default function Lesson1_1({ translateAll, translationLanguage }) {
         <div className="quiz-a">
           <button className="quiz-toggle" type="button">こたえを見る</button>
           <p className="quiz-answer">That (over there) is a school.</p>
+        
+          <SelfGradingButtons blockId="lesson11_quiz_4" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson11_quiz_4"]?.find(ann => ann.action === "quiz_result")?.content || null} />
         </div>
       </div>
       <div className="quiz">
@@ -259,6 +270,8 @@ export default function Lesson1_1({ translateAll, translationLanguage }) {
         <div className="quiz-a">
           <button className="quiz-toggle" type="button">こたえを見る</button>
           <p className="quiz-answer">She is a company employee.</p>
+        
+          <SelfGradingButtons blockId="lesson11_quiz_5" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson11_quiz_5"]?.find(ann => ann.action === "quiz_result")?.content || null} />
         </div>
       </div>
     </div>
@@ -274,6 +287,8 @@ export default function Lesson1_1({ translateAll, translationLanguage }) {
           <button className="quiz-toggle" type="button">こたえを見る</button>
           <p className="quiz-answer">かれはがくせいです。</p>
           <p className="quiz-note">彼は学生です。</p>
+        
+          <SelfGradingButtons blockId="lesson11_quiz_6" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson11_quiz_6"]?.find(ann => ann.action === "quiz_result")?.content || null} />
         </div>
       </div>
       <div className="quiz">
@@ -282,6 +297,8 @@ export default function Lesson1_1({ translateAll, translationLanguage }) {
           <button className="quiz-toggle" type="button">こたえを見る</button>
           <p className="quiz-answer">わたしはせんせいです。</p>
           <p className="quiz-note">私は先生です。</p>
+        
+          <SelfGradingButtons blockId="lesson11_quiz_7" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson11_quiz_7"]?.find(ann => ann.action === "quiz_result")?.content || null} />
         </div>
       </div>
       <div className="quiz">
@@ -290,6 +307,8 @@ export default function Lesson1_1({ translateAll, translationLanguage }) {
           <button className="quiz-toggle" type="button">こたえを見る</button>
           <p className="quiz-answer">これはほんです。</p>
           <p className="quiz-note">これは本です。</p>
+        
+          <SelfGradingButtons blockId="lesson11_quiz_8" onGraded={onSaveQuizResult} initialValue={annotations?.["lesson11_quiz_8"]?.find(ann => ann.action === "quiz_result")?.content || null} />
         </div>
       </div>
     </div>
@@ -298,6 +317,7 @@ export default function Lesson1_1({ translateAll, translationLanguage }) {
   <section className="section">
     <h2 className="section-title"><span className="num">9</span>自由に話してみよう！ Let's Talk Freely!</h2>
     <p className="section-intro">「〇〇は▼▼です」の文型を使って、自分自身（じしん）や周り（まわり）のものについて紹介してみましょう！<br />Use the sentence pattern to introduce yourself and things around you!</p>
+    <AnswerField blockId="lesson11_practice_free" initialValue={annotations?.['lesson11_practice_free']?.find(ann => ann.action === 'answer')?.content || ''} onSave={onSaveAnswer} />
     <div className="sample-wrap">
       <button className="sample-toggle" type="button">回答例を見る</button>
       <div className="sample-content">

@@ -66,7 +66,7 @@ const Levels = () => {
             gap: '24px'
           }}>
             {levels.map((level, index) => {
-              const hasCover = !!level.cover;
+              const hasCover = textbookTitle.includes('Topic') ? false : !!level.cover;
               
               if (hasCover) {
                 const titleParts = level.title.split('|');
@@ -131,6 +131,10 @@ const Levels = () => {
                 );
               }
 
+              const titleParts = level.title.split('|');
+              const mainTitle = titleParts.length > 1 ? titleParts[1].trim() : titleParts[0].trim();
+              const subTitle = titleParts.length > 1 ? titleParts[0].trim() : '';
+
               return (
                  <motion.div
                    key={level.id}
@@ -140,7 +144,7 @@ const Levels = () => {
                  >
                    <button
                      className="level-card"
-                     onClick={() => navigate(`/level/${level.id}`, { state: { textbookTitle, levelTitle: level.title } })}
+                     onClick={() => navigate(`/level/${level.id}`, { state: { textbookTitle, levelTitle: mainTitle } })}
                      style={{
                        display: 'flex',
                        alignItems: 'center',
@@ -161,10 +165,10 @@ const Levels = () => {
                      </div>
                      <div style={{ flex: 1, minWidth: 0 }}>
                        <div style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '4px' }}>
-                         {level.title}
+                         {mainTitle}
                        </div>
                         <div style={{ fontSize: '14px', color: 'var(--text-sub)' }}>
-                          レベル - {level.title}
+                          {subTitle || textbookTitle}
                         </div>
                      </div>
                      <span style={{ color: 'var(--text-primary)', flexShrink: 0 }}>

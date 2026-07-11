@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 /* ---- Icons ---- */
 export const XIcon = () => (
@@ -469,4 +469,79 @@ export const renderAnnotations = (blockId, annotations, onRemoveAnnotation) => {
     }
     return null;
   });
+};
+
+export const AnswerField = ({ blockId, initialValue, onSave }) => {
+  const [value, setValue] = useState(initialValue || '');
+  const [isSaved, setIsSaved] = useState(!!initialValue);
+  const [loading, setLoading] = useState(false);
+
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      await onSave(blockId, value);
+      setIsSaved(true);
+    } catch (e) {
+      console.error(e);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="practice-input-wrapper" style={{ marginTop: '10px', display: 'flex', gap: '8px' }}>
+      <input 
+        type="text" 
+        value={value} 
+        onChange={(e) => { setValue(e.target.value); setIsSaved(false); }}
+        placeholder="ここに答えを書いてください (Write your answer here)..."
+        style={{ flex: 1, padding: '10px 14px', borderRadius: '10px', border: `1.5px solid ${isSaved ? 'var(--ok)' : 'var(--line)'}`, outline: 'none', fontSize: '0.92rem', fontFamily: 'inherit', backgroundColor: 'var(--card)', color: 'var(--text)' }}
+      />
+      <button 
+        onClick={handleSave} 
+        disabled={loading || isSaved}
+        style={{ padding: '10px 16px', background: isSaved ? 'var(--ok)' : 'var(--primary)', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 'bold', cursor: 'pointer', minWidth: '70px', fontSize: '0.85rem' }}
+      >
+        {loading ? '...' : (isSaved ? '✓ Saved' : 'Save')}
+      </button>
+    </div>
+  );
+};
+
+export const SelfGradingButtons = ({ blockId, initialValue, onGraded }) => {
+  const [result, setResult] = useState(initialValue); // 'correct' or 'incorrect' or null
+  const [loading, setLoading] = useState(false);
+
+  const handleSelect = async (val) => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      await onGraded(blockId, val);
+      setResult(val);
+    } catch (e) {
+      console.error(e);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="self-grading-wrapper" style={{ marginTop: '10px', padding: '10px 12px', background: 'rgba(0,0,0,0.02)', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.82rem', border: '1px dashed var(--line)' }}>
+      <div style={{ fontWeight: '600', color: 'var(--text-muted)' }}>正解しましたか？ (Did you get it right?)</div>
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <button 
+          onClick={() => handleSelect('correct')}
+          disabled={loading}
+          style={{ flex: 1, padding: '6px 12px', borderRadius: '8px', border: result === 'correct' ? '2px solid var(--ok)' : '1px solid var(--line)', background: result === 'correct' ? 'rgba(76,175,80,0.1)' : 'var(--card)', color: result === 'correct' ? 'var(--ok)' : 'var(--text)', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+        >
+          できた (Correct)
+        </button>
+        <button 
+          onClick={() => handleSelect('incorrect')}
+          disabled={loading}
+          style={{ flex: 1, padding: '6px 12px', borderRadius: '8px', border: result === 'incorrect' ? '2px solid var(--warn)' : '1px solid var(--line)', background: result === 'incorrect' ? 'rgba(229,57,53,0.1)' : 'var(--card)', color: result === 'incorrect' ? 'var(--warn)' : 'var(--text)', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+        >
+          できなかった (Incorrect)
+        </button>
+      </div>
+    </div>
+  );
 };

@@ -7,7 +7,7 @@ import {
   XIcon, Volume2, TranslateIcon, BookIcon, CheckIcon, ChevronLeft,
   speak, splitTranslation, getTranslationOnly, getTranslationsFromText,
   getRawText, hasJapanese, renderFuriganaText, getNotionColorStyle, renderRichText,
-  preprocessBlocks, shouldShowAnswerField, renderAnnotations, cleanText, getLanguageLabel, parseLanguageSegments, LANGUAGE_LABELS
+  preprocessBlocks, shouldShowAnswerField, renderAnnotations, cleanText, getLanguageLabel, parseLanguageSegments, LANGUAGE_LABELS, AnswerField
 } from '../utils/lessonHelpers';
 import './TopicTalkLesson.css';
 
@@ -23,21 +23,25 @@ const TranslationControls = ({ id, rawText, isTranslated, onToggle }) => (
   </div>
 );
 
-const VocabCard = ({ phrase, reading, meaning, isTranslated, onToggle, wordId, showFurigana, pos }) => (
+const VocabCard = ({ phrase, reading, meaning, isTranslated, onToggle, wordId, showFurigana, pos, translateAll }) => (
   <div className="vocab-card">
     <div className="vocab-word">{phrase}</div>
     {showFurigana && reading && <div className="note" style={{ margin: '0 0 4px 0' }}>{reading}</div>}
     {pos && <span className="note" style={{ color: 'var(--primary)', fontWeight: 'bold' }}>[{pos}]</span>}
     {meaning && (
       <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
-        <button className="vocab-toggle" onClick={() => onToggle(wordId)}>訳を見る</button>
+        {!translateAll && (
+          <button className="vocab-toggle" onClick={() => onToggle(wordId)}>
+            {isTranslated ? '訳を隠す' : '訳を見る'}
+          </button>
+        )}
         <p className="vocab-meaning-en">{meaning}</p>
       </div>
     )}
   </div>
 );
 
-const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, onToggle, enTranslation, annotations, onContextMenu, onRemoveAnnotation, translationLanguage, showFurigana, sectionTitle }) => {
+const InnerBlockRenderer = ({ block, blockId, translateAll, individualTranslations, onToggle, enTranslation, annotations, onContextMenu, onRemoveAnnotation, translationLanguage, showFurigana, sectionTitle, onSaveAnswer }) => {
   const type = block.type;
   const blockData = block[type];
   if (!blockData) return null;
@@ -69,6 +73,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           translationLanguage={translationLanguage}
           showFurigana={showFurigana}
           sectionTitle={sectionTitle}
+          onSaveAnswer={onSaveAnswer}
         />
       ))}
     </div>
@@ -88,7 +93,11 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           {jp && <h3 className="subhead">{jpContent}</h3>}
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
-              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+              {!translateAll && (
+              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>
+                {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
+              </button>
+            )}
               <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
             </div>
           )}
@@ -112,7 +121,11 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
                 {jp && <p className="pair-q">{jpContent}</p>}
                 {en && (
                   <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
-                    <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+                    {!translateAll && (
+              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>
+                {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
+              </button>
+            )}
                     <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
                   </div>
                 )}
@@ -128,7 +141,11 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           {jp && <p style={{ margin: 0 }}>{jpContent}</p>}
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
-              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+              {!translateAll && (
+              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>
+                {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
+              </button>
+            )}
               <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
             </div>
           )}
@@ -185,7 +202,11 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
               {jp && renderArrowPair(jp)}
               {en && (
                 <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
-                  <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+                  {!translateAll && (
+              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>
+                {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
+              </button>
+            )}
                   <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
                 </div>
               )}
@@ -227,7 +248,11 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
               {bubbleContent}
               {en && (
                 <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
-                  <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+                  {!translateAll && (
+              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>
+                {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
+              </button>
+            )}
                   <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
                 </div>
               )}
@@ -247,7 +272,11 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           <div className="sample-body" style={{ display: 'none' }}>
             {en && (
               <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
-                <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+                {!translateAll && (
+              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>
+                {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
+              </button>
+            )}
                 <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
               </div>
             )}
@@ -287,7 +316,11 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           {bubbleContent}
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
-              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+              {!translateAll && (
+              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>
+                {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
+              </button>
+            )}
               <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
             </div>
           )}
@@ -314,6 +347,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
             onToggle={onToggle}
             wordId={wordId}
             showFurigana={showFurigana}
+            translateAll={translateAll}
           />
         </div>
       );
@@ -343,6 +377,7 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
                 onToggle={onToggle}
                 wordId={wordId}
                 showFurigana={showFurigana}
+                translateAll={translateAll}
               />
             );
           })}
@@ -379,7 +414,11 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
           <strong style={{ fontSize: '1.1em' }}>{jpContent}</strong>
           {en && (
             <div className={`en-wrap ${isTranslated ? 'show-en' : ''}`}>
-              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>訳を見る</button>
+              {!translateAll && (
+              <button className="local-en-toggle" onClick={() => onToggle(blockId)}>
+                {individualTranslations[blockId] ? "訳を隠す" : "訳を見る"}
+              </button>
+            )}
               <AutoTranslate text={en} targetLang={translationLanguage} className="en" />
             </div>
           )}
@@ -403,6 +442,25 @@ const BlockRenderer = ({ block, blockId, translateAll, individualTranslations, o
   }
 };
 
+const BlockRenderer = (props) => {
+  const { block, blockId, sectionTitle, onSaveAnswer, annotations } = props;
+  const showAnswer = shouldShowAnswerField(block, sectionTitle);
+  const initialAnswer = annotations?.[blockId]?.find(ann => ann.action === 'answer')?.content || '';
+
+  return (
+    <div className="block-renderer-wrapper" style={{ width: '100%' }}>
+      <InnerBlockRenderer {...props} />
+      {showAnswer && (
+        <AnswerField 
+          blockId={blockId} 
+          initialValue={initialAnswer} 
+          onSave={onSaveAnswer} 
+        />
+      )}
+    </div>
+  );
+};
+
 const TopicTalkLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) => {
   const navigate = useNavigate();
   const [translateAll, setTranslateAll] = useState(false);
@@ -422,6 +480,37 @@ const TopicTalkLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) =>
       }).catch(err => console.error(err));
     }
   }, [lessonId]);
+
+  const handleSaveAnswer = async (blockId, answerText) => {
+    const existingList = annotations[blockId] || [];
+    const existingAnswer = existingList.find(ann => ann.action === 'answer');
+    if (existingAnswer) {
+      try {
+        await deleteAnnotation(existingAnswer.id);
+      } catch (e) {
+        console.error("Failed to delete existing answer", e);
+      }
+    }
+    
+    if (answerText.trim() === '') {
+      setAnnotations(prev => {
+        const cleanList = (prev[blockId] || []).filter(ann => ann.action !== 'answer');
+        return { ...prev, [blockId]: cleanList };
+      });
+      return;
+    }
+    
+    const res = await addAnnotation(lessonId, { block_id: blockId, action: "answer", content: answerText });
+    if (res.data.success) {
+      setAnnotations(prev => {
+        const cleanList = (prev[blockId] || []).filter(ann => ann.action !== 'answer');
+        return {
+          ...prev,
+          [blockId]: [...cleanList, { id: res.data.annotation_id, action: "answer", content: answerText }]
+        };
+      });
+    }
+  };
 
   const handleSaveNote = async () => {
     setIsSavingNote(true);
@@ -476,7 +565,7 @@ const TopicTalkLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) =>
   const testSections = data?.test_sections || [];
 
   // Helper: render blocks with grouping of quotes -> .dialogue and toggles -> .drills 2-col grid
-  const renderGroupedBlocks = (items, prefix) => {
+  const renderGroupedBlocks = (items, prefix, sectionTitle) => {
     const elements = [];
     let i = 0;
     while (i < items.length) {
@@ -508,6 +597,8 @@ const TopicTalkLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) =>
                   onRemoveAnnotation={null}
                   translationLanguage={translationLanguage}
                   showFurigana={showFurigana}
+                  sectionTitle={sectionTitle}
+                  onSaveAnswer={handleSaveAnswer}
                 />
               );
             })}
@@ -541,6 +632,8 @@ const TopicTalkLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) =>
                   onRemoveAnnotation={null}
                   translationLanguage={translationLanguage}
                   showFurigana={showFurigana}
+                  sectionTitle={sectionTitle}
+                  onSaveAnswer={handleSaveAnswer}
                 />
               );
             })}
@@ -564,6 +657,8 @@ const TopicTalkLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) =>
           onRemoveAnnotation={null}
           translationLanguage={translationLanguage}
           showFurigana={showFurigana}
+          sectionTitle={sectionTitle}
+          onSaveAnswer={handleSaveAnswer}
         />
       );
       i++;
@@ -696,7 +791,7 @@ const TopicTalkLessonLayout = ({ data, lessonId, textbookTitle, levelTitle }) =>
                   {splitTranslation(section.title).jp}
                 </h2>
               )}
-              {renderGroupedBlocks(section.content, `sec_${secIdx}`)}
+              {renderGroupedBlocks(section.content, `sec_${secIdx}`, section.title)}
             </section>
           ))
         })()}

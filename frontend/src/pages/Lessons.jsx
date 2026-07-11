@@ -51,8 +51,9 @@ const Lessons = () => {
   const [loading, setLoading] = useState(true);
   const [isSuperBeginner, setIsSuperBeginner] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const [show61Modal, setShow61Modal] = useState(false);
-  const [selected61Id, setSelected61Id] = useState(null);
+  const [showSelectionModal, setShowSelectionModal] = useState(false);
+  const [selectedLessonId, setSelectedLessonId] = useState(null);
+  const [selectedLessonTitle, setSelectedLessonTitle] = useState('');
   const [levelTitle, setLevelTitle] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
@@ -99,12 +100,9 @@ const Lessons = () => {
     : lessons;
 
   const handleLessonAction = (lesson) => {
-    if (lesson.title.includes('6-1') || lesson.title.includes('6−1')) {
-      setSelected61Id(lesson.id);
-      setShow61Modal(true);
-    } else {
-      navigate(`/lesson/${lesson.id}`, { state: { textbookTitle: textbookTitleState } });
-    }
+    setSelectedLessonId(lesson.id);
+    setSelectedLessonTitle(lesson.title);
+    setShowSelectionModal(true);
   };
 
   const renderLessonCard = (lesson, index) => (
@@ -215,8 +213,8 @@ const Lessons = () => {
         )}
       </div>
 
-      {/* 6-1 Selection Modal */}
-      <Modal show={show61Modal} onClose={() => setShow61Modal(false)}>
+      {/* Selection Modal */}
+      <Modal show={showSelectionModal} onClose={() => setShowSelectionModal(false)}>
         <h3 style={{ fontSize: '1.2rem', color: 'var(--accent-dark)', marginBottom: '1.2rem', textAlign: 'center', fontWeight: 'bold' }}>
           どちらを開きますか？
         </h3>
@@ -226,7 +224,7 @@ const Lessons = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
           <button
             onClick={() => {
-              navigate('/', { state: { targetTab: 2, lessonFilter: selected61Id } });
+              navigate('/', { state: { targetTab: 2, lessonFilter: selectedLessonId, lessonTitle: selectedLessonTitle } });
             }}
             style={{
               padding: '1rem', background: 'var(--accent-soft)', color: 'var(--accent-dark)',
@@ -237,7 +235,7 @@ const Lessons = () => {
           </button>
           <button
             onClick={() => {
-              navigate(`/lesson/${selected61Id}`, { state: { textbookTitle: textbookTitleState } });
+              navigate(`/lesson/${selectedLessonId}`, { state: { textbookTitle: textbookTitleState, levelTitle: levelTitleState } });
             }}
             style={{
               padding: '1rem', background: 'var(--primary)', color: 'white',
@@ -248,7 +246,7 @@ const Lessons = () => {
           </button>
         </div>
         <button
-          onClick={() => setShow61Modal(false)}
+          onClick={() => setShowSelectionModal(false)}
           style={{ marginTop: '1.2rem', width: '100%', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.9rem' }}
         >
           キャンセル (Cancel)

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllNotes } from '../services/api';
+import { getUserAnnotations } from '../services/api';
 import { vocabularyService } from '../services/vocabularyService';
 import { motion } from 'framer-motion';
 
@@ -9,31 +9,42 @@ const ProgressDashboard = () => {
     learnedWords: 0,
     reviewingWords: 0,
     totalCustomWords: 0,
+    totalQuizzes: 0,
+    accuracyRate: null,
   });
 
   useEffect(() => {
     const fetchStats = async () => {
-      let nCount = 0;
+      let notesAndWritingsCount = 0;
+      let correctQuizzes = 0;
+      let totalQuizzes = 0;
       try {
-        const res = await getAllNotes();
+        const res = await getUserAnnotations();
         if (res.data) {
-          nCount = res.data.length;
+          const notes = res.data.filter(ann => ann.action === 'note');
+          const answers = res.data.filter(ann => ann.action === 'answer');
+          notesAndWritingsCount = notes.length + answers.length;
+          
+          const quizzes = res.data.filter(ann => ann.action === 'quiz_result');
+          totalQuizzes = quizzes.length;
+          correctQuizzes = quizzes.filter(q => q.content === 'correct').length;
         }
       } catch (err) {
-        console.error("Failed to fetch notes count", err);
+        console.error("Failed to fetch stats", err);
       }
 
       const learned = vocabularyService.getLearnedWordIds().length;
-      const discovered = vocabularyService.getDiscoveredWords();
       const custom = vocabularyService.getCustomWords();
-      
       const notYet = vocabularyService.getNotYetWords().length;
+      const accuracyRate = totalQuizzes > 0 ? Math.round((correctQuizzes / totalQuizzes) * 100) : null;
 
       setStats({
-        notesCount: nCount,
+        notesCount: notesAndWritingsCount,
         learnedWords: learned,
         reviewingWords: notYet,
         totalCustomWords: custom.length,
+        totalQuizzes,
+        accuracyRate,
       });
     };
 
@@ -46,13 +57,23 @@ const ProgressDashboard = () => {
         <h2 className="section-title">学習進捗 (Progress)</h2>
       </div>
 
-      <div className="materials-card-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
+      <div className="materials-card-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px' }}>
         
         <motion.div className="materials-card" style={{ flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '2rem 1rem' }}>
           <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📝</div>
           <div className="card-info" style={{ width: '100%' }}>
             <div className="card-title" style={{ fontSize: '2rem', color: 'var(--primary)', marginBottom: '0.5rem' }}>{stats.notesCount}</div>
             <div className="badge" style={{ margin: '0 auto' }}>Notes / Writings Saved</div>
+          </div>
+        </motion.div>
+
+        <motion.div className="materials-card" style={{ flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '2rem 1rem' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎯</div>
+          <div className="card-info" style={{ width: '100%' }}>
+            <div className="card-title" style={{ fontSize: '2rem', color: stats.accuracyRate !== null ? 'var(--primary)' : 'var(--text-muted)', marginBottom: '0.5rem' }}>
+              {stats.accuracyRate !== null ? `${stats.accuracyRate}%` : 'N/A'}
+            </div>
+            <div className="badge" style={{ margin: '0 auto' }}>Quiz Accuracy ({stats.totalQuizzes} Taken)</div>
           </div>
         </motion.div>
 

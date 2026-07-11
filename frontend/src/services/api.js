@@ -162,3 +162,13 @@ export const getAllNotes = async () => {
   if (error) throw error;
   return { data };
 };
+
+export const getUserAnnotations = async () => {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return { data: [] };
+  const { data, error } = await supabase.from('annotations')
+    .select('id, lesson_id, block_id, action, content')
+    .eq('user_id', session.user.id);
+  if (error) throw error;
+  return { data };
+};
