@@ -155,12 +155,14 @@ async def process_and_cache_media(content: dict, notion_service: NotionService) 
             aud_type = aud_data.get("type")
             if aud_type in ["file", "external"]:
                 orig_url = aud_data[aud_type]["url"]
-                if orig_url and "supabase.co" not in orig_url:
+                # Always re-cache audio: supabase.co audio is stable, but Notion file URLs expire
+                # Skip only if already in supabase and ends with known stable extension (.mp3, .m4a)
+                already_cached = orig_url and "supabase.co" in orig_url and any(orig_url.endswith(e) for e in [".mp3", ".m4a", ".wav"])
+                if orig_url and not already_cached:
                     local_url = await ensure_local_audio(block["id"], aud_data, notion_service)
                     if local_url != orig_url:
                         block["audio"][aud_type]["url"] = local_url
                         modified = True
-                        
         tasks = []
         if "children" in block and block["children"]:
             tasks.extend([process_block(child) for child in block["children"]])

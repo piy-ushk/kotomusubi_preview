@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AutoTranslate from '../components/AutoTranslate';
-import { AnswerField } from '../utils/lessonHelpers';
+import { AnswerField, SelfGradingButtons } from '../utils/lessonHelpers';
 
-export default function Lesson6_1({ translateAll, translationLanguage, annotations, onSaveAnswer }) {
+export default function Lesson6_1({ translateAll, translationLanguage, annotations, onSaveAnswer, onSaveQuizResult }) {
   useEffect(() => {
     const handleToggle = (e) => {
       if (e.target.classList.contains('local-en-toggle')) {
