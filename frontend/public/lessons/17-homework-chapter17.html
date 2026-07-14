@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 17 宿題 ／ Homework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #FAF6EE; --card: #FFFFFF; --accent: #C9A876; --accent-dark: #8B6F47; --accent-soft: #EFE4D0; --line: #D9C9AC; --text: #2E2418; --text-muted: #7A6A55; --highlight: #FFF4E0; --orange: #D98E3A; --ken-bg: #E8F0F7; --ken-color: #3D7BAF; --ana-bg: #FBE7EE; --ana-color: #C44A75; --fs-eyebrow: 0.85rem; --fs-title: 2.4rem; --fs-subtitle: 1.05rem; --fs-section: 1.25rem; --fs-example: 1.5rem; --fs-body: 1rem; --fs-en: 0.95rem; --fs-small: 0.85rem; --radius-lg: 20px; --radius: 12px; --pad-section: 1.75rem; --gap: 1.25rem; --max-width: 860px; --font-jp: 'Zen Maru Gothic', 'Noto Sans JP', sans-serif; --font-body: 'Noto Sans JP', sans-serif; --shadow: 0 4px 24px rgba(139, 111, 71, 0.08); }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { padding: 2rem 1rem; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: var(--fs-body); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+.page { max-width: var(--max-width); margin: 0 auto; }
+.toolbar { position: sticky; top: 0.6rem; z-index: 10; display: flex; gap: 0.5rem; justify-content: flex-end; margin-bottom: 1rem; flex-wrap: wrap; }
+.toolbar button { background: var(--card); border: 1px solid var(--line); color: var(--accent-dark); padding: 0.45rem 1rem; border-radius: 999px; font-size: var(--fs-small); font-family: inherit; font-weight: 500; cursor: pointer; box-shadow: var(--shadow); transition: all .15s ease; }
+.toolbar button:hover { background: var(--accent-soft); }
+.toolbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.hero { position: relative; background: var(--card); border-radius: var(--radius-lg); padding: 2.5rem var(--pad-section); box-shadow: var(--shadow); margin-bottom: var(--gap); overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -40px; right: -40px; width: 180px; height: 180px; background: var(--accent-soft); border-radius: 50%; opacity: 0.6; }
+.hero::after { content: ''; position: absolute; bottom: -50px; left: -30px; width: 130px; height: 130px; background: var(--accent-soft); border-radius: 50%; opacity: 0.4; }
+.hero-inner { position: relative; z-index: 1; }
+.eyebrow { display: inline-block; font-size: var(--fs-eyebrow); letter-spacing: 0.15em; color: var(--accent-dark); background: var(--accent-soft); padding: 0.3rem 0.9rem; border-radius: 999px; font-weight: 700; margin-bottom: 1rem; }
+.title { font-family: var(--font-jp); font-size: var(--fs-title); font-weight: 900; color: var(--accent-dark); margin: 0 0 0.5rem; line-height: 1.25; }
+.subtitle { font-size: var(--fs-subtitle); color: var(--text-muted); margin: 0; font-weight: 500; }
+.hero-note { margin: 1.1rem 0 0; font-size: var(--fs-small); color: var(--text-muted); line-height: 1.7; }
+.section { background: var(--card); border-radius: var(--radius-lg); padding: var(--pad-section); box-shadow: var(--shadow); margin-bottom: var(--gap); }
+.section-title { display: flex; align-items: center; gap: 0.7rem; font-family: var(--font-jp); font-size: var(--fs-section); font-weight: 700; color: var(--accent-dark); margin: 0 0 1.2rem; padding-bottom: 0.7rem; border-bottom: 2px dashed var(--line); }
+.section-title .num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; font-size: 1rem; font-weight: 700; font-family: var(--font-body); }
+.lead { margin: -0.4rem 0 1.2rem; color: var(--text-muted); font-size: var(--fs-small); line-height: 1.7; }
+.tag { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 0.12rem 0.6rem; border-radius: 999px; background: var(--accent-soft); color: var(--accent-dark); font-family: var(--font-body); letter-spacing: 0.02em; }
+.blank { display: inline-block; min-width: 110px; border-bottom: 2px dotted var(--accent); height: 1.4em; vertical-align: bottom; }
+.blank-input { display: inline-block; min-width: 130px; width: 150px; max-width: 60vw; border: none; border-bottom: 2px dotted var(--accent); background: transparent; font-family: var(--font-jp); font-size: 1em; font-weight: 700; color: var(--accent-dark); padding: 0 0.25rem; text-align: center; vertical-align: bottom; line-height: 1.6; }
+.blank-input:focus { outline: none; border-bottom-color: var(--accent-dark); background: var(--highlight); border-radius: 4px 4px 0 0; }
+.write-label { margin: 0.8rem 0 0.2rem; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; font-family: var(--font-body); }
+.answer-box { display: block; width: 100%; min-height: 56px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-family: var(--font-jp); font-size: 1rem; color: var(--text); padding: 0.6rem 0.8rem; line-height: 1.9; resize: vertical; }
+.answer-box:focus { outline: none; border-color: var(--accent); background: var(--highlight); }
+.word-hint-label { margin: 0.2rem 0 0.5rem; font-size: 0.85rem; font-weight: 700; color: var(--accent-dark); font-family: var(--font-jp); }
+.word-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0 0 0.2rem; }
+.word-chip { display: inline-block; background: var(--highlight); color: var(--accent-dark); padding: 0.22rem 0.8rem; border-radius: 8px; font-weight: 700; font-family: var(--font-jp); font-size: 0.95rem; border: 1px solid var(--line); }
+.quiz { background: #FBF7EE; padding: 1.1rem 1.2rem; border-radius: var(--radius); margin-bottom: 0.9rem; }
+.quiz:last-of-type { margin-bottom: 0; }
+.quiz-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-bottom: 0.7rem; font-family: var(--font-body); }
+.quiz-q { font-family: var(--font-jp); font-weight: 500; margin: 0 0 0.5rem; line-height: 2.1; }
+.quiz-en { display: none; font-family: var(--font-body); font-weight: 500; margin: 0 0 0.6rem; line-height: 1.7; color: var(--text-muted); font-size: 0.9rem; }
+body.show-en .quiz-en { display: block; }
+.quiz-toggle, .sample-toggle { background: transparent; border: 1px solid var(--accent); color: var(--accent-dark); padding: 0.3rem 0.95rem; border-radius: 999px; font-size: var(--fs-small); font-family: inherit; cursor: pointer; font-weight: 600; }
+.quiz-toggle:hover, .sample-toggle:hover { background: var(--accent-soft); }
+.quiz-a { display: none; margin: 0.7rem 0 0; padding: 0.7rem 0.9rem; background: var(--accent-soft); border-radius: 8px; border-left: 3px solid var(--accent-dark); color: var(--text); font-weight: 500; line-height: 2; font-family: var(--font-jp); }
+.quiz-a strong { color: var(--accent-dark); }
+.quiz.show .quiz-a { display: block; }
+.hint { display: inline-block; padding: 0.12rem 0.7rem; border-radius: 999px; font-size: 0.74rem; font-weight: 700; background: var(--accent-soft); color: var(--accent-dark); font-family: var(--font-body); }
+.hint.b-now { background: #FBE6CE; color: #B5701F; }
+.hint.b-past { background: #E1EFD2; color: #5E8A2C; }
+.hint.b-future { background: #CFEBE7; color: #2C8C84; }
+.hint.b-aff { background: #FBE0EA; color: #C44A75; }
+.hint.b-neg { background: #DCE7F2; color: #2E6CA2; }
+.hint.b-q { background: #FAF0C6; color: #9B7D15; }
+.hint.b-casual { background: #FAD8D8; color: #C0392B; }
+.hint.b-polite { background: #DBE0F5; color: #3B4BA8; }
+.hint.b-forbid { background: #E9DEF5; color: #7E45B8; }
+.hint.b-permit { background: #E8F1CC; color: #6E9420; }
+.hint.b-third { background: #EEE6F6; color: #7E5AA8; }
+.hint.aff { background: #E4EFE4; color: #4F7A52; }
+.hint.neg { background: #F7E4E4; color: #A85454; }
+.hint.q { background: #E3E9F5; color: #4A6AA3; }
+.verb-hint { display: inline-block; font-size: 0.85rem; color: var(--accent-dark); margin: 0 0.3rem; font-family: var(--font-body); font-weight: 500; background: var(--highlight); border: 1px solid var(--line); border-radius: 8px; padding: 0.12rem 0.6rem; }
+.dialogue { display: flex; flex-direction: column; gap: 0.6rem; margin: 0; }
+.bubble { padding: 0.85rem 1.05rem; border-radius: 14px; max-width: 90%; font-family: var(--font-jp); line-height: 2.1; }
+.bubble.ken { background: var(--ken-bg); align-self: flex-start; border-bottom-left-radius: 4px; }
+.bubble.ana { background: var(--ana-bg); align-self: flex-end; border-bottom-right-radius: 4px; }
+.bubble .blank { min-width: 120px; }
+.speaker { display: inline-block; font-size: var(--fs-small); font-weight: 700; margin-right: 0.55rem; color: var(--text-muted); }
+.bubble.ken .speaker { color: var(--ken-color); }
+.bubble.ana .speaker { color: var(--ana-color); }
+.quiz .quiz-toggle { margin-top: 0.8rem; }
+.sample-wrap { margin-top: 0.6rem; }
+.sample-body { display: none; margin-top: 0.7rem; padding: 0.85rem 1rem; background: #fff; border-radius: 8px; border-left: 3px solid var(--accent); }
+.sample-wrap.show .sample-body { display: block; }
+.sample-jp { margin: 0; font-family: var(--font-jp); line-height: 1.95; color: var(--text); }
+.sample-en { margin: 0.4rem 0 0; font-size: var(--fs-en); color: var(--text-muted); line-height: 1.6; }
+.callout-warn { background: #FFF1DC; border-left: 4px solid var(--orange); border-radius: 8px; padding: 0.9rem 1.1rem; margin: 1rem 0 0; font-family: var(--font-jp); line-height: 1.9; }
+.callout-warn .label { display: inline-block; font-family: var(--font-body); font-weight: 700; font-size: 0.78rem; padding: 0.1rem 0.7rem; border-radius: 999px; background: var(--orange); color: #fff; margin-right: 0.5rem; }
+@media (max-width: 640px) { :root { --fs-title: 1.8rem; --fs-section: 1.1rem; --pad-section: 1.25rem; } body { padding: 1rem 0.6rem; } .hero { padding: 2rem 1.25rem; } .bubble { max-width: 97%; } .blank { min-width: 80px; } }
+@media print { body { background: #fff; padding: 0; } .toolbar, .quiz-toggle, .sample-toggle { display: none; } .section, .hero { box-shadow: none; border: 1px solid var(--line); break-inside: avoid; page-break-inside: avoid; } .quiz-a, .sample-body, .quiz-en { display: block !important; } .hero::before, .hero::after { display: none; } }
+
+/* 文節単位で折り返す（単語途中改行の防止／非対応ブラウザは従来通り） */
+body { word-break: auto-phrase; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="toolbar">
+    <button id="toggle-en" type="button">英訳を表示</button>
+    <button id="clear-writes" type="button">書いた内容を消す</button>
+    <button onclick="window.print()" type="button">印刷／PDF</button>
+  </div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Chapter 17 ・ 宿題 Homework</span>
+      <h1 class="title">Chapter 17 まとめ宿題</h1>
+      <p class="subtitle">会話で使ってみよう ／ 〜そうです・〜って・〜たら／なら・〜なくてもいい・〜みたい・前に／てから</p>
+      <p class="hero-note">ケンとアナの会話の（　）に合う形を入れて、会話を完成させましょう。まず自分で考えてから「答えを見る」で確認します。<br>空欄や下のボックスに、直接タイピングして書き込めます（書いた内容は自動で保存されます）。<br>右上の「英訳を表示」で英語のヒントが出ます。最後の「自由に話してみよう」「先生に質問してみよう」は、レッスンで実際に声に出して話す練習です。</p>
+    </div>
+  </header>
+
+  <!-- ============ 1. 会話を完成させよう ============ -->
+  <section class="section">
+    <h2 class="section-title"><span class="num">1</span><span>会話を完成させよう ／ Complete the Conversations</span></h2>
+    <p class="lead">ケンとアナの会話です。（　）に合う形を入れて、会話を完成させましょう。いろいろな文法が混ざっています。タグ（17-1 など）と英語がヒントです。</p>
+
+    <div class="quiz">
+      <div class="quiz-head"><span class="tag">17-1 〜そうです</span><span class="hint b-aff">肯定 / affirmative</span><span class="verb-hint">cold — I heard</span></div>
+      <div class="dialogue">
+        <div class="bubble ken"><span class="speaker">👦🏻 ケン</span>アナ、ニュースによると、明日はとても（<input type="text" class="blank-input write" autocomplete="off">）よ。</div>
+        <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>えー、そうなんだ。コートがいるね。</div>
+      </div>
+      <p class="quiz-en">Ken: According to the news, I heard it'll be very cold tomorrow. ／ Ana: Oh really. We'll need coats.</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a">ケン：明日はとても（<strong>寒いそうだ</strong>）よ。<br>普通形＋そうだ（伝聞「〜と聞いた」）。</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-head"><span class="tag">17-2 〜って</span><span class="hint b-aff">肯定 / affirmative</span><span class="verb-hint">opened — I heard (casual)</span></div>
+      <div class="dialogue">
+        <div class="bubble ken"><span class="speaker">👦🏻 ケン</span>駅前に新しいカフェが（<input type="text" class="blank-input write" autocomplete="off">）よ。</div>
+        <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>へえ、行ってみたいね。</div>
+      </div>
+      <p class="quiz-en">Ken: I heard a new café opened near the station. ／ Ana: Oh, I want to go.</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a">ケン：新しいカフェが（<strong>できたって</strong>）よ。<br>普通形＋って（カジュアルな伝聞）。</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-head"><span class="tag">17-3 〜たら</span><span class="hint b-aff">肯定 / affirmative</span><span class="verb-hint">if (you) have time</span></div>
+      <div class="dialogue">
+        <div class="bubble ken"><span class="speaker">👦🏻 ケン</span>週末、もし時間が（<input type="text" class="blank-input write" autocomplete="off">）、一緒に出かけない？</div>
+        <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>いいね！</div>
+      </div>
+      <p class="quiz-en">Ken: This weekend, if you have time, want to go out together? ／ Ana: Sounds good!</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a">ケン：もし時間が（<strong>あったら</strong>）、一緒に出かけない？<br>た形＋ら。</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-head"><span class="tag">17-4 〜なくてもいい</span><span class="hint b-neg">否定 / negative</span><span class="verb-hint">don't have to reserve</span></div>
+      <div class="dialogue">
+        <div class="bubble ken"><span class="speaker">👦🏻 ケン</span>明日の映画、予約したほうがいいかな？</div>
+        <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>平日だから、（<input type="text" class="blank-input write" autocomplete="off">）と思うよ。</div>
+      </div>
+      <p class="quiz-en">Ken: Should we reserve for tomorrow's movie? ／ Ana: It's a weekday, so I think we don't have to.</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a">アナ：平日だから、（<strong>予約しなくてもいい</strong>）と思うよ。</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-head"><span class="tag">17-5 〜みたい</span><span class="hint b-aff">肯定 / affirmative</span><span class="verb-hint">it seems (came out)</span></div>
+      <div class="dialogue">
+        <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>あの店、人が並んでいるね。</div>
+        <div class="bubble ken"><span class="speaker">👦🏻 ケン</span>うん。新しいスイーツが（<input type="text" class="blank-input write" autocomplete="off">）だね。</div>
+      </div>
+      <p class="quiz-en">Ana: People are lining up at that shop. ／ Ken: Yeah. It seems a new sweet came out.</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a">ケン：新しいスイーツが（<strong>出たみたい</strong>）だね。<br>普通形＋みたい。</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-head"><span class="tag">17-6 〜前に</span><span class="hint b-aff">肯定 / affirmative</span><span class="verb-hint">before going</span></div>
+      <div class="dialogue">
+        <div class="bubble ken"><span class="speaker">👦🏻 ケン</span>映画に（<input type="text" class="blank-input write" autocomplete="off">）、何か食べない？</div>
+        <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>いいね、おなかすいた。</div>
+      </div>
+      <p class="quiz-en">Ken: Before going to the movie, want to eat something? ／ Ana: Yeah, I'm hungry.</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a">ケン：映画に（<strong>行く前に</strong>）、何か食べない？<br>辞書形＋前に。</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-head"><span class="tag">17-1 〜そうです</span><span class="hint b-aff">肯定 / affirmative</span><span class="verb-hint">day off — I heard</span></div>
+      <div class="dialogue">
+        <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>田中さん、来週から（<input type="text" class="blank-input write" autocomplete="off">）よ。</div>
+        <div class="bubble ken"><span class="speaker">👦🏻 ケン</span>そうなんだ、知らなかった。</div>
+      </div>
+      <p class="quiz-en">Ana: I heard Tanaka is off from next week. ／ Ken: I see, I didn't know.</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a">アナ：田中さん、来週から（<strong>休みだそうだ</strong>）よ。<br>名詞＋だ＋そうだ。</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-head"><span class="tag">17-3 〜なら</span><span class="hint b-aff">肯定 / affirmative</span><span class="verb-hint">if (you're) tired</span></div>
+      <div class="dialogue">
+        <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>今日、すごく疲れた…。</div>
+        <div class="bubble ken"><span class="speaker">👦🏻 ケン</span>（<input type="text" class="blank-input write" autocomplete="off">）、早く寝たほうがいいよ。</div>
+      </div>
+      <p class="quiz-en">Ana: I'm so tired today… ／ Ken: If you're tired, you should sleep early.</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a">ケン：（<strong>疲れているなら</strong>）、早く寝たほうがいいよ。<br>「〜なら」＝アドバイス・提案。</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-head"><span class="tag">17-6 〜てから</span><span class="hint b-aff">肯定 / affirmative</span><span class="verb-hint">after doing (homework)</span></div>
+      <div class="dialogue">
+        <div class="bubble ken"><span class="speaker">👦🏻 ケン</span>宿題、終わった？</div>
+        <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>ううん。宿題を（<input type="text" class="blank-input write" autocomplete="off">）、遊ぶよ。</div>
+      </div>
+      <p class="quiz-en">Ken: Did you finish your homework? ／ Ana: No. I'll play after I do my homework.</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a">アナ：宿題を（<strong>してから</strong>）、遊ぶよ。<br>て形＋から。</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-head"><span class="tag">17-4 〜なくていい</span><span class="hint b-neg">否定 / negative</span><span class="verb-hint">don't have to (carry)</span></div>
+      <div class="dialogue">
+        <div class="bubble ken"><span class="speaker">👦🏻 ケン</span>荷物、持とうか？</div>
+        <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>ありがとう。でも軽いから、（<input type="text" class="blank-input write" autocomplete="off">）よ。</div>
+      </div>
+      <p class="quiz-en">Ken: Shall I carry your bag? ／ Ana: Thanks. But it's light, so you don't have to.</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a">アナ：軽いから、（<strong>持たなくていい</strong>）よ。<br>会話では「も」を省いて「〜なくていい」。</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-head"><span class="tag">17-2 〜って</span><span class="hint b-aff">肯定 / affirmative</span><span class="verb-hint">easy — I heard</span></div>
+      <div class="dialogue">
+        <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>ケン、明日のテスト、（<input type="text" class="blank-input write" autocomplete="off">）よ。先生が言っていた。</div>
+        <div class="bubble ken"><span class="speaker">👦🏻 ケン</span>ほんと？よかった。</div>
+      </div>
+      <p class="quiz-en">Ana: Ken, I heard tomorrow's test is easy. The teacher said so. ／ Ken: Really? Great.</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a">アナ：明日のテスト、（<strong>簡単だって</strong>）よ。<br>な形容詞＋だ＋って。</div>
+    </div>
+
+    <div class="quiz">
+      <div class="quiz-head"><span class="tag">17-5 〜みたい</span><span class="hint b-aff">肯定 / affirmative</span><span class="verb-hint">it seems (I forgot)</span></div>
+      <div class="dialogue">
+        <div class="bubble ken"><span class="speaker">👦🏻 ケン</span>あれ、財布がない…。電車の中に（<input type="text" class="blank-input write" autocomplete="off">）。</div>
+        <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>えっ、大変！</div>
+      </div>
+      <p class="quiz-en">Ken: Huh, my wallet's gone… It seems I left it on the train. ／ Ana: Oh no!</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a">ケン：電車の中に（<strong>忘れたみたい</strong>）。<br>自分のことも、状況から「〜みたい」で言えます。</div>
+    </div>
+
+    <div class="callout-warn">
+      <span class="label">注意 Note</span>「〜そうです（伝聞）」と「〜って」は<strong>聞いた話を伝える</strong>言い方です。「〜みたい」は<strong>自分が見て・感じて推測した</strong>言い方です。<br>「〜たら」は「もし〜が起きたら」、「〜なら」は「〜の場合は（アドバイス・提案）」に使います。
+    <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">「〜そうです」 (hearsay) and 「〜って」 report something you heard from someone else, while 「〜みたい」 is a guess based on what you yourself saw or felt.<br>「〜たら」 means "if/when ~ happens," and 「〜なら」 gives advice about a specific case ("if that's the case").</p></div>
+    </div>
+  </section>
+
+  <!-- ============ 2. 自由に話してみよう ============ -->
+  <section class="section">
+    <h2 class="section-title"><span class="num">2</span><span>自由に話してみよう！ ／ Let's Talk Freely</span></h2>
+    <p class="lead">あなた自身のことを、Chapter 17 の文法を使って話しましょう。答えるのが難しい時は、まず<strong>下の単語を使って</strong>答えてみましょう。慣れたら、自由に話してみましょう。<br>「回答例を見る」で言い方の例も確認できます（例なので、同じでなくて大丈夫です）。</p>
+
+    <div class="quiz">
+      <p class="quiz-q">1. もし宝くじが当たったら、何をしたいですか？<span class="tag">17-3 〜たら</span></p>
+      <p class="quiz-en">If you won the lottery, what would you want to do?</p>
+      <p class="word-hint-label">この単語を使って答えてみよう！</p>
+      <div class="word-chips"><span class="word-chip">旅行に行く</span><span class="word-chip">家を買う</span><span class="word-chip">仕事をやめる</span><span class="word-chip">貯金する</span></div>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">もし宝くじが当たったら、世界中を旅行したいです。それから、新しい家を買いたいです。</p>
+          <p class="sample-en">If I won the lottery, I'd want to travel around the world. I'd also want to buy a new house.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">2. 寝る前に、いつも何をしますか？<span class="tag">17-6 前に／てから</span></p>
+      <p class="quiz-en">What do you always do before going to bed?</p>
+      <p class="word-hint-label">この単語を使って答えてみよう！</p>
+      <div class="word-chips"><span class="word-chip">スマホを見る</span><span class="word-chip">本を読む</span><span class="word-chip">歯をみがく</span><span class="word-chip">音楽を聞く</span></div>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">私は寝る前に、いつもスマホを見ます。それから、歯をみがいてから寝ます。</p>
+          <p class="sample-en">Before going to bed, I always look at my phone. Then I brush my teeth and then go to sleep.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">3. 最近、ニュースやSNSでどんなことを聞きましたか？「〜そうです」で教えてください。<span class="tag">17-1 〜そうです</span></p>
+      <p class="quiz-en">What have you heard recently in the news or on social media? Tell me using "~sou desu".</p>
+      <p class="word-hint-label">この単語を使って答えてみよう！</p>
+      <div class="word-chips"><span class="word-chip">天気</span><span class="word-chip">値段</span><span class="word-chip">新しい店</span><span class="word-chip">イベント</span></div>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">ニュースによると、今年の冬はとても寒いそうです。それから、駅前に新しい店ができるそうです。</p>
+          <p class="sample-en">According to the news, I heard this winter will be very cold. Also, I heard a new shop is opening near the station.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">4. 日本語の勉強で、「〜しなくてもいい」と思うことはありますか？<span class="tag">17-4 〜なくてもいい</span></p>
+      <p class="quiz-en">In studying Japanese, is there anything you think you "don't have to" do?</p>
+      <p class="word-hint-label">この単語を使って答えてみよう！</p>
+      <div class="word-chips"><span class="word-chip">毎日長く勉強する</span><span class="word-chip">全部覚える</span><span class="word-chip">漢字を全部書く</span><span class="word-chip">完璧に覚える</span></div>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">毎日長い時間、勉強しなくてもいいと思います。少しずつ続けることが大切です。</p>
+          <p class="sample-en">I think you don't have to study for long hours every day. It's important to continue little by little.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">5. 今日のあなたの気分や体調はどうですか？「〜みたい」で言ってみましょう。<span class="tag">17-5 〜みたい</span></p>
+      <p class="quiz-en">How do you feel today? Try saying it with "~mitai".</p>
+      <p class="word-hint-label">この単語を使って答えてみよう！</p>
+      <div class="word-chips"><span class="word-chip">疲れている</span><span class="word-chip">元気</span><span class="word-chip">眠い</span><span class="word-chip">風邪をひいた</span></div>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">今日は少し疲れているみたいです。あまり集中できません。早く寝たいです。</p>
+          <p class="sample-en">It seems I'm a little tired today. I can't concentrate very well. I want to sleep early.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">6. 友達や家族が最近言っていたことを、「〜って」で教えてください。<span class="tag">17-2 〜って</span></p>
+      <p class="quiz-en">Tell me something your friend or family said recently, using "~tte".</p>
+      <p class="word-hint-label">この単語を使って答えてみよう！</p>
+      <div class="word-chips"><span class="word-chip">忙しい</span><span class="word-chip">旅行に行く</span><span class="word-chip">おいしい店</span><span class="word-chip">引っ越す</span></div>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">友達が、来月韓国に旅行するって言っていました。あと、駅の近くのカフェがおいしいって。</p>
+          <p class="sample-en">My friend said they're traveling to Korea next month. Also, they said the café near the station is good.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">7. 友達が「日本に行きたい」と言ったら、どこをおすすめしますか？「〜なら」で答えてください。<span class="tag">17-3 〜なら</span></p>
+      <p class="quiz-en">If a friend said they want to go to Japan, where would you recommend? Answer with "~nara".</p>
+      <p class="word-hint-label">この単語を使って答えてみよう！</p>
+      <div class="word-chips"><span class="word-chip">京都</span><span class="word-chip">東京</span><span class="word-chip">温泉</span><span class="word-chip">北海道</span></div>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">日本に行くなら、京都がおすすめです。古いお寺がたくさんあります。温泉に行くなら、北海道もいいですよ。</p>
+          <p class="sample-en">If you're going to Japan, I recommend Kyoto. There are many old temples. If you want hot springs, Hokkaido is also nice.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">8. 朝、起きてから最初に何をしますか？<span class="tag">17-6 前に／てから</span></p>
+      <p class="quiz-en">After you wake up in the morning, what do you do first?</p>
+      <p class="word-hint-label">この単語を使って答えてみよう！</p>
+      <div class="word-chips"><span class="word-chip">顔を洗う</span><span class="word-chip">コーヒーを飲む</span><span class="word-chip">シャワーを浴びる</span><span class="word-chip">ニュースを見る</span></div>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">私は朝、起きてからまず顔を洗います。それから、コーヒーを飲んでからニュースを見ます。</p>
+          <p class="sample-en">After I wake up, I first wash my face. Then, after drinking coffee, I watch the news.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">9. 休みの日に「しなくてもいい」と思うことは何ですか？<span class="tag">17-4 〜なくてもいい</span></p>
+      <p class="quiz-en">What do you think you "don't have to" do on your day off?</p>
+      <p class="word-hint-label">この単語を使って答えてみよう！</p>
+      <div class="word-chips"><span class="word-chip">仕事の連絡を返す</span><span class="word-chip">早く起きる</span><span class="word-chip">予定を入れる</span><span class="word-chip">掃除する</span></div>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">休みの日は、仕事の連絡を返さなくてもいいと思います。それから、早く起きなくてもいいです。ゆっくり休みたいです。</p>
+          <p class="sample-en">On my day off, I think I don't have to reply to work messages. I also don't have to wake up early. I want to rest slowly.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">10. 友達の国や町について聞いたことを、「〜そうです」で教えてください。<span class="tag">17-1 〜そうです</span></p>
+      <p class="quiz-en">Tell me what you've heard about a friend's country or town, using "~sou desu".</p>
+      <p class="word-hint-label">この単語を使って答えてみよう！</p>
+      <div class="word-chips"><span class="word-chip">料理がおいしい</span><span class="word-chip">人が親切</span><span class="word-chip">物価が高い</span><span class="word-chip">きれい</span></div>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">友達の話によると、その町は人がとても親切だそうです。料理もおいしいそうです。</p>
+          <p class="sample-en">According to my friend, the people in that town are very kind. I heard the food is delicious too.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. 先生に質問してみよう ============ -->
+  <section class="section">
+    <h2 class="section-title"><span class="num">3</span><span>先生に質問してみよう ／ Ask Your Teacher</span></h2>
+    <p class="lead">下のことを、Chapter 17 の文法を使って先生に日本語で質問してみましょう。<br>まず自分で質問の文を作って、「言い方を見る」で確認できます。先生の答えもメモしましょう。</p>
+
+    <div class="quiz">
+      <p class="quiz-q">1. 先生が、もし宝くじが当たったら何をするか、聞いてみよう。<span class="tag">17-3 〜たら</span></p>
+      <p class="quiz-en">Ask what the teacher would do if they won the lottery.</p>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">言い方を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">先生は、もし宝くじが当たったら、何をしますか？</p>
+          <p class="sample-en">Sensei, if you won the lottery, what would you do?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">2. 先生が、レッスンの前に何を準備するか、聞いてみよう。<span class="tag">17-6 前に</span></p>
+      <p class="quiz-en">Ask what the teacher prepares before a lesson.</p>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">言い方を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">先生は、レッスンの前に何を準備しますか？</p>
+          <p class="sample-en">Sensei, what do you prepare before a lesson?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">3. 先生が朝、起きてから最初に何をするか、聞いてみよう。<span class="tag">17-6 てから</span></p>
+      <p class="quiz-en">Ask what the teacher does first after waking up in the morning.</p>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">言い方を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">先生は朝、起きてから最初に何をしますか？</p>
+          <p class="sample-en">Sensei, what do you do first after you wake up in the morning?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">4. 先生に、日本語の勉強で「しなくてもいいこと」があるか聞いてみよう。<span class="tag">17-4 〜なくてもいい</span></p>
+      <p class="quiz-en">Ask the teacher if there's anything in studying Japanese you "don't have to" do.</p>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">言い方を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">先生、日本語の勉強で、しなくてもいいことはありますか？</p>
+          <p class="sample-en">Sensei, in studying Japanese, is there anything I don't have to do?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">5. 先生に、日本で旅行するなら、どこがおすすめか聞いてみよう。<span class="tag">17-3 〜なら</span></p>
+      <p class="quiz-en">Ask the teacher where they recommend if you're traveling in Japan.</p>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">言い方を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">先生、日本で旅行するなら、どこがおすすめですか？</p>
+          <p class="sample-en">Sensei, if I'm traveling in Japan, where do you recommend?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">6. 先生が、もし時間がたくさんあったら何を勉強したいか、聞いてみよう。<span class="tag">17-3 〜たら</span></p>
+      <p class="quiz-en">Ask what the teacher would want to study if they had a lot of time.</p>
+      <p class="write-label">ここに書いてみよう：</p>
+      <textarea class="answer-box write" rows="2"></textarea>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">言い方を見る</button>
+        <div class="sample-body">
+          <p class="sample-jp">先生は、もし時間がたくさんあったら、何を勉強したいですか？</p>
+          <p class="sample-en">Sensei, if you had a lot of time, what would you want to study?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // 英訳の全体トグル
+  var enBtn = document.getElementById('toggle-en');
+  enBtn.addEventListener('click', function () {
+    document.body.classList.toggle('show-en');
+    var on = document.body.classList.contains('show-en');
+    enBtn.textContent = on ? '英訳を隠す' : '英訳を表示';
+    enBtn.classList.toggle('active', on);
+  });
+  // 会話の答えの表示（ボタンは .quiz の中）
+  document.querySelectorAll('.quiz-toggle').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var quiz = b.closest('.quiz');
+      if (!quiz) return;
+      var on = quiz.classList.toggle('show');
+      b.textContent = on ? '答えを隠す' : '答えを見る';
+    });
+  });
+  // 入力欄：自動保存（localStorage）と復元
+  var writes = document.querySelectorAll('.write');
+  writes.forEach(function (el, i) {
+    var key = 'hw17_' + i;
+    try { var saved = localStorage.getItem(key); if (saved !== null) el.value = saved; } catch (e) {}
+    el.addEventListener('input', function () { try { localStorage.setItem(key, el.value); } catch (e) {} });
+  });
+  // 書いた内容を消す
+  document.getElementById('clear-writes').addEventListener('click', function () {
+    if (!confirm('書いた内容を全部消しますか？')) return;
+    writes.forEach(function (el, i) {
+      el.value = '';
+      try { localStorage.removeItem('hw17_' + i); } catch (e) {}
+    });
+  });
+  // 回答例・言い方の表示
+  document.querySelectorAll('.sample-toggle').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var w = b.closest('.sample-wrap');
+      var on = w.classList.toggle('show');
+      var asking = b.textContent.indexOf('言い方') !== -1;
+      b.textContent = on ? (asking ? '言い方を隠す' : '回答例を隠す') : (asking ? '言い方を見る' : '回答例を見る');
+    });
+  });
+</script>
+</body>
+</html>

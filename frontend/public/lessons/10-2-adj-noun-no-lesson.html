@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【10-2】Adjective/Noun ＋ の／代名詞の「の」</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #FAF6EE; --card: #FFFFFF; --accent: #C9A876; --accent-dark: #8B6F47; --accent-soft: #EFE4D0; --line: #D9C9AC; --text: #2E2418; --text-muted: #7A6A55; --highlight: #FFF4E0; --ok: #6B9B7F; --orange: #D98E3A; --orange-soft: #FFF1DC; --ken-bg: #E8F0F7; --ken-color: #3D7BAF; --ana-bg: #FBE7EE; --ana-color: #C44A75; --fs-eyebrow: 0.85rem; --fs-title: 2.6rem; --fs-subtitle: 1.1rem; --fs-section: 1.25rem; --fs-example: 1.5rem; --fs-body: 1rem; --fs-en: 0.95rem; --fs-small: 0.85rem; --radius-lg: 20px; --radius: 12px; --pad-section: 1.75rem; --gap: 1.25rem; --max-width: 860px; --font-jp: 'Zen Maru Gothic', 'Noto Sans JP', sans-serif; --font-body: 'Noto Sans JP', sans-serif; --shadow: 0 4px 24px rgba(139, 111, 71, 0.08); }
+* { box-sizing: border-box; }
+html, body { word-break: auto-phrase; margin: 0; padding: 0; }
+body { padding: 2rem 1rem; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: var(--fs-body); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+.page { max-width: var(--max-width); margin: 0 auto; }
+.toolbar { position: sticky; top: 0.6rem; z-index: 10; display: flex; gap: 0.5rem; justify-content: flex-end; margin-bottom: 1rem; flex-wrap: wrap; }
+.toolbar button { background: var(--card); border: 1px solid var(--line); color: var(--accent-dark); padding: 0.45rem 1rem; border-radius: 999px; font-size: var(--fs-small); font-family: inherit; font-weight: 500; cursor: pointer; box-shadow: var(--shadow); transition: all .15s ease; }
+.toolbar button:hover { background: var(--accent-soft); }
+.toolbar button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.hero { position: relative; background: var(--card); border-radius: var(--radius-lg); padding: 2.5rem var(--pad-section); box-shadow: var(--shadow); margin-bottom: var(--gap); overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -40px; right: -40px; width: 180px; height: 180px; background: var(--accent-soft); border-radius: 50%; opacity: 0.6; }
+.hero::after { content: ''; position: absolute; bottom: -50px; left: -30px; width: 130px; height: 130px; background: var(--accent-soft); border-radius: 50%; opacity: 0.4; }
+.hero-inner { position: relative; z-index: 1; }
+.eyebrow { display: inline-block; font-size: var(--fs-eyebrow); letter-spacing: 0.15em; color: var(--accent-dark); background: var(--accent-soft); padding: 0.3rem 0.9rem; border-radius: 999px; font-weight: 700; margin-bottom: 1rem; }
+.title { font-family: var(--font-jp); font-size: var(--fs-title); font-weight: 900; color: var(--accent-dark); margin: 0 0 0.5rem; line-height: 1.2; }
+.subtitle { font-size: var(--fs-subtitle); color: var(--text-muted); margin: 0; font-weight: 500; }
+.section { background: var(--card); border-radius: var(--radius-lg); padding: var(--pad-section); box-shadow: var(--shadow); margin-bottom: var(--gap); }
+.section-title { display: flex; align-items: center; gap: 0.7rem; font-family: var(--font-jp); font-size: var(--fs-section); font-weight: 700; color: var(--accent-dark); margin: 0 0 1.2rem; padding-bottom: 0.7rem; border-bottom: 2px dashed var(--line); }
+.section-title .num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0; background: var(--accent); color: #fff; border-radius: 50%; font-size: 1rem; font-weight: 700; font-family: var(--font-body); }
+.subhead { font-family: var(--font-jp); color: var(--accent-dark); margin: 1.5rem 0 0.8rem; font-size: 1.05rem; font-weight: 700; }
+.subhead:first-child { margin-top: 0; }
+.meaning { line-height: 1.9; margin: 0; }
+.meaning p { margin: 0 0 0.5rem; }
+.form-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: var(--radius); font-size: var(--fs-body); }
+.form-table th, .form-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.form-table tbody th { background: var(--accent-soft); color: var(--accent-dark); font-weight: 700; width: 28%; vertical-align: top; }
+.form-table tbody td { background: #fff; }
+.form-table .form-line { display: flex; align-items: flex-start; gap: 0.55rem; padding: 0.1rem 0; }
+.form-table .form-line + .form-line { margin-top: 0.5rem; padding-top: 0.55rem; border-top: 1px dashed var(--line); }
+.form-table .form-line .mark { font-weight: 700; font-size: 0.78rem; padding: 0.12rem 0.6rem; border-radius: 999px; min-width: 3rem; text-align: center; background: var(--accent-soft); color: var(--accent-dark); font-family: var(--font-body); flex-shrink: 0; }
+.form-table .form-line .text { flex: 1; }
+.form-table tbody tr:last-child th, .form-table tbody tr:last-child td { border-bottom: none; }
+.form-table code { background: var(--highlight); padding: 0.15rem 0.55rem; border-radius: 6px; font-family: var(--font-jp); font-size: 1em; font-weight: 700; color: var(--accent-dark); }
+.form-table .label-en { display: block; font-size: 0.78rem; font-weight: 400; color: var(--text-muted); margin-top: 0.15rem; letter-spacing: 0.02em; }
+.pattern-table { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: var(--radius); font-size: var(--fs-body); font-family: var(--font-jp); margin: 0.8rem 0; }
+.pattern-table th, .pattern-table td { padding: 0.85rem 0.6rem; text-align: center; border: 1px solid var(--line); vertical-align: middle; }
+.pattern-table thead th { background: var(--accent-soft); color: var(--accent-dark); font-weight: 700; font-family: var(--font-body); font-size: 0.85rem; }
+.pattern-table tbody td { background: #fff; font-weight: 700; font-size: 1rem; color: var(--accent-dark); }
+.pattern-table td .mark { font-weight: 700; font-size: 0.78rem; padding: 0.12rem 0.6rem; border-radius: 999px; min-width: 3rem; display: inline-block; text-align: center; background: var(--accent-soft); color: var(--accent-dark); font-family: var(--font-body); }
+.pattern-table code { background: var(--highlight); padding: 0.15rem 0.55rem; border-radius: 6px; font-family: var(--font-jp); font-size: 1em; font-weight: 700; color: var(--accent-dark); }
+.pattern-table .label-en { display: block; font-size: 0.72rem; font-weight: 400; color: var(--text-muted); margin-top: 0.15rem; }
+.en-wrap { margin-top: 0.5rem; }
+.en-wrap .en { display: none; font-size: var(--fs-en); color: var(--text-muted); margin: 0.4rem 0 0; line-height: 1.6; }
+.en-wrap.show-en .en, body.show-en .en-wrap .en { display: block; }
+.examples { display: flex; flex-direction: column; gap: 1rem; }
+.example { padding: 1rem 1.2rem; background: #FBF7EE; border-left: 4px solid var(--accent); border-radius: 8px; }
+.example-content { flex: 1; min-width: 0; }
+.example .jp { font-family: var(--font-jp); font-size: var(--fs-example); font-weight: 500; line-height: 2.1; margin: 0; }
+.example .en, .bubble > .en { display: none; font-size: var(--fs-en); color: var(--text-muted); margin: 0.4rem 0 0; line-height: 1.6; }
+body.show-en .example .en, body.show-en .bubble > .en, .example.show-en .en, .bubble.show-en > .en { display: block; }
+.local-en-toggle { margin-top: 0.6rem; background: transparent; border: 1px solid var(--line); color: var(--accent-dark); padding: 0.2rem 0.75rem; border-radius: 999px; font-size: 0.78rem; font-family: inherit; cursor: pointer; font-weight: 600; }
+.local-en-toggle:hover { background: var(--accent-soft); border-color: var(--accent); }
+.point-list { padding: 0; margin: 0; list-style: none; }
+.point-list li { padding: 0.9rem 0 0.9rem 2rem; position: relative; border-bottom: 1px dashed var(--line); line-height: 1.8; }
+.point-list li:last-child { border-bottom: none; }
+.point-list li::before { content: '★'; position: absolute; left: 0.2rem; top: 0.85rem; color: var(--accent); font-size: 1rem; }
+.point-list strong { color: var(--accent-dark); }
+.note { display: inline-block; margin-top: 0.3rem; color: var(--text-muted); font-size: var(--fs-small); }
+.note.note-lg { font-size: 0.95rem; line-height: 1.7; }
+.dialogue { display: flex; flex-direction: column; gap: 0.7rem; }
+.bubble { padding: 0.9rem 1.1rem; border-radius: 14px; max-width: 86%; font-family: var(--font-jp); line-height: 2; }
+.bubble.ken { background: var(--ken-bg); align-self: flex-start; border-bottom-left-radius: 4px; }
+.bubble.ana { background: var(--ana-bg); align-self: flex-end; border-bottom-right-radius: 4px; }
+.speaker { display: inline-block; font-size: var(--fs-small); font-weight: 700; margin-right: 0.55rem; color: var(--text-muted); vertical-align: 0.05em; }
+.bubble.ken .speaker { color: var(--ken-color); }
+.bubble.ana .speaker { color: var(--ana-color); }
+.drills { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.drill { background: #FBF7EE; border-radius: 8px; padding: 0.7rem 1rem; }
+.drill summary { cursor: pointer; font-family: var(--font-jp); font-weight: 600; color: var(--accent-dark); list-style: none; display: flex; align-items: center; gap: 0.4rem; font-size: 1.05rem; }
+.drill summary::before { content: '▶'; font-size: 0.7rem; color: var(--accent); transition: transform .2s ease; }
+.drill[open] summary::before { transform: rotate(90deg); }
+.drill summary::-webkit-details-marker { display: none; }
+.drill-body { margin-top: 0.6rem; padding-top: 0.5rem; border-top: 1px dashed var(--line); font-family: var(--font-jp); line-height: 1.9; }
+.drill-body p { margin: 0.2rem 0; }
+.drill-body .mark { font-weight: 700; margin-right: 0.4rem; font-size: 0.82rem; padding: 0.1rem 0.55rem; border-radius: 999px; display: inline-block; min-width: 3rem; text-align: center; background: var(--accent-soft); color: var(--accent-dark); font-family: var(--font-body); }
+.mark.positive { background: #FFE9CC !important; color: #B86F1F !important; }
+.mark.negative { background: #DCE7F2 !important; color: #2E6CA2 !important; }
+.mark.past     { background: #EAEAEA !important; color: #555555 !important; }
+.mark.present  { background: #D6F0DC !important; color: #2C7144 !important; }
+.mark.future   { background: #E8DEF0 !important; color: #5E4D74 !important; }
+.mark.question { background: #FFF1B5 !important; color: #997B17 !important; }
+.mark.formal   { background: #DDDDE7 !important; color: #4F517A !important; }
+.mark.casual   { background: #FBE3E0 !important; color: #B65A4A !important; }
+.group-label { display: inline-block; font-size: 0.75rem; font-weight: 400; color: var(--text-muted); background: var(--accent-soft); padding: 0.1rem 0.6rem; border-radius: 999px; margin-left: 0.4rem; vertical-align: 0.05em; font-family: var(--font-body); }
+.quiz { background: #FBF7EE; padding: 1.1rem 1.2rem; border-radius: var(--radius); margin-bottom: 0.8rem; }
+.quiz:last-child { margin-bottom: 0; }
+.quiz-q { font-family: var(--font-jp); font-weight: 500; margin: 0 0 0.4rem; line-height: 2; }
+.quiz-q-en { font-family: var(--font-body); font-weight: 500; margin: 0 0 0.5rem; line-height: 1.8; color: var(--text); font-size: 1rem; }
+.quiz .en { display: none; color: var(--text-muted); font-size: var(--fs-en); margin: 0 0 0.5rem; }
+body.show-en .quiz .en { display: block; }
+.quiz-a { display: none; margin: 0.6rem 0 0; padding: 0.7rem 0.9rem; background: var(--accent-soft); border-radius: 8px; border-left: 3px solid var(--accent-dark); color: var(--text); font-weight: 500; line-height: 1.9; font-family: var(--font-jp); }
+.quiz-a strong { color: var(--accent-dark); }
+.quiz.show .quiz-a { display: block; }
+.quiz-toggle { background: transparent; border: 1px solid var(--accent); color: var(--accent-dark); padding: 0.3rem 0.9rem; border-radius: 999px; font-size: var(--fs-small); font-family: inherit; cursor: pointer; }
+.quiz-toggle:hover { background: var(--accent-soft); }
+.verb-hint { display: inline-block; font-size: 0.85rem; color: var(--accent-dark); margin: 0 0.3rem; font-family: var(--font-body); font-weight: 500; background: var(--highlight); border: 1px solid var(--line); border-radius: 8px; padding: 0.12rem 0.6rem; }
+.word-builder { font-family: var(--font-jp); margin: 0 0 0.6rem; line-height: 2; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.word-chip { display: inline-block; background: var(--highlight); color: var(--accent-dark); padding: 0.25rem 0.85rem; border-radius: 8px; font-weight: 700; font-family: var(--font-jp); font-size: 1.05rem; border: 1px solid var(--line); }
+.hint { display: inline-block; padding: 0.12rem 0.7rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; margin-left: 0.2rem; vertical-align: 0.05em; background: var(--accent-soft); color: var(--accent-dark); font-family: var(--font-body); }
+.hint.b-now { background: #FBE6CE; color: #B5701F; }
+.hint.b-past { background: #E1EFD2; color: #5E8A2C; }
+.hint.b-future { background: #CFEBE7; color: #2C8C84; }
+.hint.b-aff { background: #FBE0EA; color: #C44A75; }
+.hint.b-neg { background: #DCE7F2; color: #2E6CA2; }
+.hint.b-q { background: #FAF0C6; color: #9B7D15; }
+.hint.b-casual { background: #FAD8D8; color: #C0392B; }
+.hint.b-polite { background: #DBE0F5; color: #3B4BA8; }
+.hint.b-forbid { background: #E9DEF5; color: #7E45B8; }
+.hint.b-permit { background: #E8F1CC; color: #6E9420; }
+
+.practice { background: #FBF7EE; padding: 1.1rem 1.2rem; border-radius: var(--radius); margin-bottom: 0.7rem; }
+.practice-q { font-family: var(--font-jp); font-weight: 500; line-height: 1.9; color: var(--text); margin: 0; }
+.sample-wrap { margin-top: 0.6rem; }
+.sample-toggle { background: transparent; border: 1px solid var(--line); color: var(--accent-dark); padding: 0.2rem 0.75rem; border-radius: 999px; font-size: 0.78rem; font-family: inherit; cursor: pointer; font-weight: 600; }
+.sample-toggle:hover { background: var(--accent-soft); border-color: var(--accent); }
+.sample-body { display: none; margin-top: 0.6rem; padding: 0.7rem 0.9rem; background: var(--accent-soft); border-radius: 8px; border-left: 3px solid var(--accent-dark); }
+.sample-wrap.show .sample-body { display: block; }
+.sample-jp { margin: 0; font-family: var(--font-jp); color: var(--accent-dark); font-weight: 500; line-height: 1.9; }
+@media (max-width: 640px) { :root { --fs-title: 1.8rem; --fs-example: 1.2rem; --fs-section: 1.1rem; --pad-section: 1.25rem; } body { padding: 1rem 0.6rem; } .hero { padding: 2rem 1.25rem; } .form-table th { width: 40%; padding: 0.7rem 0.6rem; } .form-table td { padding: 0.7rem 0.6rem; } .drills { grid-template-columns: 1fr; } .bubble { max-width: 96%; } }
+@media print { body { background: #fff; padding: 0; } .toolbar, .local-en-toggle, .quiz-toggle, .sample-toggle { display: none; } .section, .hero { box-shadow: none; border: 1px solid var(--line); break-inside: avoid; page-break-inside: avoid; } .example .en, .bubble > .en, .quiz .en, .en-wrap .en { display: block !important; } .sample-wrap .sample-body { display: block !important; } .quiz-a { display: block !important; } .drill[open] .drill-body { display: block; } .hero::before, .hero::after { display: none; } }
+
+.conj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin-top: 0.2rem; }
+@media (max-width: 640px) { .conj-grid { grid-template-columns: 1fr; } }
+.conj-grid .conj-box { background: #FBF7EE; border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 0.9rem; }
+.conj-grid .conj-header { display: block; margin-bottom: 0.5rem; line-height: 1.5; font-family: var(--font-jp); }
+.conj-grid .conj-pattern { color: var(--accent-dark); font-family: var(--font-jp); font-weight: 700; font-size: 1rem; margin-right: 0.4rem; }
+.conj-grid .conj-sub { font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-body); }
+.conj-grid .conj-pairs { font-family: var(--font-jp); }
+.conj-grid .conj-pair { display: flex; align-items: center; gap: 0.45rem; padding: 0.18rem 0; font-size: 0.95rem; line-height: 1.7; }
+.conj-grid .conj-pair .mark { font-weight: 700; font-size: 0.76rem; padding: 0.1rem 0.5rem; border-radius: 999px; display: inline-block; min-width: 4.4rem; text-align: center; background: var(--accent-soft); color: var(--accent-dark); font-family: var(--font-body); flex-shrink: 0; }
+.conj-grid .conj-answer { display: inline-flex; align-items: center; justify-content: center; min-width: 3.6em; min-height: 1.6em; background: #FFFFFF; color: transparent; padding: 0.05rem 0.55rem; border-radius: 6px; font-weight: 700; transition: all .15s ease; user-select: none; cursor: pointer; border: 1px solid var(--line); position: relative; font-family: var(--font-jp); }
+.conj-grid .conj-answer::before { content: '?'; position: absolute; color: var(--accent-dark); font-family: var(--font-body); font-weight: 700; font-size: 0.95rem; opacity: 0.7; pointer-events: none; }
+.conj-grid .conj-answer:hover { background: var(--accent); border-color: var(--accent-dark); }
+.conj-grid .conj-answer:hover::before { color: #FFFFFF; opacity: 1; }
+.conj-grid .conj-answer.revealed { background: transparent; color: var(--accent-dark); user-select: text; cursor: default; border-color: transparent;  display: block; text-align: center; line-height: 1.6; }
+.conj-grid .conj-answer.revealed::before { display: none; }
+.conj-grid .conj-answer.revealed:hover { background: transparent; border-color: transparent; }
+
+.conj-grid .group-label { background: none; padding: 0; margin-left: 0.2rem; border-radius: 0; color: var(--text-muted); }
+.pattern-table td.c-pat { font-weight: 700; }
+.pattern-table td.c-form { text-align: left; font-weight: 500; line-height: 1.8; }
+.pattern-table td.c-form code { white-space: nowrap; }
+.pattern-table .mark { white-space: nowrap; }
+.pattern-table .ex-line { display: block; margin-top: 0.5rem; padding-top: 0.45rem; border-top: 1px dashed var(--line); font-weight: 500; }
+.pattern-table .ex-line::before { content: '例'; display: inline-block; font-size: 0.68rem; font-weight: 700; color: #fff; background: var(--accent); border-radius: 4px; padding: 0.04rem 0.38rem; margin-right: 0.45rem; vertical-align: 0.12em; font-family: var(--font-body); }
+.point-list li .note { display: block; }
+/* === Note欄＋注釈＋記入欄（全章共通・横展開 2026-06-28） === */
+.toolbar { justify-content: space-between; align-items: center; gap: 0.6rem 0.8rem; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 0.5rem 0.8rem; margin-bottom: 0.6rem; }
+.toolbar button { box-shadow: none; }
+.pen-tools { display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; }
+.tb-right { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.grp-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; margin: 0 0.1rem 0 0.2rem; }
+.toolbar .swatch { width: 22px; height: 22px; padding: 0; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--line); cursor: pointer; }
+.toolbar .swatch:hover { transform: scale(1.12); }
+.toolbar .swatch.marker { border-radius: 6px; }
+.toolbar .sep { width: 1px; height: 22px; background: var(--line); margin: 0 0.15rem; }
+.toolbar button.act { padding: 0.3rem 0.7rem; font-size: 0.74rem; font-weight: 600; }
+.write-help { font-size: 0.8rem; color: var(--text-muted); line-height: 1.7; margin: 0 0 var(--gap); padding: 0 0.3rem; }
+.write-help strong { color: var(--accent-dark); }
+.layout { display: grid; grid-template-columns: minmax(0,1fr) 330px; gap: 1.25rem; align-items: start; }
+.lesson-col { min-width: 0; }
+.note-col { position: sticky; top: 5.2rem; }
+.note-panel { background: var(--card); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 1rem 1.1rem; display: flex; flex-direction: column; }
+.note-head { font-family: var(--font-jp); font-weight: 700; color: var(--accent-dark); font-size: 1.05rem; margin: 0 0 0.6rem; padding-bottom: 0.55rem; border-bottom: 2px dashed var(--line); }
+.notepad { flex: 1; min-height: 55vh; max-height: calc(100vh - 9rem); overflow-y: auto; border: 1.5px dashed var(--line); border-radius: 10px; background: #FFFDF8; padding: 0.8rem 0.9rem; font-family: var(--font-jp); line-height: 1.95; font-size: 1rem; outline: none; }
+.notepad:focus { border-color: var(--accent); border-style: solid; background: #fff; box-shadow: 0 0 0 3px rgba(201,168,118,0.18); }
+.notepad:empty::before { content: attr(data-placeholder); color: var(--text-muted); opacity: 0.65; }
+.lesson-col .annot { border-radius: 3px; }
+.blank-input { display: inline-block; min-width: 4.5em; border-bottom: 2px solid var(--accent); padding: 0 0.35rem; margin: 0 0.1rem; font-family: var(--font-jp); font-weight: 700; color: var(--accent-dark); text-align: center; line-height: 1.6; outline: none; }
+.blank-input:focus { background: var(--highlight); border-radius: 4px 4px 0 0; }
+.write-box { display: block; margin: 0.5rem 0 0.2rem; min-height: 2.4em; border: 1.5px dashed var(--line); border-radius: 8px; background: #FFFDF8; padding: 0.5rem 0.7rem; font-family: var(--font-jp); line-height: 1.9; font-size: 1rem; color: var(--text); outline: none; }
+.write-box:focus { border-color: var(--accent); border-style: solid; background: #fff; box-shadow: 0 0 0 3px rgba(201,168,118,0.15); }
+.write-box:empty::before { content: attr(data-placeholder); color: var(--text-muted); opacity: 0.6; }
+.page { max-width: 1180px; }
+@media (max-width: 820px) { .layout { grid-template-columns: 1fr; } .note-col { position: static; } .notepad { min-height: 30vh; max-height: none; } }
+@media print { .write-help { display: none; } .layout { display: block; } .note-col { position: static; margin-top: 1.25rem; } .notepad { max-height: none; border: 1px solid var(--line) !important; background: #fff !important; box-shadow: none !important; } .notepad:empty::before { content: ''; } .write-box { border: 1px solid var(--line) !important; background: #fff !important; box-shadow: none !important; } .write-box:empty::before { content: ''; } .blank-input { border-bottom: 1px solid #999; } }
+.note-head { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.note-head #note-annot-btn { font-family: var(--font-body); font-weight: 600; font-size: 0.72rem; color: var(--accent-dark); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 0.22rem 0.7rem; cursor: pointer; }
+.note-head #note-annot-btn:hover { background: var(--accent-soft); border-color: var(--accent); }
+.note-annot { border-bottom: 1.5px dotted var(--accent); cursor: pointer; }
+.note-annot > .na-info { display: none; }
+.note-annot.show > .na-info { display: block; }
+.na-info { margin: 0.2rem 0 0.5rem 0.6rem; padding: 0.35rem 0.6rem; background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 8px; font-family: var(--font-body); }
+.na-info .na-yomi { display: block; font-family: var(--font-jp); color: var(--accent-dark); font-size: 0.9rem; line-height: 1.6; }
+.na-info .na-en { display: block; color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-top: 0.1rem; }
+/* ふりがな（ルビ）：ボタンで全漢字に表示。OFF時は読みを隠す */
+ruby rt { font-size: 0.55em; color: var(--text-muted); font-weight: 400; user-select: none; line-height: 1; }
+body:not(.show-furigana) ruby rt { display: none; }
+@media print { body.show-furigana ruby rt { display: inline !important; } }
+.bubble .msg { display: inline-block; vertical-align: top; }
+.quiz > .en-wrap .en { font-family: var(--font-jp); font-weight: 500; }
+.quiz > .en-wrap > .local-en-toggle { border-color: var(--accent); padding: 0.3rem 0.9rem; font-size: var(--fs-small); font-weight: normal; font-family: inherit;}
+.quiz > .en-wrap { margin-top: 0.6rem; margin-bottom: 0.75rem; }
+.pattern-table .ex-line strong { color: var(--accent-dark); }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="toolbar">
+    <div class="pen-tools">
+      <span class="grp-label">ペン</span>
+      <button class="swatch pen-color" data-color="#2E2418" style="background:#2E2418" title="黒" type="button"></button>
+      <button class="swatch pen-color" data-color="#D14B4B" style="background:#D14B4B" title="赤" type="button"></button>
+      <button class="swatch pen-color" data-color="#2F6DB5" style="background:#2F6DB5" title="青" type="button"></button>
+      <button class="swatch pen-color" data-color="#3C8A5A" style="background:#3C8A5A" title="緑" type="button"></button>
+      <button class="swatch pen-color" data-color="#D98E3A" style="background:#D98E3A" title="オレンジ" type="button"></button>
+      <span class="sep"></span>
+      <span class="grp-label">マーカー</span>
+      <button class="swatch marker pen-marker" data-color="#FFE89A" style="background:#FFE89A" title="黄マーカー" type="button"></button>
+      <button class="swatch marker pen-marker" data-color="#C8EBD2" style="background:#C8EBD2" title="緑マーカー" type="button"></button>
+      <button class="swatch marker pen-marker" data-color="#FAD0DE" style="background:#FAD0DE" title="ピンクマーカー" type="button"></button>
+      <button class="swatch marker pen-marker" data-color="#CFE4F7" style="background:#CFE4F7" title="青マーカー" type="button"></button>
+      <span class="sep"></span>
+      <button class="act" id="clear-fmt" type="button">書式クリア</button>
+    </div>
+    <div class="tb-right">
+    <button id="toggle-furi" type="button">ふりがなを表示</button>
+    <button id="toggle-en" type="button">英訳を表示</button>
+    <button onclick="window.print()" type="button">印刷／PDF</button>
+  </div>
+  </div>
+  <p class="write-help">左の<strong>教科書</strong>では、文字を<strong>選んでから</strong>上の<strong>ペン色・マーカー</strong>を押すと色がつきます（本文の<strong>文字は変えられません</strong>。色とマーカーだけ）。空欄や記入欄には書き込めます。右の<strong>Note欄</strong>は自由に書き込め、Enterで改行もできます。「書式クリア」で色を消せます。書いた内容と色は<strong>この端末に自動保存</strong>されます。</p>
+
+  <div class="layout">
+    <div class="lesson-col" id="lesson">
+
+  <header class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Chapter 10-2 ・ <ruby>初級<rt>しょきゅう</rt></ruby> Beginner</span>
+      <h1 class="title">Adjective／Noun ＋ の</h1>
+      <p class="subtitle"><ruby>代<rt>だい</rt></ruby><ruby>名詞<rt>めいし</rt></ruby>「の」(one) ／ <ruby>同じ<rt>おなじ</rt></ruby><ruby>名詞<rt>めいし</rt></ruby>を<ruby>繰り返さ<rt>くりかえさ</rt></ruby>ず「の」で<ruby>簡潔<rt>かんけつ</rt></ruby>に</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2 class="section-title"><span class="num">1</span><span><ruby>意味<rt>いみ</rt></ruby> ／ Meaning</span></h2>
+    <div class="meaning">
+      <p>すでに<ruby>話<rt>はなし</rt></ruby>の<ruby>中<rt>なか</rt></ruby>に<ruby>出<rt>で</rt></ruby>てきた<ruby>名詞<rt>めいし</rt></ruby>を、<br>もう<ruby>一<rt>いち</rt></ruby><ruby>度<rt>ど</rt></ruby><ruby>言わ<rt>いわ</rt></ruby>ずに「<strong>の</strong>」だけで<ruby>言う<rt>いう</rt></ruby>ことができます<br>（<ruby>英語<rt>えいご</rt></ruby>の "one / ones"）。<br>「い<ruby>形容<rt>けいよう</rt></ruby><ruby>詞<rt>し</rt></ruby>＋の」「な<ruby>形容<rt>けいよう</rt></ruby><ruby>詞<rt>し</rt></ruby>＋なの」<br>「<ruby>名詞<rt>めいし</rt></ruby>①の〜（<ruby>名詞<rt>めいし</rt></ruby>②）」の<ruby>形<rt>かたち</rt></ruby>で<ruby>使い<rt>つかい</rt></ruby>、<ruby>文<rt>ぶん</rt></ruby>が<ruby>短く<rt>みじかく</rt></ruby>、<ruby>自然<rt>しぜん</rt></ruby>になります。</p>
+      <div class="en-wrap">
+        <button class="local-en-toggle" type="button">訳を見る</button>
+        <p class="en">の replaces a noun<br>already mentioned<br>(like English "one / ones").<br>Patterns: i-adjective + の, na-adjective + なの,<br>noun + の.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><span class="num">2</span><span><ruby>文型<rt>ぶんけい</rt></ruby> ／ Sentence Pattern</span></h2>
+    <table class="pattern-table">
+      <thead><tr><th style="width:16%"><ruby>品詞<rt>ひんし</rt></ruby></th><th style="width:16%"></th><th><ruby>形<rt>かたち</rt></ruby>と<ruby>例<rt>れい</rt></ruby></th></tr></thead>
+      <tbody>
+        <tr><td class="c-pat">い<ruby>形容<rt>けいよう</rt></ruby><ruby>詞<rt>し</rt></ruby><span class="label-en">i-adjective</span></td><td><span class="mark">＋の</span></td><td class="c-form">【い<ruby>形容<rt>けいよう</rt></ruby><ruby>詞<rt>し</rt></ruby>】 ＋ <code>の</code><span class="ex-line"><ruby>白い<rt>しろい</rt></ruby><strong>の</strong> ／ <ruby>新しい<rt>あたらしい</rt></ruby><strong>の</strong></span></td></tr>
+        <tr><td class="c-pat">な<ruby>形容<rt>けいよう</rt></ruby><ruby>詞<rt>し</rt></ruby><span class="label-en">na-adjective</span></td><td><span class="mark">＋なの</span></td><td class="c-form">【な<ruby>形容<rt>けいよう</rt></ruby><ruby>詞<rt>し</rt></ruby>】 ＋ <code>なの</code><span class="ex-line"><ruby>好き<rt>すき</rt></ruby><strong>なの</strong> ／ <ruby>静か<rt>しずか</rt></ruby><strong>なの</strong></span></td></tr>
+        <tr><td class="c-pat"><ruby>名詞<rt>めいし</rt></ruby><span class="label-en">noun</span></td><td><span class="mark">①の②</span></td><td class="c-form">【<ruby>名詞<rt>めいし</rt></ruby>①】 ＋ <code>の</code> ＋ <s><ruby>名詞<rt>めいし</rt></ruby>②</s><span class="ex-line"><ruby>私<rt>わたし</rt></ruby><strong>の</strong>（<ruby>靴<rt>くつ</rt></ruby>）／ アメリカ<strong>の</strong>（ハンバーガー）</span></td></tr>
+      </tbody>
+    </table>
+    <div class="en-wrap">
+      <button class="local-en-toggle" type="button">訳を見る（英語の表）</button>
+      <div class="en">
+        <table class="pattern-table">
+      <thead><tr><th style="width:16%">part of speech</th><th style="width:16%"></th><th>form &amp; example</th></tr></thead>
+      <tbody>
+        <tr><td class="c-pat">i-adjective</td><td><span class="mark">＋の</span></td><td class="c-form">[i-adjective] + <code>の</code> <strong>(one / ones)</strong><span class="ex-line"><ruby>白い<rt>しろい</rt></ruby><strong>の</strong> (the white one) / <ruby>新しい<rt>あたらしい</rt></ruby><strong>の</strong> (the new one)</span></td></tr>
+        <tr><td class="c-pat">na-adjective</td><td><span class="mark">＋なの</span></td><td class="c-form">[na-adjective] + <code>なの</code> <strong>(one / ones)</strong><span class="ex-line"><ruby>好き<rt>すき</rt></ruby><strong>なの</strong> (a favorite one) / <ruby>静か<rt>しずか</rt></ruby><strong>なの</strong> (a quiet one)</span></td></tr>
+        <tr><td class="c-pat">noun</td><td><span class="mark">①の②</span></td><td class="c-form">[noun①] + <code>の</code> + <s>noun②</s><span class="ex-line"><ruby>私<rt>わたし</rt></ruby><strong>の</strong>（<ruby>靴<rt>くつ</rt></ruby>）(mine) / アメリカ<strong>の</strong>（ハンバーガー）(American ones)</span></td></tr>
+      </tbody>
+    </table>
+      </div>
+    </div>
+    <p class="note note-lg">＊<ruby>名詞<rt>めいし</rt></ruby>のときは「<ruby>名詞<rt>めいし</rt></ruby>①<strong>の</strong><ruby>名詞<rt>めいし</rt></ruby>②」の<ruby>形<rt>かたち</rt></ruby>です。<br><strong><ruby>同じ<rt>おなじ</rt></ruby><ruby>名詞<rt>めいし</rt></ruby>を2<ruby>回<rt>かい</rt></ruby><ruby>言わ<rt>いわ</rt></ruby>なくてもいいです</strong>。<br><ruby>例<rt>れい</rt></ruby>：「これは<strong><ruby>私<rt>わたし</rt></ruby>の<ruby>靴<rt>くつ</rt></ruby></strong>です」→「これは<strong><ruby>私<rt>わたし</rt></ruby>の</strong>です」（「<ruby>靴<rt>くつ</rt></ruby>」を<ruby>省略<rt>しょうりゃく</rt></ruby>）。<br>「<ruby>私<rt>わたし</rt></ruby>の」だけで「<ruby>私<rt>わたし</rt></ruby>のもの」の<ruby>意味<rt>いみ</rt></ruby>です。<br><ruby>表<rt>ひょう</rt></ruby>の <s><ruby>名詞<rt>めいし</rt></ruby>②</s> は、<ruby>言わ<rt>いわ</rt></ruby>なくてもいい<ruby>名詞<rt>めいし</rt></ruby>です。</p>
+    <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">＊For nouns: 「noun① の noun②」.<br>You don't have to say the same noun twice.<br>e.g. 「これは<ruby>私<rt>わたし</rt></ruby>の<ruby>靴<rt>くつ</rt></ruby>です」(This is my shoe) → 「これは<ruby>私<rt>わたし</rt></ruby>のです」(This is mine).<br>「<ruby>私<rt>わたし</rt></ruby>の」 alone means "mine".<br>The crossed-out <s><ruby>名詞<rt>めいし</rt></ruby>②</s> in the table is the noun you don't have to say.</p></div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><span class="num">3</span><span><ruby>例文<rt>れいぶん</rt></ruby> ／ Example Sentences</span></h2>
+    <div class="examples">
+      <div class="example"><div class="example-content"><p class="jp"><ruby>私<rt>わたし</rt></ruby>は<ruby>白い<rt>しろい</rt></ruby><ruby>靴<rt>くつ</rt></ruby>を<ruby>持っ<rt>もっ</rt></ruby>ています。<ruby>黒い<rt>くろい</rt></ruby><strong>の</strong>も<ruby>持っ<rt>もっ</rt></ruby>ています。</p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I have white shoes. I have black ones, too.</p></div></div></div>
+      <div class="example"><div class="example-content"><p class="jp"><ruby>新しい<rt>あたらしい</rt></ruby>スマホを<ruby>買い<rt>かい</rt></ruby>ました。<ruby>古い<rt>ふるい</rt></ruby><strong>の</strong>は<ruby>壊れ<rt>こわれ</rt></ruby>ました。</p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I bought a new phone. The old one broke.</p></div></div></div>
+      <div class="example"><div class="example-content"><p class="jp">お<ruby>菓子<rt>かし</rt></ruby>がたくさんあります。<ruby>好き<rt>すき</rt></ruby><strong>なの</strong>を<ruby>持っ<rt>もっ</rt></ruby>ていってください。</p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">There are a lot of snacks. Please take the ones you like.</p></div></div></div>
+      <div class="example"><div class="example-content"><p class="jp">アメリカのハンバーガーのほうが、<ruby>日本<rt>にほん</rt></ruby><strong>の</strong>より<ruby>大きい<rt>おおきい</rt></ruby>です。</p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">American hamburgers are bigger than Japanese ones.</p></div></div></div>
+      <div class="example"><div class="example-content"><p class="jp">あそこで<ruby>歌っ<rt>うたっ</rt></ruby>ている<strong>の</strong>は<ruby>田中<rt>たなか</rt></ruby>さんです。</p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">The one singing over there is Mr. Tanaka.</p></div></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><span class="num">4</span><span>ポイント ／ Key Points</span></h2>
+    <ul class="point-list">
+      <li>
+        <strong>な<ruby>形容<rt>けいよう</rt></ruby><ruby>詞<rt>し</rt></ruby>の「な」を<ruby>忘れ<rt>わすれ</rt></ruby>がち</strong>。<br>「<ruby>好き<rt>すき</rt></ruby><strong>の</strong>」「<ruby>静か<rt>しずか</rt></ruby><strong>の</strong>」は ✗。<br><ruby>必ず<rt>かならず</rt></ruby>「<ruby>好き<rt>すき</rt></ruby><strong>なの</strong>」「<ruby>静か<rt>しずか</rt></ruby><strong>なの</strong>」と「な」を<ruby>入れ<rt>いれ</rt></ruby>ます。
+        <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">It's easy to forget the 「な」 of na-adjectives.<br>Common mistake: dropping the な. <ruby>好き<rt>すき</rt></ruby>の ✗ / <ruby>好き<rt>すき</rt></ruby>なの ◯. Always keep the な before の for na-adjectives.</p></div>
+      </li>
+      <li>
+        <strong>「<ruby>人<rt>ひと</rt></ruby>」には「の」を<ruby>使わ<rt>つかわ</rt></ruby>ない</strong>。<br>「の」は<strong>「もの（<ruby>物<rt>もの</rt></ruby>）」</strong>を<ruby>指す<rt>さす</rt></ruby><ruby>言葉<rt>ことば</rt></ruby>です。<ruby>人<rt>ひと</rt></ruby>を<ruby>指す<rt>さす</rt></ruby>ときは「<ruby>人<rt>ひと</rt></ruby>」と<ruby>言い<rt>いい</rt></ruby>ます。<br>✗ <ruby>背<rt>せ</rt></ruby>が<ruby>高い<rt>たかい</rt></ruby><strong>の</strong>（「<ruby>人<rt>ひと</rt></ruby>」の<ruby>意味<rt>いみ</rt></ruby>で）<br>◯ <ruby>背<rt>せ</rt></ruby>が<ruby>高い<rt>たかい</rt></ruby><strong><ruby>人<rt>ひと</rt></ruby></strong>
+        <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Don't use 「の」 for people.<br>の refers to a THING, not a person. For a person, use <ruby>人<rt>ひと</rt></ruby>.<br>✗ <ruby>背<rt>せ</rt></ruby>が<ruby>高い<rt>たかい</rt></ruby>の (to mean a tall person) / ◯ <ruby>背<rt>せ</rt></ruby>が<ruby>高い<rt>たかい</rt></ruby><ruby>人<rt>ひと</rt></ruby> (a tall person)</p></div>
+      </li>
+      <li>
+        <strong><ruby>例外<rt>れいがい</rt></ruby>：「〜している<strong>の</strong>は〇〇さんです」だけは<ruby>人<rt>ひと</rt></ruby>に<ruby>使える<rt>つかえる</rt></ruby></strong>。<br>これは「〜している<strong><ruby>人<rt>ひと</rt></ruby></strong>は〇〇さんです」の<strong>「<ruby>人<rt>ひと</rt></ruby>」を「の」にした<ruby>形<rt>かたち</rt></ruby></strong>です。<br><ruby>動作<rt>どうさ</rt></ruby>で「<strong>どの<ruby>人<rt>ひと</rt></ruby>か</strong>」を<ruby>説明<rt>せつめい</rt></ruby>して、だれかを<ruby>答える<rt>こたえる</rt></ruby>ときに<ruby>使い<rt>つかい</rt></ruby>ます。<br>◯ あそこで<ruby>歌っ<rt>うたっ</rt></ruby>ている<strong>の</strong>は<ruby>田中<rt>たなか</rt></ruby>さんです。<span class="note">（＝<ruby>歌っ<rt>うたっ</rt></ruby>ている<ruby>人<rt>ひと</rt></ruby>は<ruby>田中<rt>たなか</rt></ruby>さんです）</span>
+        <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">(= The person who is singing is Tanaka.)</p></div><br>※ただ「<ruby>人<rt>ひと</rt></ruby>」を<ruby>指す<rt>さす</rt></ruby>ときは<ruby>使え<rt>つかえ</rt></ruby>ません。✗ <ruby>背<rt>せ</rt></ruby>が<ruby>高い<rt>たかい</rt></ruby><strong>の</strong> → ◯ <ruby>背<rt>せ</rt></ruby>が<ruby>高い<rt>たかい</rt></ruby><strong><ruby>人<rt>ひと</rt></ruby></strong>。
+        <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Exception: only 「〜しているのは〇〇さんです」 can refer to a person.<br>It's the 「〜している<ruby>人<rt>ひと</rt></ruby>は〇〇さんです」pattern with <ruby>人<rt>ひと</rt></ruby> replaced by の.<br>Use it to identify WHO someone is by their action.<br>◯ あそこで<ruby>歌っ<rt>うたっ</rt></ruby>ているのは<ruby>田中<rt>たなか</rt></ruby>さんです (The one singing over there is Tanaka ＝ the person who is singing is Tanaka).<br>※Not for 'a person' in general: ✗ <ruby>背<rt>せ</rt></ruby>が<ruby>高い<rt>たかい</rt></ruby>の → ◯ <ruby>背<rt>せ</rt></ruby>が<ruby>高い<rt>たかい</rt></ruby><ruby>人<rt>ひと</rt></ruby>.</p></div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><span class="num">5</span><span><ruby>会話<rt>かいわ</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby> ／ Conversation Practice</span></h2>
+    <p class="subhead"><ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>買い物<rt>かいもの</rt></ruby>／Shopping together　<span class="note">アナとケンの<ruby>会話<rt>かいわ</rt></ruby></span></p>
+    <div class="dialogue">
+      <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>わあ、この<ruby>店<rt>みせ</rt></ruby>、<ruby>靴<rt>くつ</rt></ruby>がたくさんあるね！<div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Wow, this store has a lot of shoes!</p></div></div>
+      <div class="bubble ken"><span class="speaker">👦🏻 ケン</span><ruby>本当<rt>ほんとう</rt></ruby>だ。<ruby>白い<rt>しろい</rt></ruby>のと<ruby>黒い<rt>くろい</rt></ruby>の、どっちがいいと<ruby>思う<rt>おもう</rt></ruby>？<div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">It does. Which do you think is better, the white ones or the black ones?</p></div></div>
+      <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span><ruby>私<rt>わたし</rt></ruby>は<ruby>白い<rt>しろい</rt></ruby>のが<ruby>好き<rt>すき</rt></ruby>！シンプルだから。<div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I like the white ones! Because they're simple.</p></div></div>
+      <div class="bubble ken"><span class="speaker">👦🏻 ケン</span>いいね。<ruby>僕<rt>ぼく</rt></ruby>も<ruby>派手<rt>はで</rt></ruby>なのより、シンプルなのが<ruby>好き<rt>すき</rt></ruby>だよ。<div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Nice. I also like simple ones more than flashy ones.</p></div></div>
+      <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>あ、あのかばんも<ruby>見<rt>み</rt></ruby>て！<ruby>大きい<rt>おおきい</rt></ruby>のと<ruby>小さい<rt>ちいさい</rt></ruby>の、どっちがいいと<ruby>思う<rt>おもう</rt></ruby>？<div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Oh, look at that bag too! Which do you think is better, the big one or the small one?</p></div></div>
+      <div class="bubble ken"><span class="speaker">👦🏻 ケン</span><ruby>僕<rt>ぼく</rt></ruby>は<ruby>大きい<rt>おおきい</rt></ruby>のがいいと<ruby>思う<rt>おもう</rt></ruby>。<ruby>荷物<rt>にもつ</rt></ruby>がたくさん<ruby>入る<rt>はいる</rt></ruby>から。<div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I think the big one is better. Because a lot of things fit in it.</p></div></div>
+      <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>たしかに。でも<ruby>私<rt>わたし</rt></ruby>は<ruby>小さい<rt>ちいさい</rt></ruby>のを<ruby>買う<rt>かう</rt></ruby>よ。<ruby>軽く<rt>かるく</rt></ruby>て<ruby>便利<rt>べんり</rt></ruby>だから。<div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">True. But I'll buy the small one. Because it's light and convenient.</p></div></div>
+      <div class="bubble ken"><span class="speaker">👦🏻 ケン</span><span class="msg">たしかに！<ruby>小さい<rt>ちいさい</rt></ruby>ほうが<ruby>便利<rt>べんり</rt></ruby>だね！<br>あ！あそこにケーキ<ruby>屋<rt>や</rt></ruby>さんがあるよ。<ruby>買い物<rt>かいもの</rt></ruby>の<ruby>後<rt>あと</rt></ruby>で、<ruby>食べ<rt>たべ</rt></ruby>に<ruby>行く<rt>いく</rt></ruby>？</span><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">True! The small one is more convenient!<br>Oh! There's a cake shop over there. Want to go eat after shopping?</p></div></div>
+      <div class="bubble ana"><span class="speaker">🧒🏻 アナ</span>うん、いいね！<div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yeah, sounds good!</p></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><span class="num">6</span><span><ruby>練習<rt>れんしゅう</rt></ruby><ruby>問題<rt>もんだい</rt></ruby> ／ Practice Exercises</span></h2>
+
+    <h3 class="subhead"><ruby>文<rt>ぶん</rt></ruby>を<ruby>作ろう<rt>つくろう</rt></ruby> ／ Make sentences</h3>
+
+    <div class="quiz"><p class="quiz-q">これは<ruby>赤い<rt>あかい</rt></ruby><ruby>靴<rt>くつ</rt></ruby>です。（<span class="blank-input" contenteditable="true"></span>）もあります。<span class="word-chip">green ones</span></p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">These are red shoes. I also have green ones.</p></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a">これは<ruby>赤い<rt>あかい</rt></ruby><ruby>靴<rt>くつ</rt></ruby>です。（ <strong><ruby>緑<rt>みどり</rt></ruby>の</strong> ）もあります。</div></div>
+    <div class="quiz"><p class="quiz-q">あの<ruby>静か<rt>しずか</rt></ruby>な<ruby>町<rt>まち</rt></ruby>はすてきですね。（<span class="blank-input" contenteditable="true"></span>）も<ruby>好き<rt>すき</rt></ruby>です。<span class="word-chip">lively ones</span></p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">That quiet town is nice. I also like lively ones.</p></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a">あの<ruby>静か<rt>しずか</rt></ruby>な<ruby>町<rt>まち</rt></ruby>はすてきですね。（ <strong>にぎやかなの</strong> ）も<ruby>好き<rt>すき</rt></ruby>です。</div></div>
+    <div class="quiz"><p class="quiz-q"><ruby>私<rt>わたし</rt></ruby>の<ruby>車<rt>くるま</rt></ruby>は<ruby>新しい<rt>あたらしい</rt></ruby>です。（<span class="blank-input" contenteditable="true"></span>）は？<span class="word-chip">yours</span></p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">My car is new. How about yours?</p></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a"><ruby>私<rt>わたし</rt></ruby>の<ruby>車<rt>くるま</rt></ruby>は<ruby>新しい<rt>あたらしい</rt></ruby>です。（ <strong>あなたの</strong> ）は？</div></div>
+    <div class="quiz"><p class="quiz-q"><ruby>青い<rt>あおい</rt></ruby><ruby>服<rt>ふく</rt></ruby>を<ruby>着<rt>き</rt></ruby>ています。（<span class="blank-input" contenteditable="true"></span>）も<ruby>買い<rt>かい</rt></ruby>ます。<span class="word-chip">white ones</span></p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I'm wearing blue clothes. I'll buy white ones too.</p></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a"><ruby>青い<rt>あおい</rt></ruby><ruby>服<rt>ふく</rt></ruby>を<ruby>着<rt>き</rt></ruby>ています。（ <strong><ruby>白い<rt>しろい</rt></ruby>の</strong> ）も<ruby>買い<rt>かい</rt></ruby>ます。</div></div>
+    <div class="quiz"><p class="quiz-q">これは<ruby>私<rt>わたし</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>です。あれは（<span class="blank-input" contenteditable="true"></span>）です。<span class="word-chip">Tanaka's</span></p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">This is my book. That one is Mr. Tanaka's.</p></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a">これは<ruby>私<rt>わたし</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>です。あれは（ <strong><ruby>田中<rt>たなか</rt></ruby>さんの</strong> ）です。</div></div>
+    <div class="quiz"><p class="quiz-q">（<span class="blank-input" contenteditable="true"></span>）より（<span class="blank-input" contenteditable="true"></span>）が<ruby>好き<rt>すき</rt></ruby>です。<span class="word-chip">the new one / the old one</span></p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I like the old one better than the new one.</p></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a">（ <strong><ruby>新しい<rt>あたらしい</rt></ruby>の</strong> ）より（ <strong><ruby>古い<rt>ふるい</rt></ruby>の</strong> ）が<ruby>好き<rt>すき</rt></ruby>です。</div></div>
+    <div class="quiz"><p class="quiz-q">この<ruby>時計<rt>とけい</rt></ruby>は<ruby>高い<rt>たかい</rt></ruby>ですね。（<span class="blank-input" contenteditable="true"></span>）はありますか？<span class="word-chip">not expensive ones</span></p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">This watch is expensive. Do you have ones that aren't expensive?</p></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a">この<ruby>時計<rt>とけい</rt></ruby>は<ruby>高い<rt>たかい</rt></ruby>ですね。（ <strong><ruby>高く<rt>たかく</rt></ruby>ないの</strong> ）はありますか？</div></div>
+    
+
+    <h3 class="subhead"><ruby>英語<rt>えいご</rt></ruby>から<ruby>日本<rt>にほん</rt></ruby><ruby>語<rt>ご</rt></ruby>へ ／ English → Japanese</h3>
+
+    <div class="quiz"><p class="quiz-q-en">My hat is black. His is white.</p><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><p class="quiz-a"><strong><ruby>私<rt>わたし</rt></ruby>の<ruby>帽子<rt>ぼうし</rt></ruby>は<ruby>黒い<rt>くろい</rt></ruby>です。<ruby>彼<rt>かれ</rt></ruby>のは<ruby>白い<rt>しろい</rt></ruby>です。</strong></p></div>
+    <div class="quiz"><p class="quiz-q-en">I have a small one and a big one.</p><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><p class="quiz-a"><strong><ruby>小さい<rt>ちいさい</rt></ruby>のと<ruby>大きい<rt>おおきい</rt></ruby>のを<ruby>持っ<rt>もっ</rt></ruby>ています。</strong></p></div>
+    <div class="quiz"><p class="quiz-q-en">Which one is new?</p><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><p class="quiz-a"><strong><ruby>新しい<rt>あたらしい</rt></ruby>のはどれですか？</strong></p></div>
+    <div class="quiz"><p class="quiz-q-en">The black shoes are mine. The white ones are Ken's.</p><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><p class="quiz-a"><strong><ruby>黒い<rt>くろい</rt></ruby><ruby>靴<rt>くつ</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>のです。<ruby>白い<rt>しろい</rt></ruby>のはケンのです。</strong></p></div>
+    <div class="quiz"><p class="quiz-q-en">The red one was cheap. The blue one was expensive.</p><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><p class="quiz-a"><strong><ruby>赤い<rt>あかい</rt></ruby>のは<ruby>安かっ<rt>やすかっ</rt></ruby>たです。<ruby>青い<rt>あおい</rt></ruby>のは<ruby>高かっ<rt>たかかっ</rt></ruby>たです。</strong></p></div>
+
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><span class="num">7</span><span><ruby>話し<rt>はなし</rt></ruby>てみよう ／ Let's practice</span></h2>
+    <p class="note"><ruby>自由<rt>じゆう</rt></ruby>に<ruby>答え<rt>こたえ</rt></ruby>てみましょう。<ruby>回答<rt>かいとう</rt></ruby><ruby>例<rt>れい</rt></ruby>も<ruby>見<rt>み</rt></ruby>られます。</p>
+
+    <div class="practice">
+      <p class="practice-q">どんな<ruby>服<rt>ふく</rt></ruby>が<ruby>好き<rt>すき</rt></ruby>ですか？<ruby>派手<rt>はで</rt></ruby>なのとシンプルなの、どっちが<ruby>好き<rt>すき</rt></ruby>ですか？</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">What kind of clothes do you like? Do you prefer flashy ones or simple ones?</p></div><div class="write-box" contenteditable="true" data-placeholder="ここに自由に書いてみよう"></div>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button><div class="sample-body"><p class="sample-jp"><ruby>私<rt>わたし</rt></ruby>はシンプルなのが<ruby>好き<rt>すき</rt></ruby>です。<ruby>派手<rt>はで</rt></ruby>なのはちょっと<ruby>苦手<rt>にがて</rt></ruby>です。</p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I like simple ones. I'm not really into flashy ones.</p></div></div></div>
+    </div>
+
+    <div class="practice">
+      <p class="practice-q">あなたのスマホはどんなスマホですか？<ruby>新しい<rt>あたらしい</rt></ruby>のですか、<ruby>古い<rt>ふるい</rt></ruby>のですか？</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">What kind of phone do you have? A new one or an old one?</p></div><div class="write-box" contenteditable="true" data-placeholder="ここに自由に書いてみよう"></div>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button><div class="sample-body"><p class="sample-jp"><ruby>私<rt>わたし</rt></ruby>のスマホは<ruby>黒い<rt>くろい</rt></ruby>のです。<ruby>新しい<rt>あたらしい</rt></ruby>のを<ruby>先月<rt>せんげつ</rt></ruby><ruby>買い<rt>かい</rt></ruby>ました。</p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">My phone is a black one. I bought a new one last month.</p></div></div></div>
+    </div>
+
+    <div class="practice">
+      <p class="practice-q">あなたの<ruby>部屋<rt>へや</rt></ruby>は<ruby>明るい<rt>あかるい</rt></ruby>のですか、<ruby>暗い<rt>くらい</rt></ruby>のですか？</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Is your room a bright one or a dark one?</p></div><div class="write-box" contenteditable="true" data-placeholder="ここに自由に書いてみよう"></div>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button><div class="sample-body"><p class="sample-jp"><ruby>私<rt>わたし</rt></ruby>の<ruby>部屋<rt>へや</rt></ruby>は<ruby>明るい<rt>あかるい</rt></ruby>のです。<ruby>窓<rt>まど</rt></ruby>が<ruby>大きい<rt>おおきい</rt></ruby>からです。</p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">My room is a bright one. Because the window is big.</p></div></div></div>
+    </div>
+
+    <div class="practice">
+      <p class="practice-q">あなたのかさはどんなかさですか？<ruby>大きい<rt>おおきい</rt></ruby>のですか、<ruby>小さい<rt>ちいさい</rt></ruby>のですか？</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">What kind of umbrella do you have? A big one or a small one?</p></div><div class="write-box" contenteditable="true" data-placeholder="ここに自由に書いてみよう"></div>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button><div class="sample-body"><p class="sample-jp"><ruby>私<rt>わたし</rt></ruby>のかさは<ruby>大きい<rt>おおきい</rt></ruby>のです。<ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>に<ruby>便利<rt>べんり</rt></ruby>だからです。</p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">My umbrella is a big one. Because it's handy on rainy days.</p></div></div></div>
+    </div>
+
+    <div class="practice">
+      <p class="practice-q"><ruby>飲み物<rt>のみもの</rt></ruby>は<ruby>温かい<rt>あたたかい</rt></ruby>のと<ruby>冷たい<rt>つめたい</rt></ruby>の、どちらが<ruby>好き<rt>すき</rt></ruby>ですか？</p>
+      <div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">For drinks, which do you like — warm ones or cold ones?</p></div><div class="write-box" contenteditable="true" data-placeholder="ここに自由に書いてみよう"></div>
+      <div class="sample-wrap"><button class="sample-toggle" type="button">回答例を見る</button><div class="sample-body"><p class="sample-jp"><ruby>私<rt>わたし</rt></ruby>は<ruby>冷たい<rt>つめたい</rt></ruby>のが<ruby>好き<rt>すき</rt></ruby>です。<ruby>夏<rt>なつ</rt></ruby>はよく<ruby>冷たい<rt>つめたい</rt></ruby>お<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲み<rt>のみ</rt></ruby>ます。</p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I like cold ones. In summer, I often drink cold tea.</p></div></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><span class="num">8</span><span><ruby>復習<rt>ふくしゅう</rt></ruby><ruby>問題<rt>もんだい</rt></ruby> ／ Review Exercises</span></h2>
+
+    
+
+    <h3 class="subhead"><ruby>文<rt>ぶん</rt></ruby>を<ruby>作ろう<rt>つくろう</rt></ruby> ／ Make sentences</h3>
+
+    <div class="quiz"><p class="quiz-q"><ruby>黒い<rt>くろい</rt></ruby>ペンを<ruby>使っ<rt>つかっ</rt></ruby>ています。（<span class="blank-input" contenteditable="true"></span>）もあります。<span class="word-chip">red one</span></p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I'm using a black pen. I also have a red one.</p></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a"><ruby>黒い<rt>くろい</rt></ruby>ペンを<ruby>使っ<rt>つかっ</rt></ruby>ています。（ <strong><ruby>赤い<rt>あかい</rt></ruby>の</strong> ）もあります。</div></div>
+    <div class="quiz"><p class="quiz-q">この<ruby>傘<rt>かさ</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>のです。あれは（<span class="blank-input" contenteditable="true"></span>）です。<span class="word-chip">younger sister's</span></p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">This umbrella is mine. That one is my younger sister's.</p></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a">この<ruby>傘<rt>かさ</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>のです。あれは（ <strong><ruby>妹<rt>いもうと</rt></ruby>の</strong> ）です。</div></div>
+    <div class="quiz"><p class="quiz-q">（<span class="blank-input" contenteditable="true"></span>）が<ruby>好き<rt>すき</rt></ruby>です。（<span class="blank-input" contenteditable="true"></span>）はちょっと<ruby>苦手<rt>にがて</rt></ruby>です。<span class="word-chip">quiet ones / lively ones</span></p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I like quiet ones. I'm not so good with lively ones.</p></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a">（ <strong><ruby>静か<rt>しずか</rt></ruby>なの</strong> ）が<ruby>好き<rt>すき</rt></ruby>です。（ <strong>にぎやかなの</strong> ）はちょっと<ruby>苦手<rt>にがて</rt></ruby>です。</div></div>
+    <div class="quiz"><p class="quiz-q">（<span class="blank-input" contenteditable="true"></span>）より（<span class="blank-input" contenteditable="true"></span>）が<ruby>好き<rt>すき</rt></ruby>です。<span class="word-chip">long ones / short ones</span></p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I like the short one better than the long one.</p></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a">（ <strong><ruby>長い<rt>ながい</rt></ruby>の</strong> ）より（ <strong><ruby>短い<rt>みじかい</rt></ruby>の</strong> ）が<ruby>好き<rt>すき</rt></ruby>です。</div></div>
+    <div class="quiz"><p class="quiz-q"><ruby>昨日<rt>きのう</rt></ruby>のテストは<ruby>簡単<rt>かんたん</rt></ruby>でした。でも（<span class="blank-input" contenteditable="true"></span>）もありました。<span class="word-chip">difficult ones</span></p><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yesterday's test was easy. But there were also difficult ones.</p></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a"><ruby>昨日<rt>きのう</rt></ruby>のテストは<ruby>簡単<rt>かんたん</rt></ruby>でした。でも（ <strong><ruby>難しい<rt>むずかしい</rt></ruby>の</strong> ）もありました。</div></div>    
+
+    <h3 class="subhead"><ruby>英語<rt>えいご</rt></ruby>から<ruby>日本<rt>にほん</rt></ruby><ruby>語<rt>ご</rt></ruby>へ ／ English → Japanese</h3>
+
+    <div class="quiz"><p class="quiz-q-en">Which one is your car?</p><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><p class="quiz-a"><strong>どれがあなたの<ruby>車<rt>くるま</rt></ruby>ですか？</strong></p></div>
+    <div class="quiz"><p class="quiz-q-en">Which one is Tanaka-san's bag?</p><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><p class="quiz-a"><strong>どれが<ruby>田中<rt>たなか</rt></ruby>さんの<ruby>鞄<rt>かばん</rt></ruby>ですか？</strong></p></div>
+    <div class="quiz"><p class="quiz-q-en">The one wearing glasses is my teacher.</p><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><p class="quiz-a"><strong>メガネをかけているのは<ruby>先生<rt>せんせい</rt></ruby>です。</strong></p></div>
+    <div class="quiz"><p class="quiz-q-en">A cheaper one is better.</p><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><p class="quiz-a"><strong>もっと<ruby>安い<rt>やすい</rt></ruby>のがいいです。</strong></p></div>
+    <div class="quiz"><p class="quiz-q-en">This pen isn't mine. The blue one is mine.</p><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><p class="quiz-a"><strong>このペンは<ruby>私<rt>わたし</rt></ruby>のじゃないです。<ruby>青い<rt>あおい</rt></ruby>のが<ruby>私<rt>わたし</rt></ruby>のです。</strong></p></div>
+
+    <h3 class="subhead"><ruby>単語<rt>たんご</rt></ruby>から<ruby>文<rt>ぶん</rt></ruby>を<ruby>作ろう<rt>つくろう</rt></ruby> ／ Build sentences from words</h3>
+
+    <div class="quiz"><p class="word-builder"><span class="word-chip"><ruby>大きい<rt>おおきい</rt></ruby></span><span class="word-chip">ノート</span><span class="word-chip"><ruby>小さい<rt>ちいさい</rt></ruby></span><span class="word-chip"><ruby>買う<rt>かう</rt></ruby></span><span class="hint b-past"><ruby>過去<rt>かこ</rt></ruby> / past</span><span class="hint b-aff"><ruby>肯定<rt>こうてい</rt></ruby> / affirmative</span></p><div class="write-box" contenteditable="true" data-placeholder="ここに文を作ってみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a"><strong><ruby>大きい<rt>おおきい</rt></ruby>ノートを<ruby>買い<rt>かい</rt></ruby>ました。<ruby>小さい<rt>ちいさい</rt></ruby>のも<ruby>買い<rt>かい</rt></ruby>ました。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I bought a big notebook. I also bought a small one.</p></div></div></div>
+    <div class="quiz"><p class="word-builder"><span class="word-chip">これ</span><span class="word-chip"><ruby>兄<rt>あに</rt></ruby></span><span class="word-chip"><ruby>自転<rt>じてん</rt></ruby><ruby>車<rt>しゃ</rt></ruby></span><span class="word-chip">それ</span><span class="word-chip"><ruby>姉<rt>あね</rt></ruby></span><span class="hint b-aff"><ruby>肯定<rt>こうてい</rt></ruby> / affirmative</span></p><div class="write-box" contenteditable="true" data-placeholder="ここに文を作ってみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a"><strong>これは<ruby>兄<rt>あに</rt></ruby>の<ruby>自転<rt>じてん</rt></ruby><ruby>車<rt>しゃ</rt></ruby>です。それは<ruby>姉<rt>あね</rt></ruby>のです。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">This is my older brother's bike. That one is my older sister's.</p></div></div></div>
+    <div class="quiz"><p class="word-builder"><span class="word-chip">これ</span><span class="word-chip"><ruby>私<rt>わたし</rt></ruby></span><span class="word-chip"><ruby>鞄<rt>かばん</rt></ruby></span><span class="word-chip">あれ</span><span class="word-chip"><ruby>友達<rt>ともだち</rt></ruby></span><span class="hint b-aff"><ruby>肯定<rt>こうてい</rt></ruby> / affirmative</span></p><div class="write-box" contenteditable="true" data-placeholder="ここに文を作ってみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a"><strong>これは<ruby>私<rt>わたし</rt></ruby>の<ruby>鞄<rt>かばん</rt></ruby>です。あれは<ruby>友達<rt>ともだち</rt></ruby>のです。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">This is my bag. That one is my friend's.</p></div></div></div>
+    <div class="quiz"><p class="word-builder"><span class="word-chip"><ruby>辛い<rt>からい</rt></ruby></span><span class="word-chip"><ruby>甘い<rt>あまい</rt></ruby></span><span class="word-chip"><ruby>好き<rt>すき</rt></ruby></span><span class="hint b-aff"><ruby>肯定<rt>こうてい</rt></ruby> / affirmative</span></p><div class="write-box" contenteditable="true" data-placeholder="ここに文を作ってみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a"><strong><ruby>辛い<rt>からい</rt></ruby>のより<ruby>甘い<rt>あまい</rt></ruby>のが<ruby>好き<rt>すき</rt></ruby>です。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I like sweet ones better than spicy ones.</p></div></div></div>
+
+  
+    <div class="quiz"><p class="word-builder"><span class="word-chip">この<ruby>靴<rt>くつ</rt></ruby></span><span class="word-chip"><ruby>小さい<rt>ちいさい</rt></ruby></span><span class="word-chip"><ruby>大きい<rt>おおきい</rt></ruby></span><span class="word-chip">ある</span><span class="hint b-q"><ruby>疑問<rt>ぎもん</rt></ruby> / question</span></p><div class="write-box" contenteditable="true" data-placeholder="ここに文を作ってみよう"></div><button class="quiz-toggle" type="button">答えを見る</button><div class="quiz-a"><strong>この<ruby>靴<rt>くつ</rt></ruby>は<ruby>小さい<rt>ちいさい</rt></ruby>です。<ruby>大きい<rt>おおきい</rt></ruby>のはありますか？</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">These shoes are small. Do you have bigger ones?</p></div></div></div>
+  </section>
+    </div><!-- /lesson-col -->
+
+    <aside class="note-col">
+      <div class="note-panel">
+        <div class="note-head">Note <button id="note-annot-btn" type="button">選択に読み・訳をつける</button></div>
+        <div class="notepad" id="notepad" contenteditable="true" data-placeholder="ここに自由に書き込めます。文字を選んで色・マーカー、Enterで改行。"></div>
+      </div>
+    </aside>
+  </div><!-- /layout -->
+</div>
+
+<script>
+(function(){
+  var lesson = document.getElementById('lesson');
+  var notepad = document.getElementById('notepad');
+  if(!lesson || !notepad) return;
+  var LKEY = 'lesson-annot:' + location.pathname;
+  var LVER_KEY = LKEY + ':v';
+  var LVER = '2026-07-07br-en-p2-np';
+  var NKEY = 'lesson-note:' + location.pathname;
+  try { if(localStorage.getItem(LVER_KEY) === LVER){ var sl = localStorage.getItem(LKEY); if(sl !== null){ lesson.innerHTML = sl; } } } catch(e){}
+  try { var sn = localStorage.getItem(NKEY); if(sn !== null){ notepad.innerHTML = sn; } } catch(e){}
+  function saveLesson(){ try { localStorage.setItem(LKEY, lesson.innerHTML); localStorage.setItem(LVER_KEY, LVER); } catch(e){} }
+  function saveNote(){ try { var __d=notepad.cloneNode(true); Array.prototype.forEach.call(__d.querySelectorAll('.note-annot.show'),function(s){s.classList.remove('show');}); localStorage.setItem(NKEY, __d.innerHTML); } catch(e){} }
+    // --- ふりがな（本文に埋め込み済みのルビ <ruby><rt> をボタンで表示/非表示） ---
+  var furiBtn = document.getElementById('toggle-furi');
+  if(furiBtn){
+    furiBtn.addEventListener('click', function(){
+      var on=document.body.classList.toggle('show-furigana');
+      furiBtn.classList.toggle('active', on);
+      furiBtn.textContent = on ? 'ふりがなを隠す' : 'ふりがなを表示';
+    });
+  }
+  var te = document.getElementById('toggle-en');
+  if(te){ te.addEventListener('click', function(e){document.body.classList.toggle('show-en');var on=document.body.classList.contains('show-en');e.currentTarget.classList.toggle('active',on);e.currentTarget.textContent=on?'英訳を隠す':'英訳を表示';}); }
+  lesson.querySelectorAll('.local-en-toggle').forEach(function(btn){btn.addEventListener('click',function(){var c=btn.closest('.en-wrap, .example, .bubble');if(!c)return;c.classList.toggle('show-en');var on=c.classList.contains('show-en');btn.textContent=on?'訳を隠す':'訳を見る';});});
+  lesson.querySelectorAll('.sample-toggle').forEach(function(btn){btn.addEventListener('click',function(){var w=btn.closest('.sample-wrap');if(!w)return;w.classList.toggle('show');var on=w.classList.contains('show');btn.textContent=on?'回答例を隠す':'回答例を見る';});});
+  lesson.querySelectorAll('.quiz-toggle').forEach(function(btn){btn.addEventListener('click',function(){var q=btn.parentElement;q.classList.toggle('show');var on=q.classList.contains('show');btn.innerHTML=on?'答えを隠す':'答えを見る';});});
+  lesson.querySelectorAll('.conj-answer').forEach(function(el){el.addEventListener('click',function(){el.classList.toggle('revealed');});});
+  lesson.querySelectorAll('.script-toggle button').forEach(function(btn){btn.addEventListener('click',function(){var group=btn.closest('.section');var target=btn.dataset.target;group.querySelectorAll('.script-toggle button').forEach(function(b){b.classList.toggle('active', b===btn);});group.querySelectorAll('.script-version').forEach(function(v){v.classList.toggle('active', v.dataset.script===target);});});});
+  function wrapRange(range, prop, value){ var span = document.createElement('span'); span.className = 'annot'; span.style[prop] = value; try { range.surroundContents(span); } catch(e){ var frag = range.extractContents(); span.appendChild(frag); range.insertNode(span); } }
+  function applyFmt(value, isMarker){ var sel = window.getSelection(); if(!sel || sel.rangeCount === 0 || sel.isCollapsed) return; var anchor = sel.anchorNode; if(notepad.contains(anchor)){ try { document.execCommand('styleWithCSS', false, true); } catch(e){} if(isMarker){ if(!document.execCommand('hiliteColor', false, value)) document.execCommand('backColor', false, value); } else { document.execCommand('foreColor', false, value); } saveNote(); return; } if(lesson.contains(anchor) && lesson.contains(sel.focusNode)){ wrapRange(sel.getRangeAt(0), isMarker ? 'backgroundColor' : 'color', value); sel.removeAllRanges(); saveLesson(); } }
+  function clearFmt(){ var sel = window.getSelection(); if(!sel || sel.rangeCount === 0) return; var anchor = sel.anchorNode; if(notepad.contains(anchor)){ document.execCommand('removeFormat'); saveNote(); return; } if(sel.isCollapsed || !lesson.contains(anchor)) return; var range = sel.getRangeAt(0); lesson.querySelectorAll('span.annot').forEach(function(s){ var hit = range.intersectsNode ? range.intersectsNode(s) : true; if(hit){ var p = s.parentNode; while(s.firstChild){ p.insertBefore(s.firstChild, s); } p.removeChild(s); p.normalize(); } }); sel.removeAllRanges(); saveLesson(); }
+  document.querySelectorAll('.pen-color').forEach(function(b){ b.addEventListener('mousedown', function(e){ e.preventDefault(); }); b.addEventListener('click', function(){ applyFmt(b.dataset.color, false); }); });
+  document.querySelectorAll('.pen-marker').forEach(function(b){ b.addEventListener('mousedown', function(e){ e.preventDefault(); }); b.addEventListener('click', function(){ applyFmt(b.dataset.color, true); }); });
+  var clearBtn = document.getElementById('clear-fmt'); if(clearBtn){ clearBtn.addEventListener('mousedown', function(e){ e.preventDefault(); }); clearBtn.addEventListener('click', clearFmt); }
+  notepad.addEventListener('input', saveNote);
+  lesson.addEventListener('input', saveLesson);
+
+  // --- Note: 選択に読み・訳をつける（自動取得＋編集→トグル挿入。要ネット） ---
+  function gtx(text){
+    var url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=en&dt=t&dt=rm&q='+encodeURIComponent(text);
+    return fetch(url).then(function(r){return r.json();}).then(function(j){
+      var en='', rm='';
+      (j[0]||[]).forEach(function(s){ if(s[0]) en+=s[0]; if(s[3]) rm+=s[3]; });
+      return { en:en.trim(), rm:rm.trim() };
+    });
+  }
+  function romajiToHiragana(r){
+    if(!r) return '';
+    r=r.toLowerCase().replace(/ō|ô/g,'ou').replace(/ū|û/g,'uu').replace(/ā|â/g,'aa').replace(/ē|ê/g,'ee').replace(/ī|î/g,'ii').replace(/[\s\-]/g,'');
+    var T={kya:'きゃ',kyu:'きゅ',kyo:'きょ',gya:'ぎゃ',gyu:'ぎゅ',gyo:'ぎょ',sha:'しゃ',shu:'しゅ',sho:'しょ',sya:'しゃ',syu:'しゅ',syo:'しょ',ja:'じゃ',ju:'じゅ',jo:'じょ',jya:'じゃ',jyu:'じゅ',jyo:'じょ',cha:'ちゃ',chu:'ちゅ',cho:'ちょ',nya:'にゃ',nyu:'にゅ',nyo:'にょ',hya:'ひゃ',hyu:'ひゅ',hyo:'ひょ',bya:'びゃ',byu:'びゅ',byo:'びょ',pya:'ぴゃ',pyu:'ぴゅ',pyo:'ぴょ',mya:'みゃ',myu:'みゅ',myo:'みょ',rya:'りゃ',ryu:'りゅ',ryo:'りょ',shi:'し',chi:'ち',tsu:'つ',ka:'か',ki:'き',ku:'く',ke:'け',ko:'こ',ga:'が',gi:'ぎ',gu:'ぐ',ge:'げ',go:'ご',sa:'さ',si:'し',su:'す',se:'せ',so:'そ',za:'ざ',ji:'じ',zi:'じ',zu:'ず',ze:'ぜ',zo:'ぞ',ta:'た',ti:'ち',tu:'つ',te:'て',to:'と',da:'だ',di:'ぢ',du:'づ',de:'で',do:'ど',na:'な',ni:'に',nu:'ぬ',ne:'ね',no:'の',ha:'は',hi:'ひ',fu:'ふ',hu:'ふ',he:'へ',ho:'ほ',ba:'ば',bi:'び',bu:'ぶ',be:'べ',bo:'ぼ',pa:'ぱ',pi:'ぴ',pu:'ぷ',pe:'ぺ',po:'ぽ',ma:'ま',mi:'み',mu:'む',me:'め',mo:'も',ya:'や',yu:'ゆ',yo:'よ',ra:'ら',ri:'り',ru:'る',re:'れ',ro:'ろ',wa:'わ',wo:'を',fa:'ふぁ',fi:'ふぃ',fe:'ふぇ',fo:'ふぉ',a:'あ',i:'い',u:'う',e:'え',o:'お',n:'ん'};
+    var out='',i=0;
+    while(i<r.length){
+      var c=r[i];
+      if(c==='n' && (i+1>=r.length || 'aiueoy'.indexOf(r[i+1])<0)){ out+='ん'; i++; continue; }
+      if(i+1<r.length && c===r[i+1] && 'kgsztdhfbpmyrwcj'.indexOf(c)>=0){ out+='っ'; i++; continue; }
+      var k3=r.substr(i,3), k2=r.substr(i,2), k1=r.substr(i,1);
+      if(T[k3]){ out+=T[k3]; i+=3; continue; }
+      if(T[k2]){ out+=T[k2]; i+=2; continue; }
+      if(T[k1]){ out+=T[k1]; i+=1; continue; }
+      out+=k1; i++;
+    }
+    return out;
+  }
+  function kataToHira(c){ var x=c.charCodeAt(0); return (x>=0x30A1&&x<=0x30F6)?String.fromCharCode(x-0x60):c; }
+  function isKanji(c){ return /[一-鿿々]/.test(c); }
+  function eqKana(o,k){ var oh=kataToHira(o), kk=kataToHira(k); if(oh===kk) return true; if(oh==='は'&&kk==='わ') return true; if(oh==='を'&&kk==='お') return true; if(oh==='へ'&&kk==='え') return true; return false; }
+  // 漢字だけを読みに置換し、元々のかな・カタカナ・記号はそのまま残す
+  function buildReading(orig, reading){
+    if(!reading) return orig;
+    function norm(c){ c=kataToHira(c); if(c==='は')return 'わ'; if(c==='を')return 'お'; if(c==='へ')return 'え'; if(c==='ぢ')return 'じ'; if(c==='づ')return 'ず'; return c; }
+    function isKana(c){ return c>='ぁ'&&c<='ゖ'; }
+    var read2='', normR='';
+    for(var x=0;x<reading.length;x++){ var c0=reading[x], nc=norm(c0); if(isKana(nc)){ read2+=c0; normR+=nc; } }
+    function kanaCount(str){ var n=0; for(var y=0;y<str.length;y++){ if(isKana(norm(str[y]))) n++; } return n; }
+    function kanaTarget(str){ var t=''; for(var y=0;y<str.length;y++){ var n2=norm(str[y]); if(isKana(n2)) t+=n2; } return t; }
+    var res='', i=0, j=0;
+    while(i<orig.length){
+      if(isKanji(orig[i])){
+        var k=i; while(k<orig.length && isKanji(orig[k])) k++;
+        var kanjiCount=k-i;
+        var m=k; while(m<orig.length && !isKanji(orig[m])) m++;
+        var kanaRun=orig.substring(k,m);
+        var target=kanaTarget(kanaRun);
+        if(target===''){ var end=(m>=orig.length)?read2.length:(j+kanjiCount); res+=read2.substring(j,end); j=end; res+=kanaRun; i=m; continue; }
+        var idx=normR.indexOf(target, j+kanjiCount); if(idx<0) idx=normR.indexOf(target,j); if(idx<0) idx=j;
+        res+=read2.substring(j, idx); j=idx;
+        res+=kanaRun; j+=kanaCount(kanaRun); i=m;
+      } else {
+        var m2=i; while(m2<orig.length && !isKanji(orig[m2])) m2++;
+        var kr=orig.substring(i,m2);
+        res+=kr; j+=kanaCount(kr); i=m2;
+      }
+    }
+    return res;
+  }
+  // 選択を「折りたたみトグル」として直接挿入（パネルなし）。読み・英訳は展開後にその場で編集可。
+  function insertAnnot(text, range){
+    var span=document.createElement('span'); span.className='note-annot';
+    span.appendChild(document.createTextNode(text));
+    var info=document.createElement('span'); info.className='na-info';
+    var y=document.createElement('span'); y.className='na-yomi'; y.setAttribute('contenteditable','true'); y.textContent=text; // まず原文（かな保持）。取得後に漢字部分だけ読みへ
+    var en=document.createElement('span'); en.className='na-en'; en.setAttribute('contenteditable','true'); en.textContent='翻訳中…';
+    info.appendChild(y); info.appendChild(en);
+    span.appendChild(info); // 折りたたみ状態（既定で読み・英訳は非表示）
+    try{ range.deleteContents(); range.insertNode(span); }catch(e){}
+    saveNote();
+    gtx(text).then(function(res){
+      if(res.rm && y.textContent===text){ var kana=buildReading(text, romajiToHiragana(res.rm)); if(kana) y.textContent=kana; }
+      if(en.textContent==='翻訳中…'||en.textContent===''){ en.textContent=res.en||''; }
+      saveNote();
+    }).catch(function(){ if(en.textContent==='翻訳中…') en.textContent=''; });
+  }
+  var naBtn=document.getElementById('note-annot-btn');
+  var naPendingRange=null;
+  function rangeInNote(rg){ return rg && !rg.collapsed && notepad.contains(rg.startContainer) && notepad.contains(rg.endContainer); }
+  function captureSel(){
+    var sel=window.getSelection();
+    if(sel && sel.rangeCount>0){ var rg=sel.getRangeAt(0); if(rangeInNote(rg)) naPendingRange=rg.cloneRange(); }
+  }
+  // 選択を取りこぼさないよう複数のタイミングで記憶
+  document.addEventListener('selectionchange', captureSel);
+  notepad.addEventListener('mouseup', captureSel);
+  notepad.addEventListener('keyup', captureSel);
+  notepad.addEventListener('blur', captureSel);
+  if(naBtn){
+    naBtn.addEventListener('mousedown', function(e){ captureSel(); e.preventDefault(); }); // 直前の選択を確保＋フォーカス維持
+    naBtn.addEventListener('pointerdown', function(){ captureSel(); });
+    naBtn.addEventListener('click', function(){
+      var range=null;
+      var sel=window.getSelection();
+      if(sel && sel.rangeCount>0 && rangeInNote(sel.getRangeAt(0))) range=sel.getRangeAt(0).cloneRange();
+      else if(rangeInNote(naPendingRange)) range=naPendingRange.cloneRange();
+      if(!range){ alert('Note欄で日本語をドラッグして反転（選択）してから、このボタンを押してください。'); return; }
+      var text=range.toString();
+      if(!text.trim()){ alert('Note欄で日本語を選んでから押してください。'); return; }
+      insertAnnot(text, range);
+    });
+  }
+  // 日本語の語をクリックで展開／折りたたみ（読み・英訳の中をクリックした時は編集できるよう折りたたまない）
+  notepad.addEventListener('click', function(e){
+    var t=e.target, el=(t && t.nodeType===3) ? t.parentElement : t;
+    if(el && el.closest && el.closest('.na-info')) return; // 読み・英訳の編集中は維持
+    var a=(el && el.closest) ? el.closest('.note-annot') : null;
+    if(a && notepad.contains(a)){ a.classList.toggle('show'); }
+  });
+})();
+</script>
+</body>
+</html>

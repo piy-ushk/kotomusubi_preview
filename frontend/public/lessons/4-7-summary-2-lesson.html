@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【4-7】まとめ② ／ Chapter 4 Summary Practice 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #FAF6EE; --card: #FFFFFF; --accent: #C9A876; --accent-dark: #8B6F47; --accent-soft: #EFE4D0; --line: #D9C9AC; --text: #2E2418; --text-muted: #7A6A55; --highlight: #FFF4E0; --ok: #6B9B7F; --orange: #D98E3A; --orange-soft: #FFF1DC; --ken-bg: #E8F0F7; --ken-color: #3D7BAF; --ana-bg: #FBE7EE; --ana-color: #C44A75; --mo-bg: #D7E8D9; --mo-color: #3F7345; --fs-eyebrow: 0.85rem; --fs-title: 2.4rem; --fs-subtitle: 1.05rem; --fs-section: 1.25rem; --fs-example: 1.5rem; --fs-body: 1rem; --fs-en: 0.95rem; --fs-small: 0.85rem; --radius-lg: 20px; --radius: 12px; --pad-section: 1.75rem; --gap: 1.25rem; --max-width: 860px; --font-jp: 'Zen Maru Gothic', 'Noto Sans JP', sans-serif; --font-body: 'Noto Sans JP', sans-serif; --shadow: 0 4px 24px rgba(139, 111, 71, 0.08); }
+* { box-sizing: border-box; }
+html, body { word-break: auto-phrase; margin: 0; padding: 0; }
+body { padding: 2rem 1rem; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: var(--fs-body); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+.page { max-width: var(--max-width); margin: 0 auto; }
+.toolbar { position: sticky; top: 0.6rem; z-index: 10; display: flex; gap: 0.5rem; justify-content: flex-end; margin-bottom: 1rem; flex-wrap: wrap; }
+.toolbar button { background: var(--card); border: 1px solid var(--line); color: var(--accent-dark); padding: 0.45rem 1rem; border-radius: 999px; font-size: var(--fs-small); font-family: inherit; font-weight: 500; cursor: pointer; box-shadow: var(--shadow); transition: all .15s ease; }
+.toolbar button:hover { background: var(--accent-soft); }
+.hero { position: relative; background: var(--card); border-radius: var(--radius-lg); padding: 2.5rem var(--pad-section); box-shadow: var(--shadow); margin-bottom: var(--gap); overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -40px; right: -40px; width: 180px; height: 180px; background: var(--accent-soft); border-radius: 50%; opacity: 0.6; }
+.hero::after { content: ''; position: absolute; bottom: -50px; left: -30px; width: 130px; height: 130px; background: var(--accent-soft); border-radius: 50%; opacity: 0.4; }
+.hero-inner { position: relative; z-index: 1; }
+.eyebrow { display: inline-block; font-size: var(--fs-eyebrow); letter-spacing: 0.15em; color: var(--accent-dark); background: var(--accent-soft); padding: 0.3rem 0.9rem; border-radius: 999px; font-weight: 700; margin-bottom: 1rem; }
+.title { font-family: var(--font-jp); font-size: var(--fs-title); font-weight: 900; color: var(--accent-dark); margin: 0 0 0.5rem; line-height: 1.25; }
+.subtitle { font-size: var(--fs-subtitle); color: var(--text-muted); margin: 0; font-weight: 500; }
+.section { background: var(--card); border-radius: var(--radius-lg); padding: var(--pad-section); box-shadow: var(--shadow); margin-bottom: var(--gap); }
+.section-title { display: flex; align-items: center; gap: 0.7rem; font-family: var(--font-jp); font-size: var(--fs-section); font-weight: 700; color: var(--accent-dark); margin: 0 0 1.2rem; padding-bottom: 0.7rem; border-bottom: 2px dashed var(--line); }
+.section-title .icon { font-size: 1.5rem; }
+.subhead { font-family: var(--font-jp); color: var(--accent-dark); margin: 1.5rem 0 0.8rem; font-size: 1.05rem; font-weight: 700; }
+.subhead:first-child { margin-top: 0; }
+.meaning { line-height: 1.9; margin: 0; }
+.meaning p { margin: 0 0 0.5rem; }
+.example-pair { background: #FBF7EE; padding: 1rem 1.2rem; border-radius: var(--radius); border-left: 4px solid var(--accent); margin: 0.6rem 0; }
+.example-pair .ex-line { font-family: var(--font-jp); font-weight: 500; font-size: 1.05rem; margin: 0.3rem 0; line-height: 1.7; }
+.example-pair .ex-line strong { color: var(--mo-color); }
+.example-pair .ex-label { font-family: var(--font-body); font-weight: 700; color: var(--accent-dark); margin-right: 0.4rem; font-size: 0.9rem; }
+.scenario-card { background: #FBF7EE; padding: 1rem 1.2rem; border-radius: var(--radius); border-left: 4px solid var(--accent); margin: 0.6rem 0; }
+.scenario-card .sc-head { font-family: var(--font-body); font-size: 0.95rem; font-weight: 700; color: var(--accent-dark); margin: 0 0 0.4rem; }
+.scenario-card .sc-q { font-family: var(--font-jp); font-weight: 500; line-height: 1.9; margin: 0 0 0.5rem; }
+.quiz { background: #FBF7EE; padding: 1.1rem 1.2rem; border-radius: var(--radius); margin-bottom: 0.8rem; }
+.quiz-q { font-family: var(--font-jp); font-weight: 500; margin: 0 0 0.4rem; line-height: 1.9; }
+.quiz-a { display: none; margin: 0.6rem 0 0; padding: 0.7rem 0.9rem; background: var(--accent-soft); border-radius: 8px; border-left: 3px solid var(--accent-dark); color: var(--text); font-weight: 500; line-height: 1.9; font-family: var(--font-jp); }
+.quiz-a strong { color: var(--mo-color); }
+.quiz.show .quiz-a { display: block; }
+.quiz-toggle { background: transparent; border: 1px solid var(--accent); color: var(--accent-dark); padding: 0.3rem 0.9rem; border-radius: 999px; font-size: var(--fs-small); font-family: inherit; cursor: pointer; }
+.quiz-toggle:hover { background: var(--accent-soft); }
+.note { display: inline-block; margin-top: 0.3rem; color: var(--text-muted); font-size: var(--fs-small); }
+.en-wrap { margin-top: 0.5rem; }
+.en-wrap .en { display: none; font-size: var(--fs-en); color: var(--text-muted); margin: 0.4rem 0 0; line-height: 1.6; }
+.en-wrap.show-en .en, body.show-en .en-wrap .en { display: block; }
+.local-en-toggle { margin-top: 0.6rem; background: transparent; border: 1px solid var(--line); color: var(--accent-dark); padding: 0.2rem 0.75rem; border-radius: 999px; font-size: 0.78rem; font-family: inherit; cursor: pointer; font-weight: 600; }
+.local-en-toggle:hover { background: var(--accent-soft); border-color: var(--accent); }
+.intro-box { background: #DFEEDD; border: 1px solid #B6CFB4; border-radius: var(--radius); padding: 1rem 1.2rem; margin: 0.8rem 0; }
+.intro-box h4 { margin: 0 0 0.5rem; font-family: var(--font-body); font-size: 0.95rem; color: var(--mo-color); font-weight: 700; }
+.intro-box p { margin: 0.2rem 0; font-family: var(--font-jp); font-size: 0.95rem; line-height: 1.8; }
+.intro-box .arrow { color: var(--mo-color); font-weight: 700; }
+@media (max-width: 640px) { :root { --fs-title: 1.8rem; --fs-section: 1.1rem; --pad-section: 1.25rem; } body { padding: 1rem 0.6rem; } .hero { padding: 2rem 1.25rem; } }
+@media print { body { background: #fff; padding: 0; } .toolbar, .quiz-toggle, .local-en-toggle { display: none; } .section, .hero { box-shadow: none; border: 1px solid var(--line); break-inside: avoid; page-break-inside: avoid; } .quiz-a { display: block !important; } .en-wrap .en { display: block !important; } .hero::before, .hero::after { display: none; } }
+/* === Note欄＋注釈＋記入欄（全章共通・横展開 2026-06-28） === */
+.toolbar { justify-content: space-between; align-items: center; gap: 0.6rem 0.8rem; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 0.5rem 0.8rem; margin-bottom: 0.6rem; }
+.toolbar button { box-shadow: none; }
+.pen-tools { display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; }
+.tb-right { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.grp-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; margin: 0 0.1rem 0 0.2rem; }
+.toolbar .swatch { width: 22px; height: 22px; padding: 0; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--line); cursor: pointer; }
+.toolbar .swatch:hover { transform: scale(1.12); }
+.toolbar .swatch.marker { border-radius: 6px; }
+.toolbar .sep { width: 1px; height: 22px; background: var(--line); margin: 0 0.15rem; }
+.toolbar button.act { padding: 0.3rem 0.7rem; font-size: 0.74rem; font-weight: 600; }
+.write-help { font-size: 0.8rem; color: var(--text-muted); line-height: 1.7; margin: 0 0 var(--gap); padding: 0 0.3rem; }
+.write-help strong { color: var(--accent-dark); }
+.layout { display: grid; grid-template-columns: minmax(0,1fr) 330px; gap: 1.25rem; align-items: start; }
+.lesson-col { min-width: 0; }
+.note-col { position: sticky; top: 5.2rem; }
+.note-panel { background: var(--card); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 1rem 1.1rem; display: flex; flex-direction: column; }
+.note-head { font-family: var(--font-jp); font-weight: 700; color: var(--accent-dark); font-size: 1.05rem; margin: 0 0 0.6rem; padding-bottom: 0.55rem; border-bottom: 2px dashed var(--line); }
+.notepad { flex: 1; min-height: 55vh; max-height: calc(100vh - 9rem); overflow-y: auto; border: 1.5px dashed var(--line); border-radius: 10px; background: #FFFDF8; padding: 0.8rem 0.9rem; font-family: var(--font-jp); line-height: 1.95; font-size: 1rem; outline: none; }
+.notepad:focus { border-color: var(--accent); border-style: solid; background: #fff; box-shadow: 0 0 0 3px rgba(201,168,118,0.18); }
+.notepad:empty::before { content: attr(data-placeholder); color: var(--text-muted); opacity: 0.65; }
+.lesson-col .annot { border-radius: 3px; }
+.blank-input { display: inline-block; min-width: 4.5em; border-bottom: 2px solid var(--accent); padding: 0 0.35rem; margin: 0 0.1rem; font-family: var(--font-jp); font-weight: 700; color: var(--accent-dark); text-align: center; line-height: 1.6; outline: none; }
+.blank-input:focus { background: var(--highlight); border-radius: 4px 4px 0 0; }
+.write-box { display: block; margin: 0.5rem 0 0.2rem; min-height: 2.4em; border: 1.5px dashed var(--line); border-radius: 8px; background: #FFFDF8; padding: 0.5rem 0.7rem; font-family: var(--font-jp); line-height: 1.9; font-size: 1rem; color: var(--text); outline: none; }
+.write-box:focus { border-color: var(--accent); border-style: solid; background: #fff; box-shadow: 0 0 0 3px rgba(201,168,118,0.15); }
+.write-box:empty::before { content: attr(data-placeholder); color: var(--text-muted); opacity: 0.6; }
+.page { max-width: 1180px; }
+@media (max-width: 820px) { .layout { grid-template-columns: 1fr; } .note-col { position: static; } .notepad { min-height: 30vh; max-height: none; } }
+@media print { .write-help { display: none; } .layout { display: block; } .note-col { position: static; margin-top: 1.25rem; } .notepad { max-height: none; border: 1px solid var(--line) !important; background: #fff !important; box-shadow: none !important; } .notepad:empty::before { content: ''; } .write-box { border: 1px solid var(--line) !important; background: #fff !important; box-shadow: none !important; } .write-box:empty::before { content: ''; } .blank-input { border-bottom: 1px solid #999; } }
+.note-head { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.note-head #note-annot-btn { font-family: var(--font-body); font-weight: 600; font-size: 0.72rem; color: var(--accent-dark); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 0.22rem 0.7rem; cursor: pointer; }
+.note-head #note-annot-btn:hover { background: var(--accent-soft); border-color: var(--accent); }
+.note-annot { border-bottom: 1.5px dotted var(--accent); cursor: pointer; }
+.note-annot > .na-info { display: none; }
+.note-annot.show > .na-info { display: block; }
+.na-info { margin: 0.2rem 0 0.5rem 0.6rem; padding: 0.35rem 0.6rem; background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 8px; font-family: var(--font-body); }
+.na-info .na-yomi { display: block; font-family: var(--font-jp); color: var(--accent-dark); font-size: 0.9rem; line-height: 1.6; }
+.na-info .na-en { display: block; color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-top: 0.1rem; }
+/* ふりがな（ルビ）：ボタンで全漢字に表示。OFF時は読みを隠す */
+ruby rt { font-size: 0.55em; color: var(--text-muted); font-weight: 400; user-select: none; line-height: 1; }
+body:not(.show-furigana) ruby rt { display: none; }
+@media print { body.show-furigana ruby rt { display: inline !important; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="toolbar">
+    <div class="pen-tools">
+      <span class="grp-label">ペン</span>
+      <button class="swatch pen-color" data-color="#2E2418" style="background:#2E2418" title="黒" type="button"></button>
+      <button class="swatch pen-color" data-color="#D14B4B" style="background:#D14B4B" title="赤" type="button"></button>
+      <button class="swatch pen-color" data-color="#2F6DB5" style="background:#2F6DB5" title="青" type="button"></button>
+      <button class="swatch pen-color" data-color="#3C8A5A" style="background:#3C8A5A" title="緑" type="button"></button>
+      <button class="swatch pen-color" data-color="#D98E3A" style="background:#D98E3A" title="オレンジ" type="button"></button>
+      <span class="sep"></span>
+      <span class="grp-label">マーカー</span>
+      <button class="swatch marker pen-marker" data-color="#FFE89A" style="background:#FFE89A" title="黄マーカー" type="button"></button>
+      <button class="swatch marker pen-marker" data-color="#C8EBD2" style="background:#C8EBD2" title="緑マーカー" type="button"></button>
+      <button class="swatch marker pen-marker" data-color="#FAD0DE" style="background:#FAD0DE" title="ピンクマーカー" type="button"></button>
+      <button class="swatch marker pen-marker" data-color="#CFE4F7" style="background:#CFE4F7" title="青マーカー" type="button"></button>
+      <span class="sep"></span>
+      <button class="act" id="clear-fmt" type="button">書式クリア</button>
+    </div>
+    <div class="tb-right">
+    <button id="toggle-furi" type="button">ふりがなを表示</button>
+    <button id="toggle-en" type="button">英訳を表示</button>
+    <button onclick="window.print()" type="button">印刷／PDF</button>
+  </div>
+  </div>
+  <p class="write-help">左の<strong>教科書</strong>では、文字を<strong>選んでから</strong>上の<strong>ペン色・マーカー</strong>を押すと色がつきます（本文の<strong>文字は変えられません</strong>。色とマーカーだけ）。空欄や記入欄には書き込めます。右の<strong>Note欄</strong>は自由に書き込め、Enterで改行もできます。「書式クリア」で色を消せます。書いた内容と色は<strong>この端末に自動保存</strong>されます。</p>
+
+  <div class="layout">
+    <div class="lesson-col" id="lesson">
+
+  <header class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Chapter 4-7 ・ <ruby>初級<rt>しょきゅう</rt></ruby> Beginner ・ まとめ②</span>
+      <h1 class="title">まとめ② ／ Summary Exercises 2</h1>
+      <p class="subtitle">「も」を<ruby>使っ<rt>つかっ</rt></ruby>た <ruby>書き換え<rt>かきかえ</rt></ruby>／<ruby>場面<rt>ばめん</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby></p>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2 class="section-title"><span class="icon"></span>「も」で <ruby>文<rt>ぶん</rt></ruby>を <ruby>書き換えよう<rt>かきかえよう</rt></ruby></h2>
+    <p class="meaning" style="margin-bottom:0.6rem;"><ruby>文<rt>ぶん</rt></ruby>(a)と <ruby>文<rt>ぶん</rt></ruby>(b)を <ruby>比べ<rt>くらべ</rt></ruby>て、<ruby>文<rt>ぶん</rt></ruby>(b)を <strong>「も」</strong>を <ruby>使っ<rt>つかっ</rt></ruby>て <ruby>書き換え<rt>かきかえ</rt></ruby>ましょう。</p>
+
+    <div class="intro-box">
+      <h4><ruby>例文<rt>れいぶん</rt></ruby></h4>
+      <p><span style="font-weight:700;color:var(--accent-dark);">(a)</span> りんごは 100<ruby>円<rt>えん</rt></ruby>です。</p>
+      <p><span style="font-weight:700;color:var(--accent-dark);">(b)</span> バナナは 100<ruby>円<rt>えん</rt></ruby>です。</p>
+      <p><span class="arrow">→ <ruby>答え<rt>こたえ</rt></ruby>：</span>バナナ<strong>も</strong> 100<ruby>円<rt>えん</rt></ruby>です。</p>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q"><strong>(a)</strong> ゆかさんは カメラを <ruby>買い<rt>かい</rt></ruby>ました。<br><strong>(b)</strong> ゆかさんは パソコンを <ruby>買い<rt>かい</rt></ruby>ました。</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong>(b) ゆかさんは パソコンも <ruby>買い<rt>かい</rt></ruby>ました。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yuka also bought a computer.</p></div></div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q"><strong>(a)</strong> たろうさんは <ruby>金曜日<rt>きんようび</rt></ruby>に テニスを します。<br><strong>(b)</strong> たろうさんは <ruby>土曜日<rt>どようび</rt></ruby>に テニスを します。</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong>(b) たろうさんは <ruby>土曜日<rt>どようび</rt></ruby>にも テニスを します。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Taro also plays tennis on Saturdays.</p></div></div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q"><strong>(a)</strong> <ruby>昨日<rt>きのう</rt></ruby>、<ruby>山田<rt>やまだ</rt></ruby>さんは ケンさんに <ruby>会い<rt>あい</rt></ruby>ました。<br><strong>(b)</strong> <ruby>昨日<rt>きのう</rt></ruby>、<ruby>山田<rt>やまだ</rt></ruby>さんは リナさんに <ruby>会い<rt>あい</rt></ruby>ました。</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong>(b) <ruby>昨日<rt>きのう</rt></ruby>、<ruby>山田<rt>やまだ</rt></ruby>さんは リナさんにも <ruby>会い<rt>あい</rt></ruby>ました。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yesterday, Ms. Yamada also met Rina.</p></div></div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q"><strong>(a)</strong> <ruby>先月<rt>せんげつ</rt></ruby>、<ruby>映画<rt>えいが</rt></ruby><ruby>館<rt>かん</rt></ruby>に <ruby>行き<rt>いき</rt></ruby>ました。<br><strong>(b)</strong> <ruby>先週<rt>せんしゅう</rt></ruby>、<ruby>映画<rt>えいが</rt></ruby><ruby>館<rt>かん</rt></ruby>に <ruby>行き<rt>いき</rt></ruby>ました。</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong>(b) <ruby>先週<rt>せんしゅう</rt></ruby>も <ruby>映画<rt>えいが</rt></ruby><ruby>館<rt>かん</rt></ruby>に <ruby>行き<rt>いき</rt></ruby>ました。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Last week, I also went to the movie theater.</p></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><span class="icon"></span>「も」で <ruby>人<rt>ひと</rt></ruby>や <ruby>場所<rt>ばしょ</rt></ruby>を つけたす</h2>
+    <p class="meaning" style="margin-bottom:0.6rem;">カードのヒントを <ruby>見<rt>み</rt></ruby>て、「も」「にも」「でも」を<ruby>使っ<rt>つかっ</rt></ruby>て <ruby>文<rt>ぶん</rt></ruby>を <ruby>作り<rt>つくり</rt></ruby>ましょう。</p>
+
+    <div class="scenario-card">
+      <p class="sc-head">Hana さん & Takashi さん / office worker</p>
+      <p class="sc-q">はなさんと たかしさんの <ruby>仕事<rt>しごと</rt></ruby>を 「も」で つなげましょう。</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong>はなさんは <ruby>会社<rt>かいしゃ</rt></ruby><ruby>員<rt>いん</rt></ruby>です。たかしさんも <ruby>会社<rt>かいしゃ</rt></ruby><ruby>員<rt>いん</rt></ruby>です。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Hana is an office worker. Takashi is also an office worker.</p></div></div>
+    </div>
+
+    <div class="scenario-card">
+      <p class="sc-head">Hana さん / Kyoto・Tokyo</p>
+      <p class="sc-q">はなさんは どこに <ruby>行き<rt>いき</rt></ruby>ますか？「にも」を <ruby>使っ<rt>つかっ</rt></ruby>て <ruby>文<rt>ぶん</rt></ruby>を <ruby>作り<rt>つくり</rt></ruby>ましょう。</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong>はなさんは <ruby>京都<rt>きょうと</rt></ruby>に <ruby>行き<rt>いき</rt></ruby>ます。<ruby>東京<rt>とうきょう</rt></ruby>にも <ruby>行き<rt>いき</rt></ruby>ます。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Hana is going to Kyoto. She is also going to Tokyo.</p></div></div>
+    </div>
+
+    <div class="scenario-card">
+      <p class="sc-head">Kana さん / うち・<ruby>図書<rt>としょ</rt></ruby><ruby>館<rt>かん</rt></ruby></p>
+      <p class="sc-q">かなさんは どこで <ruby>勉強<rt>べんきょう</rt></ruby>しますか？「でも」を <ruby>使っ<rt>つかっ</rt></ruby>て つけたしましょう。</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong>かなさんは <ruby>家<rt>いえ</rt></ruby>で <ruby>勉強<rt>べんきょう</rt></ruby>します。<ruby>図書<rt>としょ</rt></ruby><ruby>館<rt>かん</rt></ruby>でも <ruby>勉強<rt>べんきょう</rt></ruby>します。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Kana studies at home. She also studies at the library.</p></div></div>
+    </div>
+
+    <div class="scenario-card">
+      <p class="sc-head">Hana さん / theater・department store</p>
+      <p class="sc-q">はなさんは <ruby>昨日<rt>きのう</rt></ruby> どこに <ruby>行き<rt>いき</rt></ruby>ましたか？「にも」で つけたしましょう。</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong>はなさんは デパートに <ruby>行き<rt>いき</rt></ruby>ました。<ruby>映画<rt>えいが</rt></ruby><ruby>館<rt>かん</rt></ruby>にも <ruby>行き<rt>いき</rt></ruby>ました。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Hana went to the department store. She also went to the movie theater.</p></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><span class="icon"></span><ruby>時間<rt>じかん</rt></ruby> ＋ <ruby>動詞<rt>どうし</rt></ruby> ／ Duration + Verb</h2>
+    <p class="meaning" style="margin-bottom:0.6rem;"><ruby>何時間<rt>なんじかん</rt></ruby> 〜しましたか？「〇〇<ruby>時間<rt>じかん</rt></ruby>」を<ruby>使っ<rt>つかっ</rt></ruby>て <ruby>答え<rt>こたえ</rt></ruby>ましょう。</p>
+
+    <div class="scenario-card">
+      <p class="sc-head">Takashi さん / 2 hours of studying</p>
+      <p class="sc-q">たかしさんは <ruby>何時間<rt>なんじかん</rt></ruby>  <ruby>勉強<rt>べんきょう</rt></ruby>しましたか？</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong>たかしさんは 2<ruby>時間<rt>じかん</rt></ruby> <ruby>勉強<rt>べんきょう</rt></ruby>しました。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Takashi studied for 2 hours.</p></div></div>
+    </div>
+
+    <div class="scenario-card">
+      <p class="sc-head">Hana さん / 1.5 hours of waiting</p>
+      <p class="sc-q">はなさんは <ruby>何時間<rt>なんじかん</rt></ruby>  <ruby>待ち<rt>まち</rt></ruby>ましたか？</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong>はなさんは 1<ruby>時間<rt>じかん</rt></ruby><ruby>半<rt>はん</rt></ruby> <ruby>待ち<rt>まち</rt></ruby>ました。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Hana waited for 1 and a half hours.</p></div></div>
+    </div>
+
+    <div class="scenario-card">
+      <p class="sc-head">Takashi さん / 8 hours of work</p>
+      <p class="sc-q">たかしさんは <ruby>昨日<rt>きのう</rt></ruby> <ruby>何時間<rt>なんじかん</rt></ruby>  <ruby>仕事<rt>しごと</rt></ruby>を しましたか？</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong>たかしさんは 8<ruby>時間<rt>じかん</rt></ruby> <ruby>仕事<rt>しごと</rt></ruby>を しました。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Takashi worked for 8 hours.</p></div></div>
+    </div>
+
+    <div class="scenario-card">
+      <p class="sc-head">Takashi さん / 2.5 hours of running</p>
+      <p class="sc-q">たかしさんは <ruby>何時間<rt>なんじかん</rt></ruby>  <ruby>運動<rt>うんどう</rt></ruby>しましたか？（<ruby>走り<rt>はしり</rt></ruby>ましたか？）</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong>たかしさんは 2<ruby>時間<rt>じかん</rt></ruby><ruby>半<rt>はん</rt></ruby> <ruby>運動<rt>うんどう</rt></ruby>しました。／ たかしさんは 2<ruby>時間<rt>じかん</rt></ruby><ruby>半<rt>はん</rt></ruby> <ruby>走り<rt>はしり</rt></ruby>ました。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Takashi exercised / ran for 2 and a half hours.</p></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><span class="icon"></span><ruby>総合<rt>そうごう</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby> ／ Mixed practice</h2>
+    <p class="meaning" style="margin-bottom:0.6rem;">これまで <ruby>学ん<rt>まなん</rt></ruby>だことを <ruby>全部<rt>ぜんぶ</rt></ruby> <ruby>使っ<rt>つかっ</rt></ruby>て <ruby>答え<rt>こたえ</rt></ruby>ましょう。</p>
+
+    <div class="quiz">
+      <p class="quiz-q"><ruby>昨日<rt>きのう</rt></ruby>は どこに <ruby>行き<rt>いき</rt></ruby>ましたか？（「と」「や」「も」「にも」を <ruby>使っ<rt>つかっ</rt></ruby>て）</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong><ruby>例<rt>れい</rt></ruby>）<ruby>昨日<rt>きのう</rt></ruby> <ruby>図書<rt>としょ</rt></ruby><ruby>館<rt>かん</rt></ruby>と <ruby>本屋<rt>ほんや</rt></ruby>に <ruby>行き<rt>いき</rt></ruby>ました。コンビニにも <ruby>行き<rt>いき</rt></ruby>ました。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yesterday, I went to the library and the bookstore. I also went to the convenience store.</p></div></div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q"><ruby>今日<rt>きょう</rt></ruby>は お<ruby>休み<rt>やすみ</rt></ruby>でしたか？（<ruby>過去<rt>かこ</rt></ruby><ruby>形<rt>けい</rt></ruby>で <ruby>答える<rt>こたえる</rt></ruby>）</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong><ruby>例<rt>れい</rt></ruby>）はい、お<ruby>休み<rt>やすみ</rt></ruby>でした。／ いいえ、お<ruby>休み<rt>やすみ</rt></ruby>じゃなかったです。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yes, it was a day off. / No, it wasn't a day off.</p></div></div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">あなたの <ruby>家<rt>いえ</rt></ruby>に <ruby>何<rt>なに</rt></ruby>が ありますか？（「と」「や」を <ruby>使っ<rt>つかっ</rt></ruby>て 2つ<ruby>以上<rt>いじょう</rt></ruby>）</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong><ruby>例<rt>れい</rt></ruby>）うちに <ruby>机<rt>つくえ</rt></ruby>と いすが あります。／ うちに <ruby>本<rt>ほん</rt></ruby>や <ruby>雑誌<rt>ざっし</rt></ruby>が たくさん あります。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">There is a desk and a chair in my house. / There are lots of books, magazines, etc. in my house.</p></div></div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q">あなたの <ruby>町<rt>まち</rt></ruby>には <ruby>何<rt>なに</rt></ruby>が ありますか？（「たくさん」「や」を <ruby>使っ<rt>つかっ</rt></ruby>て）</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong><ruby>例<rt>れい</rt></ruby>）<ruby>私<rt>わたし</rt></ruby>の <ruby>町<rt>まち</rt></ruby>には <ruby>公園<rt>こうえん</rt></ruby>や カフェが たくさん あります。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">In my town, there are lots of parks, cafes, etc.</p></div></div>
+    </div>
+
+    <div class="quiz">
+      <p class="quiz-q"><ruby>昨日<rt>きのう</rt></ruby>の <ruby>夜<rt>よる</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>は <ruby>何<rt>なに</rt></ruby>でしたか？</p>
+      <button class="quiz-toggle" type="button">答えを見る</button>
+      <div class="quiz-a"><strong><ruby>例<rt>れい</rt></ruby>）<ruby>昨日<rt>きのう</rt></ruby>の <ruby>夜<rt>よる</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>は パスタでした。デザートは アイスでした。</strong><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yesterday's dinner was pasta. The dessert was ice cream.</p></div></div>
+    </div>
+  </section>
+    </div><!-- /lesson-col -->
+
+    <aside class="note-col">
+      <div class="note-panel">
+        <div class="note-head">Note <button id="note-annot-btn" type="button">選択に読み・訳をつける</button></div>
+        <div class="notepad" id="notepad" contenteditable="true" data-placeholder="ここに自由に書き込めます。文字を選んで色・マーカー、Enterで改行。"></div>
+      </div>
+    </aside>
+  </div><!-- /layout -->
+</div>
+
+<script>
+(function(){
+  var lesson = document.getElementById('lesson');
+  var notepad = document.getElementById('notepad');
+  if(!lesson || !notepad) return;
+  var LKEY = 'lesson-annot:' + location.pathname;
+  var LVER_KEY = LKEY + ':v';
+  var LVER = '2026-07-06fx-p2-p3';
+  var NKEY = 'lesson-note:' + location.pathname;
+  try { if(localStorage.getItem(LVER_KEY) === LVER){ var sl = localStorage.getItem(LKEY); if(sl !== null){ lesson.innerHTML = sl; } } } catch(e){}
+  try { var sn = localStorage.getItem(NKEY); if(sn !== null){ notepad.innerHTML = sn; } } catch(e){}
+  function saveLesson(){ try { localStorage.setItem(LKEY, lesson.innerHTML); localStorage.setItem(LVER_KEY, LVER); } catch(e){} }
+  function saveNote(){ try { var __d=notepad.cloneNode(true); Array.prototype.forEach.call(__d.querySelectorAll('.note-annot.show'),function(s){s.classList.remove('show');}); localStorage.setItem(NKEY, __d.innerHTML); } catch(e){} }
+    // --- ふりがな（本文に埋め込み済みのルビ <ruby><rt> をボタンで表示/非表示） ---
+  var furiBtn = document.getElementById('toggle-furi');
+  if(furiBtn){
+    furiBtn.addEventListener('click', function(){
+      var on=document.body.classList.toggle('show-furigana');
+      furiBtn.classList.toggle('active', on);
+      furiBtn.textContent = on ? 'ふりがなを隠す' : 'ふりがなを表示';
+    });
+  }
+  var te = document.getElementById('toggle-en');
+  if(te){ te.addEventListener('click', function(e){document.body.classList.toggle('show-en');var on=document.body.classList.contains('show-en');e.currentTarget.classList.toggle('active',on);e.currentTarget.textContent=on?'英訳を隠す':'英訳を表示';}); }
+  lesson.querySelectorAll('.local-en-toggle').forEach(function(btn){btn.addEventListener('click',function(){var c=btn.closest('.en-wrap, .example, .bubble');if(!c)return;c.classList.toggle('show-en');var on=c.classList.contains('show-en');btn.textContent=on?'訳を隠す':'訳を見る';});});
+  lesson.querySelectorAll('.sample-toggle').forEach(function(btn){btn.addEventListener('click',function(){var w=btn.closest('.sample-wrap');if(!w)return;w.classList.toggle('show');var on=w.classList.contains('show');btn.textContent=on?'回答例を隠す':'回答例を見る';});});
+  lesson.querySelectorAll('.quiz-toggle').forEach(function(btn){btn.addEventListener('click',function(){var q=btn.parentElement;q.classList.toggle('show');var on=q.classList.contains('show');btn.innerHTML=on?'答えを隠す':'答えを見る';});});
+  lesson.querySelectorAll('.script-toggle button').forEach(function(btn){btn.addEventListener('click',function(){var group=btn.closest('.section');var target=btn.dataset.target;group.querySelectorAll('.script-toggle button').forEach(function(b){b.classList.toggle('active', b===btn);});group.querySelectorAll('.script-version').forEach(function(v){v.classList.toggle('active', v.dataset.script===target);});});});
+  function wrapRange(range, prop, value){ var span = document.createElement('span'); span.className = 'annot'; span.style[prop] = value; try { range.surroundContents(span); } catch(e){ var frag = range.extractContents(); span.appendChild(frag); range.insertNode(span); } }
+  function applyFmt(value, isMarker){ var sel = window.getSelection(); if(!sel || sel.rangeCount === 0 || sel.isCollapsed) return; var anchor = sel.anchorNode; if(notepad.contains(anchor)){ try { document.execCommand('styleWithCSS', false, true); } catch(e){} if(isMarker){ if(!document.execCommand('hiliteColor', false, value)) document.execCommand('backColor', false, value); } else { document.execCommand('foreColor', false, value); } saveNote(); return; } if(lesson.contains(anchor) && lesson.contains(sel.focusNode)){ wrapRange(sel.getRangeAt(0), isMarker ? 'backgroundColor' : 'color', value); sel.removeAllRanges(); saveLesson(); } }
+  function clearFmt(){ var sel = window.getSelection(); if(!sel || sel.rangeCount === 0) return; var anchor = sel.anchorNode; if(notepad.contains(anchor)){ document.execCommand('removeFormat'); saveNote(); return; } if(sel.isCollapsed || !lesson.contains(anchor)) return; var range = sel.getRangeAt(0); lesson.querySelectorAll('span.annot').forEach(function(s){ var hit = range.intersectsNode ? range.intersectsNode(s) : true; if(hit){ var p = s.parentNode; while(s.firstChild){ p.insertBefore(s.firstChild, s); } p.removeChild(s); p.normalize(); } }); sel.removeAllRanges(); saveLesson(); }
+  document.querySelectorAll('.pen-color').forEach(function(b){ b.addEventListener('mousedown', function(e){ e.preventDefault(); }); b.addEventListener('click', function(){ applyFmt(b.dataset.color, false); }); });
+  document.querySelectorAll('.pen-marker').forEach(function(b){ b.addEventListener('mousedown', function(e){ e.preventDefault(); }); b.addEventListener('click', function(){ applyFmt(b.dataset.color, true); }); });
+  var clearBtn = document.getElementById('clear-fmt'); if(clearBtn){ clearBtn.addEventListener('mousedown', function(e){ e.preventDefault(); }); clearBtn.addEventListener('click', clearFmt); }
+  notepad.addEventListener('input', saveNote);
+  lesson.addEventListener('input', saveLesson);
+
+  // --- Note: 選択に読み・訳をつける（自動取得＋編集→トグル挿入。要ネット） ---
+  function gtx(text){
+    var url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=en&dt=t&dt=rm&q='+encodeURIComponent(text);
+    return fetch(url).then(function(r){return r.json();}).then(function(j){
+      var en='', rm='';
+      (j[0]||[]).forEach(function(s){ if(s[0]) en+=s[0]; if(s[3]) rm+=s[3]; });
+      return { en:en.trim(), rm:rm.trim() };
+    });
+  }
+  function romajiToHiragana(r){
+    if(!r) return '';
+    r=r.toLowerCase().replace(/ō|ô/g,'ou').replace(/ū|û/g,'uu').replace(/ā|â/g,'aa').replace(/ē|ê/g,'ee').replace(/ī|î/g,'ii').replace(/[\s\-]/g,'');
+    var T={kya:'きゃ',kyu:'きゅ',kyo:'きょ',gya:'ぎゃ',gyu:'ぎゅ',gyo:'ぎょ',sha:'しゃ',shu:'しゅ',sho:'しょ',sya:'しゃ',syu:'しゅ',syo:'しょ',ja:'じゃ',ju:'じゅ',jo:'じょ',jya:'じゃ',jyu:'じゅ',jyo:'じょ',cha:'ちゃ',chu:'ちゅ',cho:'ちょ',nya:'にゃ',nyu:'にゅ',nyo:'にょ',hya:'ひゃ',hyu:'ひゅ',hyo:'ひょ',bya:'びゃ',byu:'びゅ',byo:'びょ',pya:'ぴゃ',pyu:'ぴゅ',pyo:'ぴょ',mya:'みゃ',myu:'みゅ',myo:'みょ',rya:'りゃ',ryu:'りゅ',ryo:'りょ',shi:'し',chi:'ち',tsu:'つ',ka:'か',ki:'き',ku:'く',ke:'け',ko:'こ',ga:'が',gi:'ぎ',gu:'ぐ',ge:'げ',go:'ご',sa:'さ',si:'し',su:'す',se:'せ',so:'そ',za:'ざ',ji:'じ',zi:'じ',zu:'ず',ze:'ぜ',zo:'ぞ',ta:'た',ti:'ち',tu:'つ',te:'て',to:'と',da:'だ',di:'ぢ',du:'づ',de:'で',do:'ど',na:'な',ni:'に',nu:'ぬ',ne:'ね',no:'の',ha:'は',hi:'ひ',fu:'ふ',hu:'ふ',he:'へ',ho:'ほ',ba:'ば',bi:'び',bu:'ぶ',be:'べ',bo:'ぼ',pa:'ぱ',pi:'ぴ',pu:'ぷ',pe:'ぺ',po:'ぽ',ma:'ま',mi:'み',mu:'む',me:'め',mo:'も',ya:'や',yu:'ゆ',yo:'よ',ra:'ら',ri:'り',ru:'る',re:'れ',ro:'ろ',wa:'わ',wo:'を',fa:'ふぁ',fi:'ふぃ',fe:'ふぇ',fo:'ふぉ',a:'あ',i:'い',u:'う',e:'え',o:'お',n:'ん'};
+    var out='',i=0;
+    while(i<r.length){
+      var c=r[i];
+      if(c==='n' && (i+1>=r.length || 'aiueoy'.indexOf(r[i+1])<0)){ out+='ん'; i++; continue; }
+      if(i+1<r.length && c===r[i+1] && 'kgsztdhfbpmyrwcj'.indexOf(c)>=0){ out+='っ'; i++; continue; }
+      var k3=r.substr(i,3), k2=r.substr(i,2), k1=r.substr(i,1);
+      if(T[k3]){ out+=T[k3]; i+=3; continue; }
+      if(T[k2]){ out+=T[k2]; i+=2; continue; }
+      if(T[k1]){ out+=T[k1]; i+=1; continue; }
+      out+=k1; i++;
+    }
+    return out;
+  }
+  function kataToHira(c){ var x=c.charCodeAt(0); return (x>=0x30A1&&x<=0x30F6)?String.fromCharCode(x-0x60):c; }
+  function isKanji(c){ return /[一-鿿々]/.test(c); }
+  function eqKana(o,k){ var oh=kataToHira(o), kk=kataToHira(k); if(oh===kk) return true; if(oh==='は'&&kk==='わ') return true; if(oh==='を'&&kk==='お') return true; if(oh==='へ'&&kk==='え') return true; return false; }
+  // 漢字だけを読みに置換し、元々のかな・カタカナ・記号はそのまま残す
+  function buildReading(orig, reading){
+    if(!reading) return orig;
+    function norm(c){ c=kataToHira(c); if(c==='は')return 'わ'; if(c==='を')return 'お'; if(c==='へ')return 'え'; if(c==='ぢ')return 'じ'; if(c==='づ')return 'ず'; return c; }
+    function isKana(c){ return c>='ぁ'&&c<='ゖ'; }
+    var read2='', normR='';
+    for(var x=0;x<reading.length;x++){ var c0=reading[x], nc=norm(c0); if(isKana(nc)){ read2+=c0; normR+=nc; } }
+    function kanaCount(str){ var n=0; for(var y=0;y<str.length;y++){ if(isKana(norm(str[y]))) n++; } return n; }
+    function kanaTarget(str){ var t=''; for(var y=0;y<str.length;y++){ var n2=norm(str[y]); if(isKana(n2)) t+=n2; } return t; }
+    var res='', i=0, j=0;
+    while(i<orig.length){
+      if(isKanji(orig[i])){
+        var k=i; while(k<orig.length && isKanji(orig[k])) k++;
+        var kanjiCount=k-i;
+        var m=k; while(m<orig.length && !isKanji(orig[m])) m++;
+        var kanaRun=orig.substring(k,m);
+        var target=kanaTarget(kanaRun);
+        if(target===''){ var end=(m>=orig.length)?read2.length:(j+kanjiCount); res+=read2.substring(j,end); j=end; res+=kanaRun; i=m; continue; }
+        var idx=normR.indexOf(target, j+kanjiCount); if(idx<0) idx=normR.indexOf(target,j); if(idx<0) idx=j;
+        res+=read2.substring(j, idx); j=idx;
+        res+=kanaRun; j+=kanaCount(kanaRun); i=m;
+      } else {
+        var m2=i; while(m2<orig.length && !isKanji(orig[m2])) m2++;
+        var kr=orig.substring(i,m2);
+        res+=kr; j+=kanaCount(kr); i=m2;
+      }
+    }
+    return res;
+  }
+  // 選択を「折りたたみトグル」として直接挿入（パネルなし）。読み・英訳は展開後にその場で編集可。
+  function insertAnnot(text, range){
+    var span=document.createElement('span'); span.className='note-annot';
+    span.appendChild(document.createTextNode(text));
+    var info=document.createElement('span'); info.className='na-info';
+    var y=document.createElement('span'); y.className='na-yomi'; y.setAttribute('contenteditable','true'); y.textContent=text; // まず原文（かな保持）。取得後に漢字部分だけ読みへ
+    var en=document.createElement('span'); en.className='na-en'; en.setAttribute('contenteditable','true'); en.textContent='翻訳中…';
+    info.appendChild(y); info.appendChild(en);
+    span.appendChild(info); // 折りたたみ状態（既定で読み・英訳は非表示）
+    try{ range.deleteContents(); range.insertNode(span); }catch(e){}
+    saveNote();
+    gtx(text).then(function(res){
+      if(res.rm && y.textContent===text){ var kana=buildReading(text, romajiToHiragana(res.rm)); if(kana) y.textContent=kana; }
+      if(en.textContent==='翻訳中…'||en.textContent===''){ en.textContent=res.en||''; }
+      saveNote();
+    }).catch(function(){ if(en.textContent==='翻訳中…') en.textContent=''; });
+  }
+  var naBtn=document.getElementById('note-annot-btn');
+  var naPendingRange=null;
+  function rangeInNote(rg){ return rg && !rg.collapsed && notepad.contains(rg.startContainer) && notepad.contains(rg.endContainer); }
+  function captureSel(){
+    var sel=window.getSelection();
+    if(sel && sel.rangeCount>0){ var rg=sel.getRangeAt(0); if(rangeInNote(rg)) naPendingRange=rg.cloneRange(); }
+  }
+  // 選択を取りこぼさないよう複数のタイミングで記憶
+  document.addEventListener('selectionchange', captureSel);
+  notepad.addEventListener('mouseup', captureSel);
+  notepad.addEventListener('keyup', captureSel);
+  notepad.addEventListener('blur', captureSel);
+  if(naBtn){
+    naBtn.addEventListener('mousedown', function(e){ captureSel(); e.preventDefault(); }); // 直前の選択を確保＋フォーカス維持
+    naBtn.addEventListener('pointerdown', function(){ captureSel(); });
+    naBtn.addEventListener('click', function(){
+      var range=null;
+      var sel=window.getSelection();
+      if(sel && sel.rangeCount>0 && rangeInNote(sel.getRangeAt(0))) range=sel.getRangeAt(0).cloneRange();
+      else if(rangeInNote(naPendingRange)) range=naPendingRange.cloneRange();
+      if(!range){ alert('Note欄で日本語をドラッグして反転（選択）してから、このボタンを押してください。'); return; }
+      var text=range.toString();
+      if(!text.trim()){ alert('Note欄で日本語を選んでから押してください。'); return; }
+      insertAnnot(text, range);
+    });
+  }
+  // 日本語の語をクリックで展開／折りたたみ（読み・英訳の中をクリックした時は編集できるよう折りたたまない）
+  notepad.addEventListener('click', function(e){
+    var t=e.target, el=(t && t.nodeType===3) ? t.parentElement : t;
+    if(el && el.closest && el.closest('.na-info')) return; // 読み・英訳の編集中は維持
+    var a=(el && el.closest) ? el.closest('.note-annot') : null;
+    if(a && notepad.contains(a)){ a.classList.toggle('show'); }
+  });
+})();
+</script>
+</body>
+</html>

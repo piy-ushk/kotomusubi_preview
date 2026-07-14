@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【7-4】Let's practice te-form｜て形の練習</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{ --font-body: 'Noto Sans JP', sans-serif; --font-jp: 'Zen Maru Gothic', 'Noto Sans JP', sans-serif; --line: #D9C9AC; --text-muted: #7A6A55; --bg:#FAF6EE;--card:#FFFFFF;--accent:#C9A876;--accent-dark:#8B6F47;--accent-soft:#EFE4D0;--ink:#3D3528;--ink-soft:#6B5D4A;--green:#7BA05B;--green-soft:#E8F0DC;--orange:#D4A056;--orange-soft:#F8EDD8;--blue:#6B8CAE;--blue-soft:#DFE8F1;--purple:#9B7BA5;--purple-soft:#EBE0F0;--red:#C26B6B;--red-soft:#F4E0E0;--sh:0 4px 14px rgba(139,111,71,.08);--sh-h:0 8px 24px rgba(139,111,71,.14);--r:14px;--rl:22px;--g:1.3rem;--ps:1.8rem}
+*{box-sizing:border-box;margin:0;padding:0}
+body{ word-break: auto-phrase;font-family:'Zen Maru Gothic','Noto Sans JP',sans-serif;background:var(--bg);color:var(--ink);line-height:1.85;padding:2rem 1rem}
+.container{max-width:980px;margin:0 auto}
+header{text-align:center;padding:2.6rem 1.5rem;background:linear-gradient(135deg,var(--accent-soft),#fff);border-radius:var(--rl);margin-bottom:2rem;box-shadow:var(--sh);border:2px solid var(--accent-soft)}
+.chapter{display:inline-block;background:var(--accent);color:#fff;padding:.4rem 1.2rem;border-radius:99px;font-weight:700;font-size:.9rem;letter-spacing:.08em;margin-bottom:1rem}
+h1{font-size:2.1rem;font-weight:900;color:var(--accent-dark);margin-bottom:.5rem;letter-spacing:.02em}
+.subtitle{color:var(--ink-soft);font-size:1.05rem;font-weight:500}
+.toolbar{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-top:1.3rem}
+.toolbar button{font-family:inherit;font-size:.88rem;padding:.55rem 1.1rem;border:2px solid var(--accent);background:#fff;color:var(--accent-dark);border-radius:99px;font-weight:700;cursor:pointer;transition:all .2s}
+.toolbar button:hover,.toolbar button.active{background:var(--accent);color:#fff}
+section{background:var(--card);border-radius:var(--rl);padding:var(--ps);margin-bottom:1.6rem;box-shadow:var(--sh);border:1px solid var(--accent-soft)}
+h2{font-size:1.45rem;font-weight:900;color:var(--accent-dark);padding-bottom:.6rem;border-bottom:3px solid var(--accent-soft);margin-bottom:1.3rem;display:flex;align-items:center;gap:.6rem}
+.sec-num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;background:var(--accent);color:#fff;border-radius:50%;font-size:.95rem;font-weight:900}
+h3{font-size:1.1rem;color:var(--accent-dark);margin:1.2rem 0 .7rem;font-weight:700}
+p{margin-bottom:.7rem}
+.meaning-box{background:var(--accent-soft);padding:1.2rem 1.4rem;border-radius:var(--r);border-left:4px solid var(--accent);margin-bottom:1rem}
+.meaning-box .jp{font-size:1.2rem;font-weight:700;color:var(--accent-dark);margin-bottom:.3rem}
+.meaning-box .en{color:var(--ink-soft);font-size:.98rem}
+.pattern-table{width:100%;border-collapse:collapse;margin:1rem 0;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.pattern-table th{background:var(--accent);color:#fff;padding:.85rem;font-weight:700;text-align:center}
+.pattern-table td{padding:.85rem 1rem;border-bottom:1px solid var(--accent-soft);text-align:center}
+.pattern-table tr:last-child td{border-bottom:none}
+.pattern-table td:first-child{font-weight:700;color:var(--accent-dark);background:#FBF7EF;text-align:left}
+.chip{display:inline-block;padding:.18rem .6rem;border-radius:99px;font-size:.75rem;font-weight:700;margin-right:.4rem}
+.chip-pos{background:var(--green-soft);color:#4F6B3B}
+.chip-neg{background:var(--blue-soft);color:#3F5B7A}
+.chip-past{background:var(--red-soft);color:#8E3E3E}
+.chip-pastn{background:var(--purple-soft);color:#5F3F6B}
+.chip-g1{background:var(--green-soft);color:#4F6B3B}
+.chip-g2{background:var(--orange-soft);color:#8E5F2B}
+.chip-irr{background:var(--purple-soft);color:#5F3F6B}
+.ex-list{display:grid;gap:.75rem;margin-top:.8rem}
+.ex-item{background:#FBF7EF;padding:.95rem 1.15rem;border-left:4px solid var(--accent);border-radius:var(--r)}
+.ex-item .jp{font-size:1.08rem;font-weight:500;color:var(--ink);margin-bottom:.25rem}
+.ex-item .en{color:var(--ink-soft);font-size:.92rem}
+.points{display:grid;gap:.8rem;margin-top:.6rem}
+.point{background:linear-gradient(135deg,#FBF7EF,#fff);padding:1rem 1.2rem;border-radius:var(--r);border-left:4px solid var(--accent);display:flex;gap:.8rem;align-items:flex-start}
+.point .star{color:var(--accent-dark);font-weight:900;font-size:1.1rem;flex-shrink:0}
+.conj-section{margin-bottom:1.6rem}
+.conj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-top:.7rem}
+.conj-card{background:#FBF7EF;border:2px solid var(--accent-soft);border-radius:var(--r);padding:.85rem;cursor:pointer;transition:all .2s}
+.conj-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--sh-h)}
+.conj-card .verb{font-weight:700;color:var(--accent-dark);font-size:1.05rem;border-bottom:1px dashed var(--accent-soft);padding-bottom:.35rem;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center}
+.conj-card .en-meaning{color:var(--ink-soft);font-size:.82rem;margin-bottom:.5rem;font-weight:400}
+.conj-row{display:flex;justify-content:space-between;align-items:center;padding:.22rem 0;font-size:.88rem;gap:.4rem}
+.conj-row .lbl{color:var(--ink-soft);font-size:.72rem;font-weight:700;flex-shrink:0}
+.conj-row .val{background:var(--accent-soft);color:var(--accent-dark);padding:.1rem .55rem;border-radius:6px;cursor:pointer;font-weight:700;min-width:32px;text-align:center;font-size:.85rem}
+.conj-row .val.revealed{background:#fff;border:1px solid var(--accent);color:var(--ink)}
+.dialogue{display:flex;flex-direction:column;gap:.7rem}
+.bubble{padding:.9rem 1.15rem;border-radius:var(--r);max-width:88%;position:relative}
+.bubble.ken{background:var(--blue-soft);align-self:flex-start;border-left:4px solid var(--blue)}
+.bubble.ana{background:var(--red-soft);align-self:flex-end;border-right:4px solid var(--red)}
+.bubble .speaker{font-size:.78rem;font-weight:700;color:var(--ink-soft);margin-bottom:.2rem}
+.bubble .jp{font-weight:500;font-size:1.02rem;margin-bottom:.2rem}
+.bubble .romaji{font-size:.82rem;color:var(--ink-soft);font-style:normal;margin-bottom:.2rem;display:none}
+.bubble .en{font-size:.86rem;color:var(--ink-soft);display:none}
+.show-romaji .romaji,.show-en .en{display:block!important}
+.en-wrap{margin-top:.5rem}
+.en-wrap .en{display:none;font-size:.9rem;color:var(--ink-soft);margin:.35rem 0 0;line-height:1.6}
+.en-wrap.show-en .en,body.show-en .en-wrap .en{display:block}
+.local-en-toggle{background:transparent;border:1px solid var(--accent-soft);color:var(--accent-dark);padding:.2rem .8rem;border-radius:99px;font-size:.78rem;font-family:inherit;cursor:pointer;font-weight:700;margin-top:.2rem}
+.local-en-toggle:hover{background:var(--accent-soft);border-color:var(--accent)}
+.quiz-q{background:#FBF7EF;padding:1.1rem 1.3rem;border-radius:var(--r);margin-bottom:.85rem;border-left:4px solid var(--accent)}
+.quiz-q .prompt{font-weight:600;margin-bottom:.6rem;color:var(--ink);font-size:1rem}
+.quiz-q .prompt .en-q{display:block;color:var(--ink-soft);font-size:.88rem;margin-top:.2rem;font-weight:400}
+.reveal-btn{background:var(--accent);color:#fff;border:none;padding:.4rem 1rem;border-radius:99px;cursor:pointer;font-weight:700;font-family:inherit;font-size:.85rem;transition:all .2s}
+.reveal-btn:hover{background:var(--accent-dark)}
+.answer{display:none;margin-top:.65rem;padding:.75rem 1rem;background:var(--green-soft);border-radius:8px;border-left:3px solid var(--green);font-weight:600;color:#3D5530}
+.answer.show{display:block}
+.answer .romaji-a{font-size:.85rem;color:var(--ink-soft);font-weight:400;margin-top:.2rem}
+.family-table{width:100%;border-collapse:collapse;margin:1rem 0;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);font-size:.92rem}
+.family-table th{background:var(--accent);color:#fff;padding:.7rem;font-weight:700}
+.family-table td{padding:.65rem;border-bottom:1px solid var(--accent-soft);text-align:center}
+.family-table td:first-child{font-weight:700;color:var(--accent-dark);background:#FBF7EF;text-align:left}
+.note{background:var(--orange-soft);padding:.9rem 1.15rem;border-radius:var(--r);border-left:4px solid var(--orange);margin:.8rem 0;font-size:.95rem}
+@media print{.toolbar{display:none}.bubble .romaji,.en-wrap .en{display:block!important}.answer{display:block!important}.conj-row .val{background:#fff!important;border:1px solid var(--accent)!important;color:var(--ink)!important}}
+@media (max-width:680px){h1{font-size:1.65rem}section{padding:1.4rem}.conj-grid{grid-template-columns:1fr 1fr}}
+
+.conj-grid .group-label { background: none; padding: 0; margin-left: 0.2rem; border-radius: 0; color: var(--text-muted); }
+/* === Note欄＋注釈＋記入欄（7-4 個別対応 2026-06-28） === */
+.toolbar .swatch{width:22px;height:22px;padding:0;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--accent-soft);cursor:pointer}
+.toolbar .swatch.marker{border-radius:6px}
+.toolbar .sep{width:1px;height:22px;background:var(--accent-soft);margin:0 .2rem;display:inline-block;vertical-align:middle}
+.toolbar .grp-label{font-size:.72rem;color:var(--ink-soft);font-weight:700;margin:0 .15rem}
+.toolbar button.act{padding:.4rem .9rem}
+.write-help{max-width:1180px;margin:0 auto 1rem;font-size:.82rem;color:var(--ink-soft);line-height:1.7;padding:0 .3rem}
+.write-help strong{color:var(--accent-dark)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:1.3rem;align-items:start}
+.lesson-col{min-width:0}
+.note-col{position:sticky;top:1rem}
+.note-panel{background:var(--card);border-radius:var(--rl);box-shadow:var(--sh);padding:1rem 1.1rem;border:1px solid var(--accent-soft)}
+.note-head{font-weight:700;color:var(--accent-dark);font-size:1.05rem;margin-bottom:.6rem;padding-bottom:.55rem;border-bottom:2px dashed var(--accent-soft)}
+.notepad{min-height:55vh;max-height:calc(100vh - 6rem);overflow-y:auto;border:1.5px dashed var(--accent-soft);border-radius:10px;background:#FFFDF8;padding:.8rem .9rem;line-height:1.95;outline:none}
+.notepad:focus{border-color:var(--accent);border-style:solid;background:#fff}
+.notepad:empty::before{content:attr(data-placeholder);color:var(--ink-soft);opacity:.65}
+.lesson-col .annot{border-radius:3px}
+.write-box{display:block;margin:.5rem 0 .2rem;min-height:2.4em;border:1.5px dashed var(--accent-soft);border-radius:8px;background:#FFFDF8;padding:.5rem .7rem;line-height:1.9;outline:none}
+.write-box:focus{border-color:var(--accent);border-style:solid;background:#fff}
+.write-box:empty::before{content:attr(data-placeholder);color:var(--ink-soft);opacity:.6}
+.container{max-width:1180px}
+@media (max-width:820px){.layout{grid-template-columns:1fr}.note-col{position:static}.notepad{min-height:30vh;max-height:none}}
+@media print{.write-help{display:none}.layout{display:block}.note-col{position:static;margin-top:1rem}.notepad{max-height:none;border:1px solid var(--accent-soft)!important;background:#fff!important}.notepad:empty::before{content:''}.write-box{border:1px solid var(--accent-soft)!important;background:#fff!important}.write-box:empty::before{content:''}}
+.note-head { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.note-head #note-annot-btn { font-family: var(--font-body); font-weight: 600; font-size: 0.72rem; color: var(--accent-dark); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 0.22rem 0.7rem; cursor: pointer; }
+.note-head #note-annot-btn:hover { background: var(--accent-soft); border-color: var(--accent); }
+.note-annot { border-bottom: 1.5px dotted var(--accent); cursor: pointer; }
+.note-annot > .na-info { display: none; }
+.note-annot.show > .na-info { display: block; }
+.na-info { margin: 0.2rem 0 0.5rem 0.6rem; padding: 0.35rem 0.6rem; background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 8px; font-family: var(--font-body); }
+.na-info .na-yomi { display: block; font-family: var(--font-jp); color: var(--accent-dark); font-size: 0.9rem; line-height: 1.6; }
+.na-info .na-en { display: block; color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-top: 0.1rem; }
+/* ふりがな（ルビ）：ボタンで全漢字に表示。OFF時は読みを隠す */
+ruby rt { font-size: 0.55em; color: var(--text-muted); font-weight: 400; user-select: none; line-height: 1; }
+body:not(.show-furigana) ruby rt { display: none; }
+@media print { body.show-furigana ruby rt { display: inline !important; } }
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<span class="chapter">Chapter 7-4</span>
+<h1>Let's practice te-form</h1>
+<p class="subtitle">て形の練習｜現在進行形・過去進行形をマスターしよう</p>
+<div class="toolbar">
+<span class="grp-label">ペン</span><button class="swatch pen-color" data-color="#3D3528" style="background:#3D3528" title="黒" type="button"></button><button class="swatch pen-color" data-color="#D14B4B" style="background:#D14B4B" title="赤" type="button"></button><button class="swatch pen-color" data-color="#2F6DB5" style="background:#2F6DB5" title="青" type="button"></button><button class="swatch pen-color" data-color="#3C8A5A" style="background:#3C8A5A" title="緑" type="button"></button><button class="swatch pen-color" data-color="#D98E3A" style="background:#D98E3A" title="オレンジ" type="button"></button><span class="sep"></span><span class="grp-label">マーカー</span><button class="swatch marker pen-marker" data-color="#FFE89A" style="background:#FFE89A" title="黄" type="button"></button><button class="swatch marker pen-marker" data-color="#C8EBD2" style="background:#C8EBD2" title="緑" type="button"></button><button class="swatch marker pen-marker" data-color="#FAD0DE" style="background:#FAD0DE" title="桃" type="button"></button><button class="swatch marker pen-marker" data-color="#CFE4F7" style="background:#CFE4F7" title="青" type="button"></button><span class="sep"></span><button class="act" id="clear-fmt" type="button">書式クリア</button>
+<button id="toggleRomaji">ローマ字 ON/OFF</button>
+<button id="toggle-furi" type="button">ふりがなを表示</button>
+    <button id="toggleEn">英訳を表示</button>
+<button onclick="window.print()">印刷 / PDF</button>
+</div>
+</header>
+<p class="write-help">本文は<strong>選んでペン・マーカーで色だけ</strong>つけられます（文字は変えられません）。練習の英文の下の<strong>記入欄</strong>と右の<strong>Note欄</strong>には自由に書き込め、内容は<strong>この端末に自動保存</strong>されます。</p>
+<div class="layout">
+<div class="lesson-col" id="lesson">
+
+<section>
+<h2><span class="sec-num">1</span><ruby>意味<rt>いみ</rt></ruby>｜Meaning</h2>
+<div class="meaning-box">
+<div class="jp"><ruby>て形<rt>てけい</rt></ruby> + います / いません / いました / いませんでした</div>
+<div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Continuous / progressive: am/is/are doing, was/were doing, and their negatives.</p></div>
+</div>
+<p>これまでに<ruby>学ん<rt>まなん</rt></ruby>だ「<ruby>て形<rt>てけい</rt></ruby>」を<ruby>使っ<rt>つかっ</rt></ruby>て、<strong><ruby>現在<rt>げんざい</rt></ruby><ruby>進行<rt>しんこう</rt></ruby><ruby>形<rt>けい</rt></ruby></strong>と<strong><ruby>過去<rt>かこ</rt></ruby><ruby>進行<rt>しんこう</rt></ruby><ruby>形<rt>けい</rt></ruby></strong>を<ruby>作り<rt>つくり</rt></ruby>ましょう。<br>
+<ruby>動作<rt>どうさ</rt></ruby>が<ruby>今<rt>いま</rt></ruby><ruby>進行<rt>しんこう</rt></ruby><ruby>中<rt>ちゅう</rt></ruby>であること、あるいは<ruby>過去<rt>かこ</rt></ruby>に<ruby>進行<rt>しんこう</rt></ruby><ruby>中<rt>ちゅう</rt></ruby>だったことを<ruby>表し<rt>あらわし</rt></ruby>ます。</p>
+<div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Using the te-form you've learned, let's make the present progressive and the past progressive.<br>
+They express that an action is in progress now, or was in progress at some point in the past.</p></div>
+</section>
+
+<section>
+<h2><span class="sec-num">2</span><ruby>文型<rt>ぶんけい</rt></ruby>｜Pattern</h2>
+<table class="pattern-table">
+<thead><tr><th><ruby>形<rt>かたち</rt></ruby></th><th><ruby>日本<rt>にほん</rt></ruby><ruby>語<rt>ご</rt></ruby></th><th><ruby>英語<rt>えいご</rt></ruby></th></tr></thead>
+<tbody>
+<tr><td><ruby>原形<rt>げんけい</rt></ruby> dictionary form</td><td>ねる</td><td>to sleep</td></tr>
+<tr><td><span class="chip chip-pos"><ruby>肯定<rt>こうてい</rt></ruby></span><ruby>現在<rt>げんざい</rt></ruby><ruby>進行<rt>しんこう</rt></ruby><ruby>形<rt>けい</rt></ruby></td><td>ね<strong>ています</strong></td><td>am / is / are sleeping</td></tr>
+<tr><td><span class="chip chip-neg"><ruby>否定<rt>ひてい</rt></ruby></span><ruby>現在<rt>げんざい</rt></ruby><ruby>進行<rt>しんこう</rt></ruby><ruby>形<rt>けい</rt></ruby>・<ruby>否定<rt>ひてい</rt></ruby></td><td>ね<strong>ていません</strong></td><td>not sleeping</td></tr>
+<tr><td><span class="chip chip-past"><ruby>過去<rt>かこ</rt></ruby></span><ruby>過去<rt>かこ</rt></ruby><ruby>進行<rt>しんこう</rt></ruby><ruby>形<rt>けい</rt></ruby></td><td>ね<strong>ていました</strong></td><td>was / were sleeping</td></tr>
+<tr><td><span class="chip chip-pastn"><ruby>過去<rt>かこ</rt></ruby><ruby>否定<rt>ひてい</rt></ruby></span><ruby>過去<rt>かこ</rt></ruby><ruby>進行<rt>しんこう</rt></ruby><ruby>形<rt>けい</rt></ruby>・<ruby>否定<rt>ひてい</rt></ruby></td><td>ね<strong>ていませんでした</strong></td><td>was / were not sleeping</td></tr>
+</tbody>
+</table>
+<div class="note"><ruby>て形<rt>てけい</rt></ruby> + <strong>います / いません / いました / いませんでした</strong> の4つのパターンを<ruby>覚え<rt>おぼえ</rt></ruby>ましょう。</div>
+</section>
+
+<section>
+<h2><span class="sec-num">3</span><ruby>動詞<rt>どうし</rt></ruby><ruby>活用<rt>かつよう</rt></ruby>｜Verb Conjugation</h2>
+<p><ruby>各<rt>かく</rt></ruby><ruby>動詞<rt>どうし</rt></ruby>のカードをクリック（タップ）して「<strong>?</strong>」を<ruby>答え<rt>こたえ</rt></ruby><ruby>合わせ<rt>あわせ</rt></ruby>てください。</p>
+
+<div class="conj-section">
+<h3><span class="chip chip-g1">1 Group</span> <ruby>五<rt>ご</rt></ruby><ruby>段<rt>だん</rt></ruby><ruby>活用<rt>かつよう</rt></ruby> godan / u-verbs</h3>
+<p style="font-size:.92rem;color:var(--ink-soft);margin-bottom:.6rem">※<ruby>語尾<rt>ごび</rt></ruby>が「う・つ・る・く・ぐ・す・む・ぶ・ぬ」のどれか（<ruby>例<rt>れい</rt></ruby>：あらう）</p>
+<div class="conj-grid">
+<div class="conj-card"><div class="verb"><ruby>行く<rt>いく</rt></ruby></div><div class="en-meaning">to go</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="<ruby>行<rt>い</rt></ruby>っています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="<ruby>行<rt>い</rt></ruby>っていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="<ruby>行<rt>い</rt></ruby>っていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="<ruby>行<rt>い</rt></ruby>っていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>話す<rt>はなす</rt></ruby></div><div class="en-meaning">to speak</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="話しています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="話していません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="話していました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="話していませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>待つ<rt>まつ</rt></ruby></div><div class="en-meaning">to wait</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="<ruby>待<rt>ま</rt></ruby>っています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="<ruby>待<rt>ま</rt></ruby>っていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="<ruby>待<rt>ま</rt></ruby>っていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="<ruby>待<rt>ま</rt></ruby>っていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>使う<rt>つかう</rt></ruby></div><div class="en-meaning">to use</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="<ruby>使<rt>つか</rt></ruby>っています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="<ruby>使<rt>つか</rt></ruby>っていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="<ruby>使<rt>つか</rt></ruby>っていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="<ruby>使<rt>つか</rt></ruby>っていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>飲む<rt>のむ</rt></ruby></div><div class="en-meaning">to drink</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="飲んでいます">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="飲んでいません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="飲んでいました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="飲んでいませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>読む<rt>よむ</rt></ruby></div><div class="en-meaning">to read</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="読んでいます">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="読んでいません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="読んでいました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="読んでいませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>洗う<rt>あらう</rt></ruby></div><div class="en-meaning">to wash</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="<ruby>洗<rt>あら</rt></ruby>っています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="<ruby>洗<rt>あら</rt></ruby>っていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="<ruby>洗<rt>あら</rt></ruby>っていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="<ruby>洗<rt>あら</rt></ruby>っていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>書く<rt>かく</rt></ruby></div><div class="en-meaning">to write</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="<ruby>書<rt>か</rt></ruby>いています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="<ruby>書<rt>か</rt></ruby>いていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="<ruby>書<rt>か</rt></ruby>いていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="<ruby>書<rt>か</rt></ruby>いていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>買う<rt>かう</rt></ruby></div><div class="en-meaning">to buy</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="<ruby>買<rt>か</rt></ruby>っています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="<ruby>買<rt>か</rt></ruby>っていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="<ruby>買<rt>か</rt></ruby>っていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="<ruby>買<rt>か</rt></ruby>っていませんでした">?</span></div></div>
+</div>
+</div>
+
+<div class="conj-section">
+<h3><span class="chip chip-g2">2 Group</span> <ruby>一段<rt>いちだん</rt></ruby><ruby>活用<rt>かつよう</rt></ruby> ichidan / ru-verbs</h3>
+<p style="font-size:.92rem;color:var(--ink-soft);margin-bottom:.6rem">※おわりが「〜える」「〜いる」であることが<ruby>多い<rt>おおい</rt></ruby>（<ruby>例<rt>れい</rt></ruby>：おぼえる）</p>
+<div class="conj-grid">
+<div class="conj-card"><div class="verb"><ruby>覚える<rt>おぼえる</rt></ruby></div><div class="en-meaning">to memorize</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="<ruby>覚<rt>おぼ</rt></ruby>えています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="<ruby>覚<rt>おぼ</rt></ruby>えていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="<ruby>覚<rt>おぼ</rt></ruby>えていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="<ruby>覚<rt>おぼ</rt></ruby>えていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>起きる<rt>おきる</rt></ruby></div><div class="en-meaning">to wake up</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="<ruby>起<rt>お</rt></ruby>きています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="<ruby>起<rt>お</rt></ruby>きていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="<ruby>起<rt>お</rt></ruby>きていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="<ruby>起<rt>お</rt></ruby>きていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>出かける<rt>でかける</rt></ruby></div><div class="en-meaning">to go out</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="出かけています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="出かけていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="出かけていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="出かけていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>決める<rt>きめる</rt></ruby></div><div class="en-meaning">to decide</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="<ruby>決<rt>き</rt></ruby>めています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="<ruby>決<rt>き</rt></ruby>めていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="<ruby>決<rt>き</rt></ruby>めていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="<ruby>決<rt>き</rt></ruby>めていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>借りる<rt>かりる</rt></ruby></div><div class="en-meaning">to borrow</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="<ruby>借<rt>か</rt></ruby>りています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="<ruby>借<rt>か</rt></ruby>りていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="<ruby>借<rt>か</rt></ruby>りていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="<ruby>借<rt>か</rt></ruby>りていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>食べる<rt>たべる</rt></ruby></div><div class="en-meaning">to eat</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="食べています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="食べていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="食べていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="食べていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>寝る<rt>ねる</rt></ruby></div><div class="en-meaning">to sleep</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="<ruby>寝<rt>ね</rt></ruby>ています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="<ruby>寝<rt>ね</rt></ruby>ていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="<ruby>寝<rt>ね</rt></ruby>ていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="<ruby>寝<rt>ね</rt></ruby>ていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>見る<rt>みる</rt></ruby></div><div class="en-meaning">to see, watch</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="<ruby>見<rt>み</rt></ruby>ています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="<ruby>見<rt>み</rt></ruby>ていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="<ruby>見<rt>み</rt></ruby>ていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="<ruby>見<rt>み</rt></ruby>ていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>調べる<rt>しらべる</rt></ruby></div><div class="en-meaning">to look up, check</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="<ruby>調<rt>しら</rt></ruby>べています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="<ruby>調<rt>しら</rt></ruby>べていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="<ruby>調<rt>しら</rt></ruby>べていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="<ruby>調<rt>しら</rt></ruby>べていませんでした">?</span></div></div>
+</div>
+</div>
+
+<div class="conj-section">
+<h3><span class="chip chip-irr">Irregular</span> <ruby>不<rt>ふ</rt></ruby><ruby>規則<rt>きそく</rt></ruby><ruby>動詞<rt>どうし</rt></ruby></h3>
+<p style="font-size:.92rem;color:var(--ink-soft);margin-bottom:.6rem">※する・くる・〜する<ruby>動詞<rt>どうし</rt></ruby>（<ruby>例<rt>れい</rt></ruby>：<ruby>料理<rt>りょうり</rt></ruby>する・<ruby>勉強<rt>べんきょう</rt></ruby>する）</p>
+<div class="conj-grid">
+<div class="conj-card"><div class="verb">くる</div><div class="en-meaning">to come</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="きています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="きていません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="きていました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="きていませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb">する</div><div class="en-meaning">to do</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="しています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="していません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="していました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="していませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>料理<rt>りょうり</rt></ruby>する</div><div class="en-meaning">to cook</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="料理しています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="料理していません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="料理していました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="料理していませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>掃除<rt>そうじ</rt></ruby>する</div><div class="en-meaning">to clean</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="掃除しています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="掃除していません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="掃除していました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="掃除していませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>運転<rt>うんてん</rt></ruby>する</div><div class="en-meaning">to drive</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="運転しています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="運転していません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="運転していました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="運転していませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>質問<rt>しつもん</rt></ruby>する</div><div class="en-meaning">to ask</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="質問しています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="質問していません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="質問していました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="質問していませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>散歩<rt>さんぽ</rt></ruby>する</div><div class="en-meaning">to take a walk</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="散歩しています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="散歩していません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="散歩していました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="散歩していませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>勉強<rt>べんきょう</rt></ruby>する</div><div class="en-meaning">to study</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="勉強しています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="勉強していません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="勉強していました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="勉強していませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>練習<rt>れんしゅう</rt></ruby>する</div><div class="en-meaning">to practice</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="練習しています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="練習していません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="練習していました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="練習していませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>電話<rt>でんわ</rt></ruby>する</div><div class="en-meaning">to call / phone</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="電話しています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="電話していません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="電話していました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="電話していませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>買い物<rt>かいもの</rt></ruby>する</div><div class="en-meaning">to shop</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="買い物しています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="買い物していません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="買い物していました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="買い物していませんでした">?</span></div></div>
+<div class="conj-card"><div class="verb"><ruby>予約<rt>よやく</rt></ruby>する</div><div class="en-meaning">to make a reservation</div>
+<div class="conj-row"><span class="lbl">〜ています</span><span class="val" data-ans="予約しています">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていません</span><span class="val" data-ans="予約していません">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていました</span><span class="val" data-ans="予約していました">?</span></div>
+<div class="conj-row"><span class="lbl">〜ていませんでした</span><span class="val" data-ans="予約していませんでした">?</span></div></div>
+</div>
+</div>
+</section>
+
+<section>
+<h2><span class="sec-num">4</span>ポイント｜Key Points</h2>
+<div class="points">
+<div class="point"><span class="star">★</span><div><strong>Group 2（ru-verbs）</strong>：<ruby>最後<rt>さいご</rt></ruby>の「る」を<ruby>取っ<rt>とっ</rt></ruby>て「て」を<ruby>付ける<rt>つける</rt></ruby>だけ。<br><span style="color:var(--ink-soft);font-size:.92rem"><ruby>食べる<rt>たべる</rt></ruby> → <ruby>食べ<rt>たべ</rt></ruby>て → <ruby>食べ<rt>たべ</rt></ruby>ています</span><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Group 2 (ru-verbs): just drop the final る and add て. (<ruby>食べる<rt>たべる</rt></ruby> → <ruby>食べ<rt>たべ</rt></ruby>て → <ruby>食べ<rt>たべ</rt></ruby>ています)</p></div></div></div>
+<div class="point"><span class="star">★</span><div><strong>Group 1（u-verbs）</strong>：<ruby>て形<rt>てけい</rt></ruby>のルール（〜く→いて、〜ぐ→いで、〜む/ぶ/ぬ→んで、〜う/つ/る→って、〜す→して）に<ruby>従う<rt>したがう</rt></ruby>。<div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Group 1 (u-verbs): follow the te-form rules (〜く→いて, 〜ぐ→いで, 〜む/ぶ/ぬ→んで, 〜う/つ/る→って, 〜す→して).</p></div></div></div>
+<div class="point"><span class="star">★</span><div><strong><ruby>状態<rt>じょうたい</rt></ruby>を<ruby>表す<rt>あらわす</rt></ruby><ruby>動詞<rt>どうし</rt></ruby></strong>：すむ（<ruby>住む<rt>すむ</rt></ruby>）・<ruby>知っ<rt>しっ</rt></ruby>ている（<ruby>知っ<rt>しっ</rt></ruby>ている）・<ruby>結婚<rt>けっこん</rt></ruby>する（<ruby>結婚<rt>けっこん</rt></ruby>する）などは、「〜ています」で<strong><ruby>状態<rt>じょうたい</rt></ruby></strong>を<ruby>表し<rt>あらわし</rt></ruby>ます。<div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Stative verbs like すむ (live), <ruby>知っ<rt>しっ</rt></ruby>ている (know), and <ruby>結婚<rt>けっこん</rt></ruby>する (be married) express a state with 〜ています.</p></div></div></div>
+<div class="point"><span class="star">★</span><div><strong><ruby>過去<rt>かこ</rt></ruby><ruby>進行<rt>しんこう</rt></ruby><ruby>形<rt>けい</rt></ruby></strong>は、<ruby>過去<rt>かこ</rt></ruby>のある<ruby>時点<rt>じてん</rt></ruby>で<ruby>進行<rt>しんこう</rt></ruby>していた<ruby>動作<rt>どうさ</rt></ruby>を<ruby>表し<rt>あらわし</rt></ruby>ます。<br><span style="color:var(--ink-soft);font-size:.92rem"><ruby>昨日<rt>きのう</rt></ruby>の よる10じに、ほんを <ruby>読ん<rt>よん</rt></ruby>でいました。</span><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">The past progressive expresses an action that was in progress at a specific point in the past. (At 10 p.m. last night, I was reading a book.)</p></div></div></div>
+</div>
+</section>
+
+<section>
+<h2><span class="sec-num">5</span><ruby>会話<rt>かいわ</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>｜Dialogue</h2>
+<div class="dialogue">
+<div class="bubble ken"><div class="speaker">👨🏻‍💼 <ruby>上司<rt>じょうし</rt></ruby></div><div class="jp">まみさん、<ruby>今日<rt>きょう</rt></ruby>は<ruby>顔色<rt>かおいろ</rt></ruby>が<ruby>悪い<rt>わるい</rt></ruby>ですね。<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですか？</div><div class="romaji">Mami-san, kyō wa kaoiro ga warui desu ne. Daijōbu desu ka?</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Mami, you don't look well today. Are you okay?</p></div></div>
+<div class="bubble ana"><div class="speaker">👩🏻 まみ</div><div class="jp">ありがとうございます。ちょっと<ruby>熱<rt>ねつ</rt></ruby>があって、<ruby>頭<rt>あたま</rt></ruby>も<ruby>痛い<rt>いたい</rt></ruby>です。ちょっと<ruby>風邪<rt>かぜ</rt></ruby>です。</div><div class="romaji">Arigatō gozaimasu. Chotto netsu ga atte, atama mo itai desu. Chotto kaze desu.</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Thank you. I have a bit of a fever and a headache. I have a slight cold.</p></div></div>
+<div class="bubble ken"><div class="speaker">👨🏻‍💼 <ruby>上司<rt>じょうし</rt></ruby></div><div class="jp">そうですか？<ruby>早く<rt>はやく</rt></ruby><ruby>帰っ<rt>かえっ</rt></ruby>て<ruby>休ん<rt>やすん</rt></ruby>でください。</div><div class="romaji">Sō desu ka. Hayaku kaette yasunde kudasai.</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I see. Please go home early and get some rest.</p></div></div>
+<div class="bubble ana"><div class="speaker">👩🏻 まみ</div><div class="jp">はい、でも、<ruby>今日<rt>きょう</rt></ruby><ruby>資料<rt>しりょう</rt></ruby>を<ruby>出し<rt>だし</rt></ruby>ます…。</div><div class="romaji">Hai, demo, kyō shiryō o dashimasu…</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yes, but I'm submitting the documents today…</p></div></div>
+<div class="bubble ken"><div class="speaker">👨🏻‍💼 <ruby>上司<rt>じょうし</rt></ruby></div><div class="jp">じゃあ、<ruby>一緒<rt>いっしょ</rt></ruby>にまとめて、<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>出し<rt>だし</rt></ruby>ましょうか？</div><div class="romaji">Jā, issho ni matomete, issho ni dashimashō ka?</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Then shall we put them together and submit them together?</p></div></div>
+<div class="bubble ana"><div class="speaker">👩🏻 まみ</div><div class="jp">えっ、いいですか？ありがとうございます！</div><div class="romaji">Eh, ii desu ka? Arigatō gozaimasu!</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Really? Is that okay? Thank you so much!</p></div></div>
+<div class="bubble ken"><div class="speaker">👨🏻‍💼 <ruby>上司<rt>じょうし</rt></ruby></div><div class="jp">もちろん。たくさん<ruby>働い<rt>はたらい</rt></ruby>てはいけませんよ。<ruby>少し<rt>すこし</rt></ruby>だけやって、すぐ<ruby>休ん<rt>やすん</rt></ruby>でくださいね。</div><div class="romaji">Mochiron. Takusan hataraite wa ikemasen yo. Sukoshi dake yatte, sugu yasunde kudasai ne.</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Of course. You shouldn't work too much. Just do a little and rest soon.</p></div></div>
+<div class="bubble ana"><div class="speaker">👩🏻 まみ</div><div class="jp">はい、そうします。<ruby>仕事<rt>しごと</rt></ruby>が<ruby>終わっ<rt>おわっ</rt></ruby>て、すぐ<ruby>家<rt>いえ</rt></ruby>に<ruby>帰っ<rt>かえっ</rt></ruby>て<ruby>寝<rt>ね</rt></ruby>ます。</div><div class="romaji">Hai, sō shimasu. Shigoto ga owatte, sugu ie ni kaette nemasu.</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yes, I'll do that. Once work is over, I'll go straight home and sleep.</p></div></div>
+<div class="bubble ken"><div class="speaker">👨🏻‍💼 <ruby>上司<rt>じょうし</rt></ruby></div><div class="jp">あとで<ruby>薬<rt>くすり</rt></ruby>を<ruby>買っ<rt>かっ</rt></ruby>て、スープも<ruby>作り<rt>つくり</rt></ruby>ますよ。<ruby>温かく<rt>あたたかく</rt></ruby>て、おいしいスープです。</div><div class="romaji">Atode kusuri o katte, sūpu mo tsukurimasu yo. Atatakakute, oishii sūpu desu.</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">I'll buy some medicine later and make soup for you. It'll be warm and delicious.</p></div></div>
+<div class="bubble ana"><div class="speaker">👩🏻 まみ</div><div class="jp">えっ、<ruby>本当<rt>ほんとう</rt></ruby>に？いいですか？</div><div class="romaji">Eh, hontō ni? Ii desu ka?</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Really? Is that okay?</p></div></div>
+<div class="bubble ken"><div class="speaker">👨🏻‍💼 <ruby>上司<rt>じょうし</rt></ruby></div><div class="jp">もちろん。<ruby>私<rt>わたし</rt></ruby>は<ruby>料理<rt>りょうり</rt></ruby>が<ruby>好き<rt>すき</rt></ruby>です。</div><div class="romaji">Mochiron. Watashi wa ryōri ga suki desu.</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Of course. I like cooking.</p></div></div>
+<div class="bubble ana"><div class="speaker">👩🏻 まみ</div><div class="jp">ありがとうございます。じゃあ、<ruby>頼み<rt>たのみ</rt></ruby>ます！</div><div class="romaji">Arigatō gozaimasu. Jā, tanomimasu!</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Thank you! Then I'll count on you!</p></div></div>
+<div class="bubble ken"><div class="speaker">👨🏻‍💼 <ruby>上司<rt>じょうし</rt></ruby></div><div class="jp">じゃあ、まず<ruby>書類<rt>しょるい</rt></ruby>をまとめてから、<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>出し<rt>だし</rt></ruby>ましょう。</div><div class="romaji">Jā, mazu shorui o matomete kara, issho ni dashimashō.</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Okay, let's organize the documents first, then go submit them together.</p></div></div>
+<div class="bubble ana"><div class="speaker">👩🏻 まみ</div><div class="jp">はい、<ruby>助かり<rt>たすかり</rt></ruby>ます。</div><div class="romaji">Hai, tasukarimasu.</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Yes, that helps a lot.</p></div></div>
+<div class="bubble ken"><div class="speaker">👨🏻‍💼 <ruby>上司<rt>じょうし</rt></ruby></div><div class="jp"><ruby>分かり<rt>わかり</rt></ruby>ました！<ruby>仕事<rt>しごと</rt></ruby>が<ruby>終わっ<rt>おわっ</rt></ruby>て、<ruby>連絡<rt>れんらく</rt></ruby>してから<ruby>行き<rt>いき</rt></ruby>ますね。</div><div class="romaji">Wakarimashita! Shigoto ga owatte, renraku shite kara ikimasu ne.</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Got it! I'll contact you after I'm done and head over.</p></div></div>
+<div class="bubble ana"><div class="speaker">👩🏻 まみ</div><div class="jp">はい。じゃあ、<ruby>次<rt>つぎ</rt></ruby>は<ruby>一緒<rt>いっしょ</rt></ruby>にランチも<ruby>行き<rt>いき</rt></ruby>ましょうね！</div><div class="romaji">Hai. Jā, tsugi wa issho ni ranchi mo ikimashō ne!</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Okay. Then let's go for lunch together next time too!</p></div></div>
+<div class="bubble ken"><div class="speaker">👨🏻‍💼 <ruby>上司<rt>じょうし</rt></ruby></div><div class="jp">いいですね！<ruby>楽しみ<rt>たのしみ</rt></ruby>にしています！<ruby>早く<rt>はやく</rt></ruby><ruby>風邪<rt>かぜ</rt></ruby>を<ruby>治し<rt>なおし</rt></ruby>てくださいね。</div><div class="romaji">Ii desu ne! Tanoshimi ni shiteimasu! Hayaku kaze o naoshite kudasai ne.</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Sounds good! I'm looking forward to it. Get well soon!</p></div></div>
+</div>
+</section>
+
+<section>
+<h2><span class="sec-num">6</span><ruby>家族<rt>かぞく</rt></ruby>の<ruby>質問<rt>しつもん</rt></ruby>｜Family Q&amp;A</h2>
+<p><ruby>家族<rt>かぞく</rt></ruby>の<ruby>表<rt>ひょう</rt></ruby>を<ruby>見<rt>み</rt></ruby>て、<ruby>質問<rt>しつもん</rt></ruby>に<ruby>答え<rt>こたえ</rt></ruby>ましょう。</p>
+<table class="family-table">
+<thead><tr><th><ruby>家族<rt>かぞく</rt></ruby></th><th><ruby>住ん<rt>すん</rt></ruby>でいる</th><th><ruby>仕事<rt>しごと</rt></ruby></th><th><ruby>年れい<rt>ねんれい</rt></ruby></th></tr></thead>
+<tbody>
+<tr><td>おじいさん</td><td><ruby>大阪<rt>おおさか</rt></ruby></td><td><ruby>働い<rt>はたらい</rt></ruby>ていない</td><td>76さい</td></tr>
+<tr><td>おばあさん</td><td><ruby>大阪<rt>おおさか</rt></ruby></td><td><ruby>働い<rt>はたらい</rt></ruby>ていない</td><td>72さい</td></tr>
+<tr><td>お<ruby>父<rt>とう</rt></ruby>さん</td><td><ruby>福岡<rt>ふくおか</rt></ruby></td><td><ruby>会社<rt>かいしゃ</rt></ruby>で<ruby>働い<rt>はたらい</rt></ruby>ている</td><td>50さい</td></tr>
+<tr><td>お<ruby>母<rt>かあ</rt></ruby>さん</td><td><ruby>福岡<rt>ふくおか</rt></ruby></td><td><ruby>病院<rt>びょういん</rt></ruby>で<ruby>働い<rt>はたらい</rt></ruby>ている</td><td>47さい</td></tr>
+<tr><td>お<ruby>姉<rt>ねえ</rt></ruby>さん</td><td><ruby>東京<rt>とうきょう</rt></ruby></td><td><ruby>花屋<rt>はなや</rt></ruby>で<ruby>働い<rt>はたらい</rt></ruby>ている</td><td>26さい</td></tr>
+<tr><td><ruby>弟<rt>おとうと</rt></ruby></td><td><ruby>横浜<rt>よこはま</rt></ruby></td><td><ruby>学生<rt>がくせい</rt></ruby></td><td>21さい</td></tr>
+</tbody>
+</table>
+<div class="quiz-q"><div class="prompt">① <ruby>弟<rt>おとうと</rt></ruby>はどこに<ruby>住ん<rt>すん</rt></ruby>でいますか？</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Where does the younger brother live?</p></div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>横浜<rt>よこはま</rt></ruby>に<ruby>住ん<rt>すん</rt></ruby>でいます。</div></div>
+<div class="quiz-q"><div class="prompt">② お<ruby>父<rt>とう</rt></ruby>さんは<ruby>働い<rt>はたらい</rt></ruby>ていますか？</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Does your father work?</p></div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer">はい、<ruby>働い<rt>はたらい</rt></ruby>ています。</div></div>
+<div class="quiz-q"><div class="prompt">③ お<ruby>母<rt>かあ</rt></ruby>さんはどこで<ruby>働い<rt>はたらい</rt></ruby>ていますか？</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Where does your mother work?</p></div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>病院<rt>びょういん</rt></ruby>で<ruby>働い<rt>はたらい</rt></ruby>ています。</div></div>
+<div class="quiz-q"><div class="prompt">④ お<ruby>姉<rt>ねえ</rt></ruby>さんはどこに<ruby>住ん<rt>すん</rt></ruby>でいますか？</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Where does your older sister live?</p></div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>東京<rt>とうきょう</rt></ruby>に<ruby>住ん<rt>すん</rt></ruby>でいます。</div></div>
+<div class="quiz-q"><div class="prompt">⑤ <ruby>弟<rt>おとうと</rt></ruby>は<ruby>仕事<rt>しごと</rt></ruby>をしていますか？</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Does your younger brother work?</p></div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer">いいえ、<ruby>仕事<rt>しごと</rt></ruby>をしていません。<ruby>学生<rt>がくせい</rt></ruby>です。</div></div>
+<div class="quiz-q"><div class="prompt">⑥ おじいさんは<ruby>仕事<rt>しごと</rt></ruby>をしていますか？</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Does your grandfather work?</p></div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer">いいえ、<ruby>仕事<rt>しごと</rt></ruby>をしていません。</div></div>
+</section>
+
+<section>
+<h2><span class="sec-num">7</span><ruby>練習<rt>れんしゅう</rt></ruby><ruby>問題<rt>もんだい</rt></ruby>｜Exercises (<ruby>英<rt>えい</rt></ruby>→<ruby>日<rt>にち</rt></ruby>)</h2>
+<div class="quiz-q"><div class="prompt">① I am sleeping now.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>今<rt>いま</rt></ruby>、<ruby>寝<rt>ね</rt></ruby>ています。<div class="romaji-a">ima, neteimasu.</div></div></div>
+<div class="quiz-q"><div class="prompt">② I was not drinking coffee yesterday.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>昨日<rt>きのう</rt></ruby>、コーヒーを<ruby>飲ん<rt>のん</rt></ruby>でいませんでした。</div></div>
+<div class="quiz-q"><div class="prompt">③ My younger brother is living in Yokohama.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>弟<rt>おとうと</rt></ruby>は、<ruby>横浜<rt>よこはま</rt></ruby>に<ruby>住ん<rt>すん</rt></ruby>でいます。</div></div>
+<div class="quiz-q"><div class="prompt">④ I was practicing the piano at 10 PM.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>午後<rt>ごご</rt></ruby>10<ruby>時<rt>じ</rt></ruby>に、ピアノを<ruby>練習<rt>れんしゅう</rt></ruby>していました。</div></div>
+<div class="quiz-q"><div class="prompt">⑤ Are you washing your hands?</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>手<rt>て</rt></ruby>を<ruby>洗っ<rt>あらっ</rt></ruby>ていますか？</div></div>
+<div class="quiz-q"><div class="prompt">⑥ My mother is working at a hospital.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer">お<ruby>母<rt>かあ</rt></ruby>さんは、<ruby>病院<rt>びょういん</rt></ruby>で<ruby>働い<rt>はたらい</rt></ruby>ています。</div></div>
+<div class="quiz-q"><div class="prompt">⑦ My older sister is married.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>姉<rt>あね</rt></ruby>は<ruby>結婚<rt>けっこん</rt></ruby>しています。</div></div>
+<div class="quiz-q"><div class="prompt">⑧ I was not living in Tokyo last year.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>去年<rt>きょねん</rt></ruby>、<ruby>東京<rt>とうきょう</rt></ruby>に<ruby>住ん<rt>すん</rt></ruby>でいませんでした。</div></div>
+<div class="quiz-q"><div class="prompt">⑨ Are you holding a textbook?</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>教科<rt>きょうか</rt></ruby><ruby>書<rt>しょ</rt></ruby>を<ruby>持っ<rt>もっ</rt></ruby>ていますか？</div></div>
+<div class="quiz-q"><div class="prompt">⑩ I was singing a song at 8:00.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer">8<ruby>時<rt>じ</rt></ruby>に、<ruby>歌<rt>うた</rt></ruby>を<ruby>歌っ<rt>うたっ</rt></ruby>ていました。</div></div>
+</section>
+
+<section>
+<h2><span class="sec-num">8</span>Let's practice｜あなたについて</h2>
+<div class="quiz-q"><div class="prompt">① あなたは<ruby>今<rt>いま</rt></ruby>、<ruby>日本<rt>にほん</rt></ruby><ruby>語<rt>ご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>していますか？</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Are you studying Japanese now?</p></div></div>
+<div class="quiz-q"><div class="prompt">② あなたは<ruby>今<rt>いま</rt></ruby>、メガネをかけていますか？</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Are you wearing glasses now?</p></div></div>
+<div class="quiz-q"><div class="prompt">③ <ruby>昨日<rt>きのう</rt></ruby>の<ruby>夜<rt>よる</rt></ruby>、10<ruby>時<rt>じ</rt></ruby>ごろは<ruby>何<rt>なに</rt></ruby>をしていましたか？</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">What were you doing around 10 PM last night?</p></div></div>
+<div class="quiz-q"><div class="prompt">④ 5<ruby>年<rt>ねん</rt></ruby><ruby>前<rt>まえ</rt></ruby>、どこに<ruby>住ん<rt>すん</rt></ruby>でいましたか？</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Where did you live five years ago?</p></div></div>
+<div class="quiz-q"><div class="prompt">⑤ あなたは<ruby>結婚<rt>けっこん</rt></ruby>していますか？</div><div class="en-wrap"><button class="local-en-toggle" type="button">訳を見る</button><p class="en">Are you married?</p></div></div>
+</section>
+
+<section>
+<h2><span class="sec-num">9</span><ruby>復習<rt>ふくしゅう</rt></ruby><ruby>問題<rt>もんだい</rt></ruby>｜Review Questions</h2>
+<div class="quiz-q"><div class="prompt">① I am memorizing new words now.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>今<rt>いま</rt></ruby>、<ruby>新しい<rt>あたらしい</rt></ruby><ruby>単語<rt>たんご</rt></ruby>を<ruby>覚え<rt>おぼえ</rt></ruby>ています。</div></div>
+<div class="quiz-q"><div class="prompt">② I was not sleeping at 11 PM last night.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>昨日<rt>きのう</rt></ruby>の<ruby>夜<rt>よる</rt></ruby>11<ruby>時<rt>じ</rt></ruby>、<ruby>寝<rt>ね</rt></ruby>ていませんでした。</div></div>
+<div class="quiz-q"><div class="prompt">③ Ken was making soup yesterday.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>昨日<rt>きのう</rt></ruby>、ケンさんはスープを<ruby>作っ<rt>つくっ</rt></ruby>ていました。</div></div>
+<div class="quiz-q"><div class="prompt">④ I am studying Japanese at home now.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>今<rt>いま</rt></ruby>、<ruby>家<rt>いえ</rt></ruby>で<ruby>日本<rt>にほん</rt></ruby><ruby>語<rt>ご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しています。</div></div>
+<div class="quiz-q"><div class="prompt">⑤ Ana was not working yesterday.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>昨日<rt>きのう</rt></ruby>、アナさんは<ruby>働い<rt>はたらい</rt></ruby>ていませんでした。</div></div>
+<div class="quiz-q"><div class="prompt">⑥ I am buying vegetables at the supermarket now.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>今<rt>いま</rt></ruby>、スーパーで<ruby>野菜<rt>やさい</rt></ruby>を<ruby>買っ<rt>かっ</rt></ruby>ています。</div></div>
+<div class="quiz-q"><div class="prompt">⑦ I was reading a book at 8:00.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer">8<ruby>時<rt>じ</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>を<ruby>読ん<rt>よん</rt></ruby>でいました。</div></div>
+<div class="quiz-q"><div class="prompt">⑧ My father is not going out now.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>今<rt>いま</rt></ruby>、お<ruby>父<rt>とう</rt></ruby>さんは<ruby>出かけ<rt>でかけ</rt></ruby>ていません。</div></div>
+<div class="quiz-q"><div class="prompt">⑨ I was borrowing books at the library yesterday.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>昨日<rt>きのう</rt></ruby>、<ruby>図書<rt>としょ</rt></ruby><ruby>館<rt>かん</rt></ruby>で<ruby>本<rt>ほん</rt></ruby>を<ruby>借り<rt>かり</rt></ruby>ていました。</div></div>
+<div class="quiz-q"><div class="prompt">⑩ I am calling my friend now.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>今<rt>いま</rt></ruby>、<ruby>友達<rt>ともだち</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>しています。</div></div>
+<div class="quiz-q"><div class="prompt">⑪ My mother was not wearing glasses yesterday.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>昨日<rt>きのう</rt></ruby>、お<ruby>母<rt>かあ</rt></ruby>さんはメガネをかけていませんでした。</div></div>
+<div class="quiz-q"><div class="prompt">⑫ I was taking a walk in the park yesterday.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>昨日<rt>きのう</rt></ruby>、<ruby>公園<rt>こうえん</rt></ruby>で<ruby>散歩<rt>さんぽ</rt></ruby>していました。</div></div>
+<div class="quiz-q"><div class="prompt">⑬ I am using a dictionary now.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>今<rt>いま</rt></ruby>、<ruby>辞書<rt>じしょ</rt></ruby>を<ruby>使っ<rt>つかっ</rt></ruby>ています。</div></div>
+<div class="quiz-q"><div class="prompt">⑭ I was not driving a car yesterday.</div><div class="write-box" contenteditable="true" data-placeholder="ここに日本語で書いてみよう"></div><button class="reveal-btn">答えを見る</button><div class="answer"><ruby>昨日<rt>きのう</rt></ruby>、<ruby>車<rt>くるま</rt></ruby>を<ruby>運転<rt>うんてん</rt></ruby>していませんでした。</div></div>
+</section>
+
+</div><!-- /lesson-col -->
+<aside class="note-col"><div class="note-panel"><div class="note-head">Note <button id="note-annot-btn" type="button">選択に読み・訳をつける</button></div><div class="notepad" id="notepad" contenteditable="true" data-placeholder="ここに自由に書き込めます。文字を選んで色・マーカー、Enterで改行。"></div></div></aside>
+</div><!-- /layout -->
+</div>
+<script>
+(function(){
+  var lesson=document.getElementById('lesson'), notepad=document.getElementById('notepad');
+  if(!lesson||!notepad) return;
+  var LKEY='lesson-annot:'+location.pathname, LVER_KEY=LKEY+':v', LVER='2026-07-06fx', NKEY='lesson-note:'+location.pathname;
+  try{ if(localStorage.getItem(LVER_KEY)===LVER){ var sl=localStorage.getItem(LKEY); if(sl!==null) lesson.innerHTML=sl; } }catch(e){}
+  try{ var sn=localStorage.getItem(NKEY); if(sn!==null) notepad.innerHTML=sn; }catch(e){}
+  function saveLesson(){ try{ localStorage.setItem(LKEY,lesson.innerHTML); localStorage.setItem(LVER_KEY,LVER);}catch(e){} }
+  function saveNote(){ try { var __d=notepad.cloneNode(true); Array.prototype.forEach.call(__d.querySelectorAll('.note-annot.show'),function(s){s.classList.remove('show');}); localStorage.setItem(NKEY, __d.innerHTML); } catch(e){} }
+  lesson.querySelectorAll('.reveal-btn').forEach(b=>b.addEventListener('click',()=>{const a=b.nextElementSibling;a.classList.toggle('show');b.textContent=a.classList.contains('show')?'答えをかくす':'答えを見る'}));
+  lesson.querySelectorAll('.conj-row .val').forEach(v=>v.addEventListener('click',()=>{const ans=v.dataset.ans;if(v.classList.contains('revealed')){v.textContent='?';v.classList.remove('revealed')}else{v.innerHTML=ans;v.classList.add('revealed')}}));
+  var tR=document.getElementById('toggleRomaji'),tE=document.getElementById('toggleEn'),body=document.body;
+  if(tR) tR.addEventListener('click',()=>{const on=body.classList.toggle('show-romaji');tR.classList.toggle('active',on);tR.textContent=on?'ローマ字を隠す':'ローマ字 ON/OFF'});
+  if(tE) tE.addEventListener('click',()=>{const on=body.classList.toggle('show-en');tE.classList.toggle('active',on);tE.textContent=on?'英訳を隠す':'英訳を表示'});
+  lesson.querySelectorAll('.local-en-toggle').forEach(btn=>btn.addEventListener('click',()=>{const w=btn.closest('.en-wrap');if(!w)return;const on=w.classList.toggle('show-en');btn.textContent=on?'訳を隠す':'訳を見る'}));
+  function wrapRange(range,prop,value){var span=document.createElement('span');span.className='annot';span.style[prop]=value;try{range.surroundContents(span);}catch(e){var frag=range.extractContents();span.appendChild(frag);range.insertNode(span);}}
+  function applyFmt(value,isMarker){var sel=window.getSelection();if(!sel||sel.rangeCount===0||sel.isCollapsed)return;var anchor=sel.anchorNode;if(notepad.contains(anchor)){try{document.execCommand('styleWithCSS',false,true);}catch(e){}if(isMarker){if(!document.execCommand('hiliteColor',false,value))document.execCommand('backColor',false,value);}else{document.execCommand('foreColor',false,value);}saveNote();return;}if(lesson.contains(anchor)&&lesson.contains(sel.focusNode)){wrapRange(sel.getRangeAt(0),isMarker?'backgroundColor':'color',value);sel.removeAllRanges();saveLesson();}}
+  function clearFmt(){var sel=window.getSelection();if(!sel||sel.rangeCount===0)return;var anchor=sel.anchorNode;if(notepad.contains(anchor)){document.execCommand('removeFormat');saveNote();return;}if(sel.isCollapsed||!lesson.contains(anchor))return;var range=sel.getRangeAt(0);lesson.querySelectorAll('span.annot').forEach(function(s){var hit=range.intersectsNode?range.intersectsNode(s):true;if(hit){var pp=s.parentNode;while(s.firstChild){pp.insertBefore(s.firstChild,s);}pp.removeChild(s);pp.normalize();}});sel.removeAllRanges();saveLesson();}
+  document.querySelectorAll('.pen-color').forEach(function(b){b.addEventListener('mousedown',function(e){e.preventDefault();});b.addEventListener('click',function(){applyFmt(b.dataset.color,false);});});
+  document.querySelectorAll('.pen-marker').forEach(function(b){b.addEventListener('mousedown',function(e){e.preventDefault();});b.addEventListener('click',function(){applyFmt(b.dataset.color,true);});});
+  var clearBtn=document.getElementById('clear-fmt');if(clearBtn){clearBtn.addEventListener('mousedown',function(e){e.preventDefault();});clearBtn.addEventListener('click',clearFmt);}
+  notepad.addEventListener('input',saveNote);   // --- ふりがな（本文に埋め込み済みのルビ <ruby><rt> をボタンで表示/非表示） ---
+  var furiBtn = document.getElementById('toggle-furi');
+  if(furiBtn){
+    furiBtn.addEventListener('click', function(){
+      var on=document.body.classList.toggle('show-furigana');
+      furiBtn.classList.toggle('active', on);
+      furiBtn.textContent = on ? 'ふりがなを隠す' : 'ふりがなを表示';
+    });
+  }
+  lesson.addEventListener('input',saveLesson);
+
+  // --- Note: 選択に読み・訳をつける（自動取得＋編集→トグル挿入。要ネット） ---
+  function gtx(text){
+    var url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=en&dt=t&dt=rm&q='+encodeURIComponent(text);
+    return fetch(url).then(function(r){return r.json();}).then(function(j){
+      var en='', rm='';
+      (j[0]||[]).forEach(function(s){ if(s[0]) en+=s[0]; if(s[3]) rm+=s[3]; });
+      return { en:en.trim(), rm:rm.trim() };
+    });
+  }
+  function romajiToHiragana(r){
+    if(!r) return '';
+    r=r.toLowerCase().replace(/ō|ô/g,'ou').replace(/ū|û/g,'uu').replace(/ā|â/g,'aa').replace(/ē|ê/g,'ee').replace(/ī|î/g,'ii').replace(/[\s\-]/g,'');
+    var T={kya:'きゃ',kyu:'きゅ',kyo:'きょ',gya:'ぎゃ',gyu:'ぎゅ',gyo:'ぎょ',sha:'しゃ',shu:'しゅ',sho:'しょ',sya:'しゃ',syu:'しゅ',syo:'しょ',ja:'じゃ',ju:'じゅ',jo:'じょ',jya:'じゃ',jyu:'じゅ',jyo:'じょ',cha:'ちゃ',chu:'ちゅ',cho:'ちょ',nya:'にゃ',nyu:'にゅ',nyo:'にょ',hya:'ひゃ',hyu:'ひゅ',hyo:'ひょ',bya:'びゃ',byu:'びゅ',byo:'びょ',pya:'ぴゃ',pyu:'ぴゅ',pyo:'ぴょ',mya:'みゃ',myu:'みゅ',myo:'みょ',rya:'りゃ',ryu:'りゅ',ryo:'りょ',shi:'し',chi:'ち',tsu:'つ',ka:'か',ki:'き',ku:'く',ke:'け',ko:'こ',ga:'が',gi:'ぎ',gu:'ぐ',ge:'げ',go:'ご',sa:'さ',si:'し',su:'す',se:'せ',so:'そ',za:'ざ',ji:'じ',zi:'じ',zu:'ず',ze:'ぜ',zo:'ぞ',ta:'た',ti:'ち',tu:'つ',te:'て',to:'と',da:'だ',di:'ぢ',du:'づ',de:'で',do:'ど',na:'な',ni:'に',nu:'ぬ',ne:'ね',no:'の',ha:'は',hi:'ひ',fu:'ふ',hu:'ふ',he:'へ',ho:'ほ',ba:'ば',bi:'び',bu:'ぶ',be:'べ',bo:'ぼ',pa:'ぱ',pi:'ぴ',pu:'ぷ',pe:'ぺ',po:'ぽ',ma:'ま',mi:'み',mu:'む',me:'め',mo:'も',ya:'や',yu:'ゆ',yo:'よ',ra:'ら',ri:'り',ru:'る',re:'れ',ro:'ろ',wa:'わ',wo:'を',fa:'ふぁ',fi:'ふぃ',fe:'ふぇ',fo:'ふぉ',a:'あ',i:'い',u:'う',e:'え',o:'お',n:'ん'};
+    var out='',i=0;
+    while(i<r.length){
+      var c=r[i];
+      if(c==='n' && (i+1>=r.length || 'aiueoy'.indexOf(r[i+1])<0)){ out+='ん'; i++; continue; }
+      if(i+1<r.length && c===r[i+1] && 'kgsztdhfbpmyrwcj'.indexOf(c)>=0){ out+='っ'; i++; continue; }
+      var k3=r.substr(i,3), k2=r.substr(i,2), k1=r.substr(i,1);
+      if(T[k3]){ out+=T[k3]; i+=3; continue; }
+      if(T[k2]){ out+=T[k2]; i+=2; continue; }
+      if(T[k1]){ out+=T[k1]; i+=1; continue; }
+      out+=k1; i++;
+    }
+    return out;
+  }
+  function kataToHira(c){ var x=c.charCodeAt(0); return (x>=0x30A1&&x<=0x30F6)?String.fromCharCode(x-0x60):c; }
+  function isKanji(c){ return /[一-鿿々]/.test(c); }
+  function eqKana(o,k){ var oh=kataToHira(o), kk=kataToHira(k); if(oh===kk) return true; if(oh==='は'&&kk==='わ') return true; if(oh==='を'&&kk==='お') return true; if(oh==='へ'&&kk==='え') return true; return false; }
+  // 漢字だけを読みに置換し、元々のかな・カタカナ・記号はそのまま残す
+  function buildReading(orig, reading){
+    if(!reading) return orig;
+    function norm(c){ c=kataToHira(c); if(c==='は')return 'わ'; if(c==='を')return 'お'; if(c==='へ')return 'え'; if(c==='ぢ')return 'じ'; if(c==='づ')return 'ず'; return c; }
+    function isKana(c){ return c>='ぁ'&&c<='ゖ'; }
+    var read2='', normR='';
+    for(var x=0;x<reading.length;x++){ var c0=reading[x], nc=norm(c0); if(isKana(nc)){ read2+=c0; normR+=nc; } }
+    function kanaCount(str){ var n=0; for(var y=0;y<str.length;y++){ if(isKana(norm(str[y]))) n++; } return n; }
+    function kanaTarget(str){ var t=''; for(var y=0;y<str.length;y++){ var n2=norm(str[y]); if(isKana(n2)) t+=n2; } return t; }
+    var res='', i=0, j=0;
+    while(i<orig.length){
+      if(isKanji(orig[i])){
+        var k=i; while(k<orig.length && isKanji(orig[k])) k++;
+        var kanjiCount=k-i;
+        var m=k; while(m<orig.length && !isKanji(orig[m])) m++;
+        var kanaRun=orig.substring(k,m);
+        var target=kanaTarget(kanaRun);
+        if(target===''){ var end=(m>=orig.length)?read2.length:(j+kanjiCount); res+=read2.substring(j,end); j=end; res+=kanaRun; i=m; continue; }
+        var idx=normR.indexOf(target, j+kanjiCount); if(idx<0) idx=normR.indexOf(target,j); if(idx<0) idx=j;
+        res+=read2.substring(j, idx); j=idx;
+        res+=kanaRun; j+=kanaCount(kanaRun); i=m;
+      } else {
+        var m2=i; while(m2<orig.length && !isKanji(orig[m2])) m2++;
+        var kr=orig.substring(i,m2);
+        res+=kr; j+=kanaCount(kr); i=m2;
+      }
+    }
+    return res;
+  }
+  // 選択を「折りたたみトグル」として直接挿入（パネルなし）。読み・英訳は展開後にその場で編集可。
+  function insertAnnot(text, range){
+    var span=document.createElement('span'); span.className='note-annot';
+    span.appendChild(document.createTextNode(text));
+    var info=document.createElement('span'); info.className='na-info';
+    var y=document.createElement('span'); y.className='na-yomi'; y.setAttribute('contenteditable','true'); y.textContent=text; // まず原文（かな保持）。取得後に漢字部分だけ読みへ
+    var en=document.createElement('span'); en.className='na-en'; en.setAttribute('contenteditable','true'); en.textContent='翻訳中…';
+    info.appendChild(y); info.appendChild(en);
+    span.appendChild(info); // 折りたたみ状態（既定で読み・英訳は非表示）
+    try{ range.deleteContents(); range.insertNode(span); }catch(e){}
+    saveNote();
+    gtx(text).then(function(res){
+      if(res.rm && y.textContent===text){ var kana=buildReading(text, romajiToHiragana(res.rm)); if(kana) y.textContent=kana; }
+      if(en.textContent==='翻訳中…'||en.textContent===''){ en.textContent=res.en||''; }
+      saveNote();
+    }).catch(function(){ if(en.textContent==='翻訳中…') en.textContent=''; });
+  }
+  var naBtn=document.getElementById('note-annot-btn');
+  var naPendingRange=null;
+  function rangeInNote(rg){ return rg && !rg.collapsed && notepad.contains(rg.startContainer) && notepad.contains(rg.endContainer); }
+  function captureSel(){
+    var sel=window.getSelection();
+    if(sel && sel.rangeCount>0){ var rg=sel.getRangeAt(0); if(rangeInNote(rg)) naPendingRange=rg.cloneRange(); }
+  }
+  // 選択を取りこぼさないよう複数のタイミングで記憶
+  document.addEventListener('selectionchange', captureSel);
+  notepad.addEventListener('mouseup', captureSel);
+  notepad.addEventListener('keyup', captureSel);
+  notepad.addEventListener('blur', captureSel);
+  if(naBtn){
+    naBtn.addEventListener('mousedown', function(e){ captureSel(); e.preventDefault(); }); // 直前の選択を確保＋フォーカス維持
+    naBtn.addEventListener('pointerdown', function(){ captureSel(); });
+    naBtn.addEventListener('click', function(){
+      var range=null;
+      var sel=window.getSelection();
+      if(sel && sel.rangeCount>0 && rangeInNote(sel.getRangeAt(0))) range=sel.getRangeAt(0).cloneRange();
+      else if(rangeInNote(naPendingRange)) range=naPendingRange.cloneRange();
+      if(!range){ alert('Note欄で日本語をドラッグして反転（選択）してから、このボタンを押してください。'); return; }
+      var text=range.toString();
+      if(!text.trim()){ alert('Note欄で日本語を選んでから押してください。'); return; }
+      insertAnnot(text, range);
+    });
+  }
+  // 日本語の語をクリックで展開／折りたたみ（読み・英訳の中をクリックした時は編集できるよう折りたたまない）
+  notepad.addEventListener('click', function(e){
+    var t=e.target, el=(t && t.nodeType===3) ? t.parentElement : t;
+    if(el && el.closest && el.closest('.na-info')) return; // 読み・英訳の編集中は維持
+    var a=(el && el.closest) ? el.closest('.note-annot') : null;
+    if(a && notepad.contains(a)){ a.classList.toggle('show'); }
+  });
+})();
+</script>
+</body>
+</html>

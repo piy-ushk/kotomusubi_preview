@@ -166,7 +166,9 @@ class SyncService:
                 
             sort_val = 999
             for i, order in enumerate(level_order):
-                if order.lower() in title.lower(): sort_val = i
+                if order.lower() in title.lower(): 
+                    sort_val = i
+                    break
                 
             supabase_client.table('levels').upsert({
                 "id": lvl_id,

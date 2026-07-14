@@ -4,6 +4,8 @@ import { getLessonContent } from '../services/api';
 import GrammarLessonLayout from './GrammarLessonLayout';
 import TopicTalkLessonLayout from './TopicTalkLessonLayout';
 import TravelLessonLayout from './TravelLessonLayout';
+import StaticHtmlLessonLayout from './StaticHtmlLessonLayout';
+import lessonMap from '../utils/lessonMap.json';
 
 const LessonDetail = () => {
   const { lessonId } = useParams();
@@ -45,6 +47,23 @@ const LessonDetail = () => {
           コンテンツが見つかりませんでした
         </div>
       </div>
+    );
+  }
+
+  // Check if we have a static HTML file for this lesson based on the prefix in the title
+  // e.g. "【1-1】..." -> "1-1", "【10-2】..." -> "10-2"
+  const title = data.title || '';
+  const match = title.match(/【([\d\-]+)】|(\d+\-\d+)/);
+  const prefix = match ? (match[1] || match[2]) : null;
+  const htmlFilename = prefix ? lessonMap[prefix] : null;
+
+  if (htmlFilename) {
+    return (
+      <StaticHtmlLessonLayout 
+        htmlFilename={htmlFilename} 
+        textbookTitle={textbookTitle} 
+        levelTitle={levelTitle} 
+      />
     );
   }
 
