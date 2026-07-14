@@ -220,7 +220,8 @@ class SyncService:
                 title = title.replace("Capter", "Chapter")
                 sort_val = extract_number(title)
                 
-                child_dbs = await self.notion.fetch_child_database_ids(p_id)
+                is_chapter_page = "Chapter" in title
+                child_dbs = await self.notion.fetch_child_database_ids(p_id) if is_chapter_page else []
                 if child_dbs:
                     supabase_client.table('lessons').upsert({
                         "id": p_id, "level_id": level_id, "chapter_id": None, "title": title, "is_chapter": True, "sort_order": sort_val
@@ -406,6 +407,26 @@ class SyncService:
             print(f"      Skipping already fetched lesson {lesson_id}")
             return
             
+        # First, check if this lesson has a pre-made iframe HTML file
+        # We fetch the lesson title from supabase to get the prefix
+        response = supabase_client.table('lessons').select('title').eq('id', lesson_id).execute()
+        if response.data:
+            title = response.data[0]['title']
+            match = re.search(r'【([\d\-]+)】|(\d+\-\d+)', title)
+            prefix = match.group(1) or match.group(2) if match else None
+            
+            # Check if an HTML file starting with this prefix exists in frontend/public/lessons
+            if prefix:
+                import os
+                lessons_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend', 'public', 'lessons')
+                if os.path.exists(lessons_dir):
+                    for f in os.listdir(lessons_dir):
+                        if f.startswith(f"{prefix}-") and f.endswith('.html'):
+                            print(f"Skipping Notion fetch for {lesson_id} because it has a pre-made iframe: {f}")
+                            # Delete existing blocks if any
+                            supabase_client.table('lesson_blocks').delete().eq('lesson_id', lesson_id).execute()
+                            return
+
         print(f"      Fetching content for lesson {lesson_id}")
         blocks = await self.notion.fetch_blocks_with_children(lesson_id)
         
