@@ -198,42 +198,46 @@ class SyncService:
             await self._sync_lesson_content(level_id)
             return
 
-        is_upper_intermediate = "Upper" in level_title or "中上級" in level_title
-        
         def extract_number(t):
+            # Tests go to the end of the chapter
+            if "レベルチェックテスト" in t:
+                nums = re.findall(r'\d+', t)
+                return int(nums[0]) * 100 + 99 if nums else 999999
+            
+            # Format like 13-1
+            match = re.search(r'(\d+)-(\d+)', t)
+            if match:
+                return int(match.group(1)) * 100 + int(match.group(2))
+                
             nums = re.findall(r'\d+', t)
-            return int(nums[0]) if nums else 9999
+            return int(nums[0]) * 100 if nums else 999999
 
         for db_id in db_ids:
             pages = await self.notion.fetch_database_pages(db_id)
             for p in pages:
                 p_id = p["id"]
                 title = clean_text(self.notion.extract_page_title(p))
+                title = title.replace("Capter", "Chapter")
                 sort_val = extract_number(title)
                 
-                if is_upper_intermediate:
-                    child_dbs = await self.notion.fetch_child_database_ids(p_id)
-                    if child_dbs:
-                        supabase_client.table('lessons').upsert({
-                            "id": p_id, "level_id": level_id, "chapter_id": None, "title": title, "is_chapter": True, "sort_order": sort_val
-                        }).execute()
-                                  
-                        for child_db_id in child_dbs:
-                            sub_pages = await self.notion.fetch_database_pages(child_db_id)
-                            for sp in sub_pages:
-                                sp_id = sp["id"]
-                                sp_title = clean_text(self.notion.extract_page_title(sp))
-                                sp_sort = extract_number(sp_title)
-                                
-                                supabase_client.table('lessons').upsert({
-                                    "id": sp_id, "level_id": level_id, "chapter_id": p_id, "title": sp_title, "is_chapter": False, "sort_order": sp_sort
-                                }).execute()
-                                await self._sync_lesson_content(sp_id)
-                    else:
-                        supabase_client.table('lessons').upsert({
-                            "id": p_id, "level_id": level_id, "chapter_id": None, "title": title, "is_chapter": False, "sort_order": sort_val
-                        }).execute()
-                        await self._sync_lesson_content(p_id)
+                child_dbs = await self.notion.fetch_child_database_ids(p_id)
+                if child_dbs:
+                    supabase_client.table('lessons').upsert({
+                        "id": p_id, "level_id": level_id, "chapter_id": None, "title": title, "is_chapter": True, "sort_order": sort_val
+                    }).execute()
+                              
+                    for child_db_id in child_dbs:
+                        sub_pages = await self.notion.fetch_database_pages(child_db_id)
+                        for sp in sub_pages:
+                            sp_id = sp["id"]
+                            sp_title = clean_text(self.notion.extract_page_title(sp))
+                            sp_title = sp_title.replace("Capter", "Chapter")
+                            sp_sort = extract_number(sp_title)
+                            
+                            supabase_client.table('lessons').upsert({
+                                "id": sp_id, "level_id": level_id, "chapter_id": p_id, "title": sp_title, "is_chapter": False, "sort_order": sp_sort
+                            }).execute()
+                            await self._sync_lesson_content(sp_id)
                 else:
                     supabase_client.table('lessons').upsert({
                         "id": p_id, "level_id": level_id, "chapter_id": None, "title": title, "is_chapter": False, "sort_order": sort_val

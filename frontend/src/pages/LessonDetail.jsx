@@ -54,13 +54,7 @@ const LessonDetail = () => {
   // e.g. "【1-1】..." -> "1-1", "【10-2】..." -> "10-2"
   const title = data.title || '';
   const match = title.match(/【([\d\-]+)】|(\d+\-\d+)/);
-  let prefix = match ? (match[1] || match[2]) : null;
-  
-  // Special fallback for 1-1 which might be named "Chapter1" or "Chapter１"
-  if (!prefix && (title.includes('Chapter1') || title.includes('Chapter 1') || title.includes('Chapter１') || lessonId === '3f3edc46-8f20-83b5-8b83-813292c5056f')) {
-    prefix = '1-1';
-  }
-
+  const prefix = match ? (match[1] || match[2]) : null;
   const htmlFilename = prefix ? lessonMap[prefix] : null;
 
   if (htmlFilename) {
